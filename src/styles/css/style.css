@@ -11,7 +11,12 @@
 }
 
 .circleBtn {
+  color: red;
   background-color: black;
+}
+
+.to {
+  color: blue;
 }
 
 .text {

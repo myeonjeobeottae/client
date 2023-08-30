@@ -2,10 +2,14 @@
 
 .btn {
 	@include mixin-btn;
-
 	background: red;
 }
 
 .circleBtn {
+	color: red;
 	background-color: black;
+}
+
+.to {
+	color: blue;
 }
