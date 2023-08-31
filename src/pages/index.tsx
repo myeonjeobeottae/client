@@ -1,4 +1,5 @@
 import Button from '@atoms/button';
+import LinkButton from '@atoms/linkButton/LinkButton';
 // import Button from '@atoms/button/Button'
 
 export default function LandingPage() {
@@ -7,9 +8,8 @@ export default function LandingPage() {
 
 	return (
 		<div>
-			<Button className="btn circleBtn" onClick={handleClick}>
-				dd
-			</Button>
+			<LinkButton href="/chat">chat</LinkButton>
+			<LinkButton href="/voice">voice</LinkButton>
 		</div>
 	);
 }

@@ -20,6 +20,7 @@
 			"@molecules/*": ["./components/molecules/*"],
 			"@organisms/*": ["./components/organisms/*"],
 			"@templates/*": ["./components/templates/*"],
+			"@pages/*": ["./pages/*"],
 			"@styles/*": ["./styles/css/*"]
 		}
 	},

@@ -2,14 +2,21 @@
 
 .btn {
 	@include mixin-btn;
-	background: red;
+	padding: 30px;
 }
 
-.circleBtn {
+.doorBtn {
+	@include mixin-btn;
 	color: red;
 	background-color: black;
 }
 
 .to {
+	@include mixin-btn;
 	color: blue;
+}
+
+.green {
+	@include mixin-btn;
+	color: green;
 }

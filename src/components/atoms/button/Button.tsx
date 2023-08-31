@@ -3,7 +3,11 @@ interface PropTypes extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function Button({ children, ...props }: PropTypes) {
-	return <button {...props}>{children}</button>;
+	return (
+		<button className="btn" {...props}>
+			{children}
+		</button>
+	);
 }
 
 export default Button;

@@ -9,3 +9,12 @@
 	text-decoration: none;
 	@content;
 }
+@mixin linkBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	text-decoration: none;
+	color: black;
+	@content;
+}
