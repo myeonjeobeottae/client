@@ -1,7 +1,10 @@
-.text {
-	font-size: large;
-	margin-top: auto;
+@mixin wrapper {
+	width: 100vw;
+	height: 100vh;
 }
-.a {
-	display: block;
+
+@mixin flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

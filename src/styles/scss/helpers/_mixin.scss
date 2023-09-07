@@ -1,7 +1,7 @@
+@use '../base' as *;
+
 @mixin btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	@include com-flex-center;
 	cursor: pointer;
 	min-height: 40px;
 	border: none;
@@ -10,9 +10,7 @@
 	@content;
 }
 @mixin linkBtn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	@include com-flex-center;
 	border: none;
 	text-decoration: none;
 	color: black;
