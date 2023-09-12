@@ -11,7 +11,7 @@ COPY package.json yarn.lock* ./
 # --production == devDependency 노설치
 RUN yarn --frozen-lockfile
 # 먼저 캐쉬 삭제해서 경량화
-# RUN rm -rf ./.next/cache
+RUN rm -rf ./.next/cache
 
 # Rebuild the source code only when needed
 FROM base AS builder
