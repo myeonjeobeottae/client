@@ -11,23 +11,21 @@ export default function LandingPage() {
 	// teest
 
 	return (
-		<div className="landing-page-wrapper">
+		<main className="landing-page-wrapper">
 			<Image
 				className="bg"
 				src={Background}
-				objectFit="contain"
-				objectPosition="center"
 				alt="LandingPage Background Image"
 			/>
-			<div className="title">면접 방식을 선택하세요</div>
-			<div className="btn-box">
+			<h1 className="title">면접 방식을 선택하세요</h1>
+			<section className="btn-box">
 				<LinkButton href="/chat">
-					<Image src={Chat} alt="LandingPage Chat button Image" />
+					<Image src={Chat} alt="chat" />
 				</LinkButton>
 				<LinkButton href="/voice">
-					<Image src={Voice} alt="LandingPage Voice button Image" />
+					<Image src={Voice} alt="voice" />
 				</LinkButton>
-			</div>
-		</div>
+			</section>
+		</main>
 	);
 }
