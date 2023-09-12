@@ -259,4 +259,18 @@ button {
   transform: scale(1.2);
 }
 
+.chat-page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15rem;
+}
+.chat-page-wrapper > .btn-box {
+  border: solid red;
+  width: 50vmin;
+}
+
 /*# sourceMappingURL=style.css.map */
