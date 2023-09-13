@@ -1,5 +1,12 @@
-import ChatPage from '@pages/chat';
+import ChatPage from '@pages/[type]';
 import { render, screen } from '@testing-library/react';
+import { useRouter } from 'next/router';
+
+jest.mock('next/router', () => ({
+	useRouter: jest.fn().mockReturnValue({
+		query: { type: 'chat' },
+	}),
+}));
 
 describe(`<ChatPage />`, () => {
 	it('ChatPage에 타이틀이 렌더링 된다.', () => {
@@ -14,15 +21,15 @@ describe(`<ChatPage />`, () => {
 
 		expect(chatExplainList).toHaveLength(2);
 	});
+
 	it('ChatPage에 링크 버튼을 누르면 해당 페이지로 이동한다.', () => {
 		render(<ChatPage />);
 
+		const { type } = useRouter().query;
 		const urlButton = screen.getByRole('link', { name: 'URL' });
-
-		expect(urlButton).toHaveAttribute('href', '/chat/url');
-
 		const customButton = screen.getByRole('link', { name: '직무 선택' });
 
-		expect(customButton).toHaveAttribute('href', '/chat/custom');
+		expect(customButton).toHaveAttribute('href', `/${type}/custom`);
+		expect(urlButton).toHaveAttribute('href', `/${type}/url`);
 	});
 });
