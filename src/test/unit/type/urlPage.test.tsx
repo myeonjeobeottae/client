@@ -1,4 +1,4 @@
-import { wantedUrl } from 'utils/variables';
+import { wantedUrl } from '@utils/variables';
 import { render, screen } from '@testing-library/react';
 import UrlPage from '@pages/[type]/url';
 import userEvent from '@testing-library/user-event';
