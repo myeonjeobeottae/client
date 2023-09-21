@@ -13,7 +13,7 @@ export default function useInput({ initValue, ...props }: useInputType) {
 }
 
 interface useInputType extends React.InputHTMLAttributes<HTMLInputElement> {
-	initValue: any;
+	initValue?: any;
 }
 
 export const useTextInput = (options: Parameters<typeof useInput>[0]) =>
