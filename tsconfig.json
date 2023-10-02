@@ -16,7 +16,8 @@
 		"incremental": true,
 		"baseUrl": "./src",
 		"paths": {
-			"@public/*": ["../public/images/*"],
+			"@images/*": ["../public/images/*"],
+			"@svgs/*": ["../public/svgs/*"],
 			"@atoms/*": ["./components/atoms/*"],
 			"@molecules/*": ["./components/molecules/*"],
 			"@organisms/*": ["./components/organisms/*"],

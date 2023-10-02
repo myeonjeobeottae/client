@@ -198,6 +198,18 @@ button {
   color: green;
 }
 
+.logoMid {
+  position: relative;
+  width: 118px;
+  height: 38px;
+}
+
+.logoBig {
+  position: relative;
+  width: 130px;
+  height: 70px;
+}
+
 .landing-page-wrapper {
   width: 100vw;
   height: 100vh;
