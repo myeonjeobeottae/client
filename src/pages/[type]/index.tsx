@@ -1,4 +1,4 @@
-import LinkButton from '@atoms/linkButton/LinkButton';
+import { LinkButton } from '@atoms/button/LinkButton';
 import React from 'react';
 
 export default function ChatPage() {

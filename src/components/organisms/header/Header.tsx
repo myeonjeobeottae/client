@@ -1,9 +1,11 @@
 import Logo from '@atoms/logo/Logo';
+import HamburgerMenu from '@svgs/menu.svg';
 
 function Header() {
 	return (
-		<div>
+		<div className="headerWrapper">
 			<Logo size={`mid`} />
+			<HamburgerMenu />
 		</div>
 	);
 }

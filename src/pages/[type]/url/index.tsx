@@ -1,6 +1,6 @@
 import { useTextInput } from '@atoms/input/Input';
 import Button from '@atoms/button/Button';
-import BackButton from '@atoms/backButton/BackButton';
+import { BackButton } from '@atoms/button/BackButton';
 
 export default function UrlPage() {
 	const [value, urlInput] = useTextInput({
