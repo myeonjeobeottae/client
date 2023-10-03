@@ -26,6 +26,7 @@
 		"typescript": "5.1.6"
 	},
 	"devDependencies": {
+		"@svgr/webpack": "^8.1.0",
 		"@tanstack/react-query": "^4.32.6",
 		"@tanstack/react-query-devtools": "^4.32.6",
 		"@testing-library/dom": "^9.3.1",
