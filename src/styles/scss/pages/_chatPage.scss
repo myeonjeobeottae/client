@@ -2,8 +2,8 @@
 @use '../helpers' as *;
 
 .chat-page-wrapper {
-	@include com-wrapper;
-	@include com-flex-center;
+	@include mixin-fullScreen;
+	@include mixin-flexCenter;
 	flex-direction: column;
 	gap: 15rem;
 

@@ -1,22 +1,22 @@
-@use '../../../helpers' as *;
+@use '../../../base' as *;
 
 .btn {
-	@include mixin-btn;
+	@include com-btn;
 	padding: 30px;
 }
 
 .doorBtn {
-	@include mixin-btn;
+	@include com-btn;
 	color: red;
 	background-color: black;
 }
 
 .to {
-	@include mixin-btn;
+	@include com-btn;
 	color: blue;
 }
 
 .green {
-	@include mixin-btn;
+	@include com-btn;
 	color: green;
 }

@@ -1,11 +1,14 @@
 import Logo from '@atoms/logo/Logo';
-import HamburgerMenu from '@svgs/menu.svg';
+import Button from '@atoms/button/Button';
+import Hamburger from '@svgs/menu.svg';
 
 function Header() {
 	return (
 		<div className="headerWrapper">
 			<Logo size={`mid`} />
-			<HamburgerMenu />
+			<Button className="hamburgerBtn" type="button">
+				<Hamburger />
+			</Button>
 		</div>
 	);
 }

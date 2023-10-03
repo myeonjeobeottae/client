@@ -1,10 +1,19 @@
-@mixin wrapper {
-	width: 100vw;
-	height: 100vh;
+@use '../helpers/' as *;
+
+@mixin btn {
+	@include mixin-flexCenter;
+	cursor: pointer;
+	min-height: 40px;
+	border: none;
+	border-radius: 4px;
+	text-decoration: none;
+	@content;
 }
 
-@mixin flex-center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+@mixin linkBtn {
+	@include mixin-flexCenter;
+	border: none;
+	text-decoration: none;
+	color: black;
+	@content;
 }

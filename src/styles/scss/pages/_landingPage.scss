@@ -2,8 +2,8 @@
 @use '../helpers' as *;
 
 .landing-page-wrapper {
-	@include com-wrapper;
-	@include com-flex-center;
+	@include mixin-fullScreen;
+	@include mixin-flexCenter;
 	position: relative;
 	overflow: hidden;
 
@@ -30,7 +30,7 @@
 	}
 
 	& > .btn-box {
-		@include com-flex-center;
+		@include mixin-flexCenter;
 		position: relative;
 		top: -100px;
 		width: 110vmin;
