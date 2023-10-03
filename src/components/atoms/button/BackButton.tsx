@@ -5,7 +5,7 @@ interface PropTypes extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 }
 
-export default function BackButton({ children, ...props }: PropTypes) {
+export function BackButton({ children, ...props }: PropTypes) {
 	const router = useRouter();
 	return (
 		<Button onClick={() => router.back()} {...props}>
