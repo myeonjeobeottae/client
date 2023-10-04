@@ -6,7 +6,7 @@ interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
 	return (
-		<div>
+		<div style={{ backgroundColor: 'black' }}>
 			<Header />
 			{children}
 		</div>
