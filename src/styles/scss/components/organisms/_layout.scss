@@ -1,0 +1,6 @@
+@use '../../helpers/' as *;
+
+.layoutWrapper {
+	@include mixin-fullScreen;
+	position: relative;
+}

@@ -1,7 +1,7 @@
 @use '../base' as *;
 @use '../helpers' as *;
 
-.landing-page-wrapper {
+.landingPageWrapper {
 	@include mixin-fullScreen;
 	@include mixin-flexCenter;
 	position: relative;
@@ -29,7 +29,7 @@
 		color: white;
 	}
 
-	& > .btn-box {
+	& > .selectBtns {
 		@include mixin-flexCenter;
 		position: relative;
 		top: -100px;

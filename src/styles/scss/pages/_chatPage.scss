@@ -1,18 +1,35 @@
 @use '../base' as *;
 @use '../helpers' as *;
 
-.chat-page-wrapper {
+.chatPageWrapper {
 	@include mixin-fullScreen;
 	@include mixin-flexCenter;
 	flex-direction: column;
+	position: relative;
 	gap: 15rem;
-
-	& > .btn-box {
-		border: solid red;
-		width: 50vmin;
-		& > a:nth-of-type(1) {
+	& > .title {
+		color: var(--white);
+	}
+	& > .selectBtns {
+		@include mixin-flexBetween;
+		width: 400px;
+		& > .url,
+		& > .custom {
+			@include com-linkBtn;
+			width: 170px;
+			padding: var(--padding-s);
+			color: var(--color-gray-9);
+			font-size: var(--fs-m);
+			border: 1px solid var(--color-gray-7);
 		}
-		& > a:nth-of-type(2) {
+	}
+	& > .tips {
+		@include mixin-flexColumn;
+		gap: var(--gap-xs);
+		color: var(--color-gray-7);
+		font-size: var(--fs-xs);
+		& > .tip {
+			list-style: square;
 		}
 	}
 }

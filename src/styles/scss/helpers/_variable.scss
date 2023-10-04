@@ -6,6 +6,11 @@
 	--color-gray-5: #555555;
 	--color-gray-7: #767676;
 	--color-gray-9: #dbdbdb;
+	--color-gradient: linear-gradient(
+		90deg,
+		rgba(25, 28, 33, 1) 0%,
+		rgba(24, 35, 48, 1) 100%
+	);
 
 	/* padding */
 	--padding-s: 1rem;
