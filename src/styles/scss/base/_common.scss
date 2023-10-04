@@ -2,7 +2,6 @@
 
 @mixin btn {
 	@include mixin-flexCenter;
-	cursor: pointer;
 	min-height: 40px;
 	border: none;
 	border-radius: var(--radius-m);
