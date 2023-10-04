@@ -16,12 +16,15 @@
 		"incremental": true,
 		"baseUrl": "./src",
 		"paths": {
+			"@images/*": ["../public/images/*"],
+			"@svgs/*": ["../public/svgs/*"],
 			"@atoms/*": ["./components/atoms/*"],
 			"@molecules/*": ["./components/molecules/*"],
 			"@organisms/*": ["./components/organisms/*"],
 			"@templates/*": ["./components/templates/*"],
 			"@pages/*": ["./pages/*"],
-			"@styles/*": ["./styles/css/*"]
+			"@styles/*": ["./styles/css/*"],
+			"@utils/*": ["./utils/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

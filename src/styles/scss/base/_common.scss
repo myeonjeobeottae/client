@@ -1,7 +1,18 @@
-.text {
-	font-size: large;
-	margin-top: auto;
+@use '../helpers/' as *;
+
+@mixin btn {
+	@include mixin-flexCenter;
+	min-height: 40px;
+	border: none;
+	border-radius: 4px;
+	text-decoration: none;
+	@content;
 }
-.a {
-	display: block;
+
+@mixin linkBtn {
+	@include mixin-flexCenter;
+	border: none;
+	text-decoration: none;
+	color: black;
+	@content;
 }

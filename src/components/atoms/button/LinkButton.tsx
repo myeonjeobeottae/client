@@ -6,12 +6,10 @@ interface PropTypes extends React.LinkHTMLAttributes<HTMLAnchorElement> {
 	href: string;
 }
 
-function LinkButton({ href, children, ...props }: PropTypes) {
+export function LinkButton({ href, children, ...props }: PropTypes) {
 	return (
 		<Link className="linkBtn" href={href} {...props}>
 			{children}
 		</Link>
 	);
 }
-
-export default LinkButton;

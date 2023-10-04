@@ -1,0 +1,14 @@
+@use '../base' as *;
+@use '../helpers' as *;
+
+.chat-page-wrapper {
+	@include mixin-fullScreen;
+	@include mixin-flexCenter;
+	flex-direction: column;
+	gap: 15rem;
+
+	& > .btn-box {
+		border: solid red;
+		width: 50vmin;
+	}
+}

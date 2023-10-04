@@ -1,0 +1,24 @@
+@use '../../helpers/' as *;
+
+.headerWrapper {
+	@include mixin-flexBetween;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 60px;
+	padding: var(--padding-s);
+	& > .hamburgerBtn {
+		position: relative;
+		width: 100px;
+		height: 100%;
+		& > svg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+}

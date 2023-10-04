@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 describe(`<LandingPage />`, () => {
 	it('랜딩페이지 링크 버튼을 누르면 해당 페이지로 이동한다.', () => {
 		render(<LandingPage />);
+
 		const chatButton = screen.getByRole('link', { name: 'chat' });
 		userEvent.click(chatButton);
 
