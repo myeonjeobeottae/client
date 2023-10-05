@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				<Layout>
 					<Suspense fallback={<Loading />}>
 						<Component {...pageProps} />
-						<ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+						{/* <ReactQueryDevtools initialIsOpen={false} position="bottom-right" /> */}
 					</Suspense>
 				</Layout>
 			</Hydrate>

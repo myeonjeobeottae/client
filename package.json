@@ -13,6 +13,7 @@
 		"sass": "sass --watch --no-source-map src/styles/scss:src/styles/css"
 	},
 	"dependencies": {
+		"@toss/use-funnel": "^1.2.6",
 		"@types/node": "20.4.10",
 		"@types/react": "18.2.20",
 		"@types/react-dom": "18.2.7",
@@ -43,6 +44,7 @@
 		"framer-motion": "^10.15.1",
 		"jest": "^29.6.2",
 		"jest-environment-jsdom": "^29.6.2",
+		"next-router-mock": "^0.9.10",
 		"prettier": "^3.0.3",
 		"ts-jest": "^29.1.1"
 	}

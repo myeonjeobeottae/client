@@ -11,7 +11,7 @@ export default function ChatPage() {
 				<LinkButton className="url" href="/chat/url">
 					URL
 				</LinkButton>
-				<LinkButton className="custom" href="/chat/custom">
+				<LinkButton className="custom" href="/chat/custom?funnel-step=position">
 					직접 선택
 				</LinkButton>
 			</section>
