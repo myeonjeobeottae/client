@@ -1,5 +1,6 @@
-import IconWantedLogo from './03_SVG/wanted_BI_combination_좌우조합.svg';
+import IconWantedLogo from './wanted_BI.svg';
 import IconHamburger from './menu.svg';
 import IconBack from './back.svg';
+import IconSearch from './search.svg';
 
-export { IconHamburger, IconBack, IconWantedLogo };
+export { IconHamburger, IconBack, IconWantedLogo, IconSearch };

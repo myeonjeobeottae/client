@@ -2,13 +2,16 @@ import Header from '@organisms/header/Header';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Background from '@images/landingPage/bg.png';
+import { IconBack } from '@svgs/index';
+import { BackButton } from '@atoms/button/BackButton';
 
 interface LayoutProps {
 	children: React.ReactNode;
 }
 
 function Layout({ children }: LayoutProps) {
-	// const { pathname} = useRouter();
+	const { query } = useRouter();
+	const isQuestion = !!query.q;
 
 	return (
 		<div className="layoutWrapper">
@@ -21,6 +24,9 @@ function Layout({ children }: LayoutProps) {
 				alt="Background Image"
 			/>
 			<Header />
+			<BackButton>
+				<IconBack />
+			</BackButton>
 
 			{children}
 		</div>

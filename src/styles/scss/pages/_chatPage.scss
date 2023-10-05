@@ -26,7 +26,7 @@
 	& > .tips {
 		@include mixin-flexColumn;
 		gap: var(--gap-xs);
-		color: var(--color-gray-7);
+		color: var(--color-gray-9);
 		font-size: var(--fs-xs);
 		& > .tip {
 			list-style: square;
