@@ -4,15 +4,17 @@
 	@include mixin-flexCenter;
 	min-height: 40px;
 	border: none;
-	border-radius: 4px;
+	border-radius: var(--radius-m);
 	text-decoration: none;
 	@content;
 }
 
 @mixin linkBtn {
 	@include mixin-flexCenter;
-	border: none;
-	text-decoration: none;
+	padding: var(--padding-s);
 	color: black;
+	border: none;
+	border-radius: var(--radius-m);
+	text-decoration: none;
 	@content;
 }

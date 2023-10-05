@@ -2,21 +2,4 @@
 
 .btn {
 	@include com-btn;
-	padding: 30px;
-}
-
-.doorBtn {
-	@include com-btn;
-	color: red;
-	background-color: black;
-}
-
-.to {
-	@include com-btn;
-	color: blue;
-}
-
-.green {
-	@include com-btn;
-	color: green;
 }
