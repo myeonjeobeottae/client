@@ -1,4 +1,3 @@
-import HomeLogo from '@images/landingPage/logo.png';
 import HomeLogoGray from '@images/landingPage/logo-gray.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

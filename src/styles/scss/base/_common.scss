@@ -11,7 +11,6 @@
 
 @mixin linkBtn {
 	@include mixin-flexCenter;
-	padding: var(--padding-s);
 	color: black;
 	border: none;
 	border-radius: var(--radius-m);
