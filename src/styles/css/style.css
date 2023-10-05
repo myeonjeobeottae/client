@@ -211,7 +211,6 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--padding-s);
   color: black;
   border: none;
   border-radius: var(--radius-m);
@@ -360,7 +359,6 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--padding-s);
   color: black;
   border: none;
   border-radius: var(--radius-m);
