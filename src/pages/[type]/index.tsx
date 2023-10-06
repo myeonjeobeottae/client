@@ -1,7 +1,7 @@
 import { LinkButton } from '@atoms/button/LinkButton';
 import Background from '@atoms/background';
 import Src from '@images/chatPage/bg.png';
-import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function ChatPage() {
 	return (

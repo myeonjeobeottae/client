@@ -23,7 +23,7 @@ const queryClient = new QueryClient();
 // }
 
 describe('useFunnel이 정상적으로 동작하는 테스트', () => {
-	it('Query Param의 funnel-step이 select1일 때, select1 스텝이 렌더된다.', async () => {
+	it('Query Param의 funnel-step이 position 때, position 스텝이 렌더된다.', async () => {
 		// function TestComponent() {
 		// 	const [테스트퍼널] = useFunnel(퍼널스텝리스트);
 
@@ -45,10 +45,10 @@ describe('useFunnel이 정상적으로 동작하는 테스트', () => {
 		// 	);
 		// }
 
-		mockRouter.setCurrentUrl(`?funnel-step=select1`);
+		mockRouter.setCurrentUrl(`?funnel-step=position`);
 		renderWithQueryClient(<CustomPage />);
 
-		expect(mockRouter.query['funnel-step']).toBe('select1');
+		expect(mockRouter.query['funnel-step']).toBe('position');
 		expect(
 			await screen.findByText('직무를 선택해 볼까요?'),
 		).toBeInTheDocument();

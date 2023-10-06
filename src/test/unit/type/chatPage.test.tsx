@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import mockRouter from 'next-router-mock';
 import userEvent from '@testing-library/user-event';
+import { renderWithQueryClient } from '@test/test-utils';
 
 // jest.mock('next/router', () => ({
 // 	useRouter: jest.fn().mockReturnValue({
@@ -25,16 +26,16 @@ describe(`<ChatPage />`, () => {
 	});
 
 	it('ChatPage에 링크 버튼을 누르면 해당 페이지로 이동한다.', async () => {
-		render(<ChatPage />);
-		// mockRouter.setCurrentUrl(`/chat/url`);
+		mockRouter.setCurrentUrl(`/chat`);
+		renderWithQueryClient(<ChatPage />);
 		// const { type } = useRouter().query;
 		// const router = useRouter();
-		// const urlButton = screen.getByRole('link', { name: 'URL' });
+		const urlButton = screen.getByRole('link', { name: 'URL' });
 		// const customButton = screen.getByRole('link', { name: '직접 선택' });
 
-		// await userEvent.click(urlButton);
+		await userEvent.click(urlButton);
 
-		// expect(mockRouter.pathname).toBe('/chat/url');
+		expect(mockRouter.pathname).toBe('/[type]/url');
 
 		// expect(customButton).toHaveAttribute('href', `/${type}/custom`);
 		// expect(urlButton).toHaveAttribute('href', `/${type}/url`);
