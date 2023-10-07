@@ -10,8 +10,9 @@ interface LayoutProps {
 }
 
 function Layout({ children }: LayoutProps) {
-	const { query } = useRouter();
+	const { query, pathname } = useRouter();
 	const isQuestion = !!query.q;
+	const viewBackBtn = pathname !== '/' && !isQuestion;
 
 	return (
 		<div className="layoutWrapper">
@@ -24,9 +25,11 @@ function Layout({ children }: LayoutProps) {
 				alt="Background Image"
 			/>
 			<Header />
-			<BackButton>
-				<IconBack />
-			</BackButton>
+			{viewBackBtn ? (
+				<BackButton>
+					<IconBack />
+				</BackButton>
+			) : null}
 
 			{children}
 		</div>
