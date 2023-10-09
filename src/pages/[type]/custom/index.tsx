@@ -11,12 +11,12 @@ function CustomPage() {
 		<main className="customPageWrapper">
 			<Funnel>
 				<Funnel.Step name="position">
-					<PositionTemp next={() => setStep('stack')} />
+					<PositionTemp next={(e) => setStep('stack', e)} />
 				</Funnel.Step>
 				<Funnel.Step name="stack">
-					<PositionTemp next={() => setStep('test')} />
+					<PositionTemp next={(e) => setStep('time', e)} />
 				</Funnel.Step>
-				<Funnel.Step name="test">
+				<Funnel.Step name="time">
 					<div>asdfadsfasd</div>
 				</Funnel.Step>
 			</Funnel>

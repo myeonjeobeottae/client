@@ -1,22 +1,28 @@
 import Button from '@atoms/button/Button';
+import { MouseEvent } from 'react';
 
 interface PositionTempProps {
-	next: () => void;
+	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
 function PositionTemp({ next }: PositionTempProps) {
 	return (
-		<section className="positionWrapper">
+		<section
+			className="positionWrapper"
+			onClick={() => console.log('버블링section')}
+		>
 			<h1 className="title">직무를 선택해 볼까요?</h1>
-			<div className="selectBtns">
-				<Button className="frontEnd" type="button">
+			<div className="selectBtns" onClick={() => console.log('버블링')}>
+				<Button
+					className="frontEnd"
+					data-name="프론트엔드"
+					type="button"
+					onClick={next}
+				>
 					프론트엔드
 				</Button>
-				<Button className="backEnd" type="button">
+				<Button className="backEnd" type="button" onClick={next}>
 					백엔드
-				</Button>
-				<Button type="button" onClick={next}>
-					next
 				</Button>
 			</div>
 			<ul className="tips">
