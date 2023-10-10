@@ -7,12 +7,9 @@ interface PositionTempProps {
 
 function PositionTemp({ next }: PositionTempProps) {
 	return (
-		<section
-			className="positionWrapper"
-			onClick={() => console.log('버블링section')}
-		>
-			<h1 className="title">직무를 선택해 볼까요?</h1>
-			<div className="selectBtns" onClick={() => console.log('버블링')}>
+		<section className="positionWrapper">
+			<h1 className="title">직무를 선택해 주세요.</h1>
+			<div className="selectBtns">
 				<Button
 					className="frontEnd"
 					data-name="프론트엔드"
