@@ -5,21 +5,16 @@ interface PositionTempProps {
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
-function PositionTemp({ next }: PositionTempProps) {
+function StackTemp({ next }: PositionTempProps) {
 	return (
 		<section className="positionWrapper">
-			<h1 className="title">직무를 선택해 주세요.</h1>
+			<h1 className="title">세부 기술을 선택해 주세요.</h1>
 			<div className="selectBtns">
-				<button
-					className="frontEnd"
-					data-name="프론트엔드"
-					type="button"
-					onClick={next}
-				>
-					프론트엔드
-				</button>
+				<Button className="frontEnd" type="button" onClick={next}>
+					CS
+				</Button>
 				<Button className="backEnd" type="button" onClick={next}>
-					백엔드
+					언어
 				</Button>
 			</div>
 			<ul className="tips">
@@ -34,4 +29,4 @@ function PositionTemp({ next }: PositionTempProps) {
 	);
 }
 
-export default PositionTemp;
+export default StackTemp;

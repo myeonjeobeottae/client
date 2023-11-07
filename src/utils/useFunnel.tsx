@@ -41,16 +41,16 @@ export function useFunnel(options: {
 		setState(router.query[`funnel-step`] as stateType);
 	}, [router.query[`funnel-step`]]);
 
-	const setStep = (
-		step: stateType,
-		e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
-	) => {
+	const setStep = (step: stateType, e: MouseEvent<HTMLButtonElement>) => {
 		if (!e.currentTarget.dataset.name) {
 			return;
 		}
-
+		console.log(e, e.currentTarget, e.target);
 		const name = e.currentTarget.dataset.name;
+
 		setSelected((prev) => {
+			console.log(e, e.currentTarget, e.target);
+
 			return { ...prev, [state]: name };
 		});
 		router.push(`/${type}/custom?funnel-step=${step}`);
