@@ -13,6 +13,8 @@
 		"sass": "sass --watch --no-source-map src/styles/scss:src/styles/css"
 	},
 	"dependencies": {
+		"@tanstack/react-query": "^5.8.1",
+		"@tanstack/react-query-devtools": "^5.8.1",
 		"@toss/use-funnel": "^1.2.6",
 		"@types/node": "20.4.10",
 		"@types/react": "18.2.20",
@@ -29,8 +31,6 @@
 	},
 	"devDependencies": {
 		"@svgr/webpack": "^8.1.0",
-		"@tanstack/react-query": "^4.32.6",
-		"@tanstack/react-query-devtools": "^4.32.6",
 		"@testing-library/dom": "^9.3.1",
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^14.0.0",

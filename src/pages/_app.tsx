@@ -1,7 +1,7 @@
 import Layout from '@templates/layout';
 import Loading from '@atoms/loading/Loading';
 import {
-	Hydrate,
+	HydrationBoundary,
 	QueryClient,
 	QueryClientProvider,
 } from '@tanstack/react-query';
@@ -24,14 +24,17 @@ export default function App({ Component, pageProps }: AppProps) {
 	);
 	return (
 		<QueryClientProvider client={queryClient}>
-			<Hydrate state={pageProps.dehydratedState}>
+			<HydrationBoundary state={pageProps.dehydratedState}>
 				<Layout>
 					<Suspense fallback={<Loading />}>
 						<Component {...pageProps} />
-						<ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+						<ReactQueryDevtools
+							initialIsOpen={false}
+							buttonPosition="bottom-right"
+						/>
 					</Suspense>
 				</Layout>
-			</Hydrate>
+			</HydrationBoundary>
 		</QueryClientProvider>
 	);
 }
