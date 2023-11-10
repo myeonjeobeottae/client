@@ -22,8 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				},
 			}),
 	);
-	const restapi = 'sssssss';
-	console.log(restapi);
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<HydrationBoundary state={pageProps.dehydratedState}>
