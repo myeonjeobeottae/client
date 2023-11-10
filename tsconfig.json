@@ -24,7 +24,8 @@
 			"@templates/*": ["./components/templates/*"],
 			"@pages/*": ["./pages/*"],
 			"@styles/*": ["./styles/css/*"],
-			"@utils/*": ["./utils/*"]
+			"@utils/*": ["./utils/*"],
+			"@test/*": ["./test/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

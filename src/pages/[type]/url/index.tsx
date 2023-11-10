@@ -2,8 +2,11 @@ import { useTextInput } from '@atoms/input/Input';
 import Button from '@atoms/button/Button';
 import { BackButton } from '@atoms/button/BackButton';
 import { IconSearch, IconWantedLogo } from '@svgs/index';
+import { useRouter } from 'next/router';
 
 export default function UrlPage() {
+	const { pathname } = useRouter();
+	console.log(pathname);
 	const [value, urlInput] = useTextInput({
 		id: 'url-input',
 		placeholder: 'wanted 채용 공고 URL을 입력해주세요',

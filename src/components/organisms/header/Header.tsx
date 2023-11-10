@@ -1,14 +1,15 @@
 import Logo from '@atoms/logo/Logo';
-import Button from '@atoms/button/Button';
-import Hamburger from '@svgs/menu.svg';
+import { IconProfile } from '@svgs/index';
+import { KAKAO_LOGIN_URI } from '@utils/variables';
 
 function Header() {
 	return (
 		<div className="headerWrapper">
 			<Logo size={`mid`} />
-			<Button className="hamburgerBtn" type="button">
-				<Hamburger />
-			</Button>
+			<a className="loginBtn" href={KAKAO_LOGIN_URI}>
+				<IconProfile />
+				<span>로그인</span>
+			</a>
 		</div>
 	);
 }
