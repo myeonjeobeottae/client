@@ -2,19 +2,20 @@ import { screen } from '@testing-library/dom';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockRouter from 'next-router-mock';
-import { Suspense, ReactNode } from 'react';
+import { Suspense, ReactNode, ReactElement } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { useFunnel } from '@toss/use-funnel';
+import { useFunnel } from '@utils/useFunnel';
 import { renderWithQueryClient } from '@test/test-utils';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import PositionTemp from '@templates/positionTemp';
 import CustomPage from '@pages/[type]/custom';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import ChatPage from '@pages/[type]';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
-const 퍼널스텝리스트 = ['select1', 'select2'] as const;
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
-// function renderWithTestAppContext(node: ReactNode) {
+// function renderWithTestAppContext(node: ReactElement) {
 // 	return render(
 // 		<QueryClientProvider client={queryClient}>
 // 			<Suspense fallback={null}>{node}</Suspense>
@@ -22,159 +23,76 @@ const queryClient = new QueryClient();
 // 	);
 // }
 
+const TestTemp = () => {
+	return <h1>Test1</h1>; //page
+};
+
 describe('useFunnel이 정상적으로 동작하는 테스트', () => {
 	it('Query Param의 funnel-step이 position 때, position 스텝이 렌더된다.', async () => {
-		// function TestComponent() {
-		// 	const [테스트퍼널] = useFunnel(퍼널스텝리스트);
-
-		// 	return (
-		// 		<테스트퍼널>
-		// 			<테스트퍼널.Step name="test1">
-		// 				<h1>Test1</h1> //page
-		// 			</테스트퍼널.Step>
-		// 			<테스트퍼널.Step name="test1">
-		// 				<h1>Test1</h1> //page
-		// 			</테스트퍼널.Step>
-		// 			<테스트퍼널.Step name="test1">
-		// 				<h1>Test1</h1> //page
-		// 			</테스트퍼널.Step>
-		// 			<테스트퍼널.Step name="test1">
-		// 				<h1>Test1</h1> //page
-		// 			</테스트퍼널.Step>
-		// 		</테스트퍼널>
-		// 	);
-		// }
-
 		mockRouter.setCurrentUrl(`?funnel-step=position`);
 		renderWithQueryClient(<CustomPage />);
 
 		expect(mockRouter.query['funnel-step']).toBe('position');
 		expect(
-			await screen.findByText('직무를 선택해 볼까요?'),
+			await screen.findByText('직무를 선택해 주세요.'),
 		).toBeInTheDocument();
 	});
 
 	it('select1에서 setStep을 클릭하여 select2 스텝으로 넘어간다.', async () => {
-		// function TestComponent() {
-		// 	const [테스트퍼널, setStep] = useFunnel(퍼널스텝리스트);
-
-		// 	return (
-		// 		<테스트퍼널>
-		// 			<테스트퍼널.Step name="test1">
-		// 				<h1>Test1</h1>
-		// 				<button onClick={() => setStep('test2')}>next</button>
-		// 			</테스트퍼널.Step>
-		// 			<테스트퍼널.Step name="test2">
-		// 				<h1>Test2</h1>
-		// 			</테스트퍼널.Step>
-		// 		</테스트퍼널>
-		// 	);
-		// }
-
-		mockRouter.setCurrentUrl(`?funnel-step=select1`);
+		mockRouter.setCurrentUrl(`?funnel-step=position`);
 		renderWithQueryClient(<CustomPage />);
 
-		const button = await screen.findByRole('button', { name: 'next' });
+		const button = await screen.findByRole('button', { name: '프론트엔드' });
 		await userEvent.click(button);
 
-		expect(mockRouter.query['funnel-step']).toBe('test2');
-		expect(await screen.findByText('Test2')).toBeInTheDocument();
+		expect(mockRouter.query['funnel-step']).toBe('stack');
+		expect(
+			await screen.findByText('세부 기술을 선택해 주세요.'),
+		).toBeInTheDocument();
 	});
 
-	// 	it('test1에서 setStep을 클릭하여 test2 스텝으로 넘어갈 때, test2에 걸린 onEnter와 useFunnel에 걸어 놓은 onStepChange가 호출된다.', async () => {
-	// 		const handleStepChange = jest.fn(
-	// 			(name: (typeof 퍼널스텝리스트)[number]) => {
-	// 				return name;
-	// 			},
-	// 		);
-	// 		const handleTest2Enter = jest.fn();
+	it('funnel-step 쿼리 파라미터가 없고 initialStep이 있고, initialStep에 해당하는 스텝이 렌더된다.', async () => {
+		function TestComponent() {
+			const [테스트퍼널, setStep] = useFunnel({
+				initialStep: 'time',
+			});
+			console.log(
+				'🚀 ~ file: customPage.test.tsx:59 ~ TestComponent ~ 테스트퍼널:',
+				테스트퍼널,
+			);
 
-	// 		function TestComponent() {
-	// 			const [테스트퍼널, setStep] = useFunnel(퍼널스텝리스트, {
-	// 				onStepChange: handleStepChange,
-	// 			});
+			return (
+				<테스트퍼널>
+					<테스트퍼널.Step name="time">
+						<h1>time2</h1>
+					</테스트퍼널.Step>
+				</테스트퍼널>
+			);
+		}
 
-	// 			return (
-	// 				<테스트퍼널>
-	// 					<테스트퍼널.Step name="test1">
-	// 						<h1>Test1</h1>
-	// 						<button onClick={() => setStep('test2')}>next</button>
-	// 					</테스트퍼널.Step>
-	// 					<테스트퍼널.Step name="test2" onEnter={handleTest2Enter}>
-	// 						<h1>Test2</h1>
-	// 					</테스트퍼널.Step>
-	// 				</테스트퍼널>
-	// 			);
-	// 		}
+		renderWithQueryClient(<TestComponent />);
 
-	// 		mockRouter.setCurrentUrl(`?funnel-step=test1`);
-	// 		renderWithTestAppContext(<TestComponent />);
+		// expect(
+		// 	await screen.findByText('세부 기술을 선택해 주세요.'),
+		// ).toBeInTheDocument();
 
-	// 		const button = await screen.findByRole('button', { name: 'next' });
-	// 		await userEvent.click(button);
+		expect(await screen.findByText('time2')).toBeInTheDocument();
+		// expect(await screen.findAllByText(/time2/)).toBeInTheDocument();
+		// expect(
+		// 	screen.getByText((_, element) => element?.textContent === 'time2'),
+		// ).toBeInTheDocument();
 
-	// 		await waitFor(() => expect(handleStepChange).toBeCalledWith('test2'));
-	// 		await waitFor(() => expect(handleTest2Enter).toBeCalled());
-	// 	});
-
-	// 	it("setStep('test2', { preserveQuery: true }) 시 funnel-step는 test2로, 그 외의 쿼리들은 유지된다.", async () => {
-	// 		function TestComponent() {
-	// 			const [테스트퍼널, setStep] = useFunnel(퍼널스텝리스트);
-
-	// 			return (
-	// 				<테스트퍼널>
-	// 					<테스트퍼널.Step name="test1">
-	// 						<h1>Test1</h1>
-	// 						<button onClick={() => setStep('test2', { preserveQuery: true })}>
-	// 							next
-	// 						</button>
-	// 					</테스트퍼널.Step>
-	// 					<테스트퍼널.Step name="test2">
-	// 						<h1>Test2</h1>
-	// 					</테스트퍼널.Step>
-	// 				</테스트퍼널>
-	// 			);
-	// 		}
-
-	// 		mockRouter.setCurrentUrl(`?funnel-step=test1&test=test&merong=merong`);
-	// 		renderWithTestAppContext(<TestComponent />);
-
-	// 		const button = await screen.findByRole('button', { name: 'next' });
-	// 		await userEvent.click(button);
-
-	// 		expect(mockRouter.query['funnel-step']).toBe('test2');
-	// 		expect(mockRouter.query['test']).toBe('test');
-	// 		expect(mockRouter.query['merong']).toBe('merong');
-	// 	});
-
-	// 	it('funnel-step 쿼리 파라미터가 없고 initialStep이 있을 경우, initialStep에 해당하는 스텝이 렌더된다.', async () => {
-	// 		function TestComponent() {
-	// 			const [테스트퍼널] = useFunnel(퍼널스텝리스트, { initialStep: 'test1' });
-
-	// 			return (
-	// 				<테스트퍼널>
-	// 					<테스트퍼널.Step name="test1">
-	// 						<h1>Test1</h1>
-	// 					</테스트퍼널.Step>
-	// 				</테스트퍼널>
-	// 			);
-	// 		}
-
-	// 		mockRouter.setCurrentUrl('');
-	// 		renderWithTestAppContext(<TestComponent />);
-
-	// 		// SSR에서 에러가 생기는지 여부 확인
-	// 		expect(() =>
-	// 			ReactDOMServer.renderToString(
-	// 				<QueryClientProvider client={queryClient}>
-	// 					<Suspense fallback={null}>
-	// 						<TestComponent />
-	// 					</Suspense>
-	// 				</QueryClientProvider>,
-	// 			),
-	// 		).not.toThrow();
-	// 		expect(await screen.findByText('Test1')).toBeInTheDocument();
-	// 	});
+		// SSR에서 에러가 생기는지 여부 확인
+		// expect(() =>
+		// 	ReactDOMServer.renderToString(
+		// 		<QueryClientProvider client={queryClient}>
+		// 			<Suspense fallback={null}>
+		// 				<TestComponent />
+		// 			</Suspense>
+		// 		</QueryClientProvider>,
+		// 	),
+		// ).not.toThrow();
+	});
 
 	// 	it('options에 stepQueryKey가 kkk이면, 현재 스텝을 나타내는 query key는 kkk이고 setStep 시 kkk가 변경된다.', async () => {
 	// 		const CUSTOM_QUERY_KEY = 'kkk';

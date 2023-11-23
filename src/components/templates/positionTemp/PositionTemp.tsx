@@ -10,15 +10,20 @@ function PositionTemp({ next }: PositionTempProps) {
 		<section className="positionWrapper">
 			<h1 className="title">직무를 선택해 주세요.</h1>
 			<div className="selectBtns">
-				<button
+				<Button
 					className="frontEnd"
 					data-name="프론트엔드"
 					type="button"
 					onClick={next}
 				>
 					프론트엔드
-				</button>
-				<Button className="backEnd" type="button" onClick={next}>
+				</Button>
+				<Button
+					className="backEnd"
+					data-name="백엔드"
+					type="button"
+					onClick={next}
+				>
 					백엔드
 				</Button>
 			</div>
