@@ -1,6 +1,9 @@
+import Button from '@atoms/button';
 import { LinkButton } from '@atoms/button/LinkButton';
+import { useRouter } from 'next/router';
 
 export default function ChatPage() {
+	const router = useRouter();
 	return (
 		<main className="chatPageWrapper">
 			<h1 className="title">질문 방식을 선택해 주세요.</h1>

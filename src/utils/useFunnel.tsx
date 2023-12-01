@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 
@@ -35,30 +35,46 @@ export function useFunnel(options: {
 		time: 0,
 	});
 	console.log('🚀 ~ file: useFunnel.tsx:30 ~ state:', state);
-	console.log('🚀 ~ file: useFunnel.tsx:35 ~ selected:', selected);
+	// console.log('🚀 ~ file: useFunnel.tsx:35 ~ selected:', selected);
+	// const prevCountRef = useRef<string>(router.query[`funnel-step`]);
+	// useEffect(() => {
+	// 	prevCountRef.current = router.query[`funnel-step`]t;
+	// }, [router.query[`funnel-step`]]);
 
+	/**
+	 * ChatPage => Funnel
+	 * replace 로 주는 주소는 history에 쌓이지 않기 떄문에, custom이 마지막 history 기록이기 때문에 뒤로가기 동작함
+	 *
+	 * position이 asPath에 할당 된 이유
+	 * replae 후 useeffect의 else 로직이 돌아 리랜더링되면 asPathdp postion이 할당됨
+	 * 이유: 브라우저가 표시되는 경로
+	 */
 	useEffect(() => {
+		// debugger;
 		if (!router.query[`funnel-step`]) {
-			router.push(`/${type}/custom?funnel-step=${options.initialStep}`);
+			// debugger;
+			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
+			console.log('111', router);
 		} else {
+			console.log('111else', router);
 			setState(router.query[`funnel-step`] as stateType);
 		}
 	}, [router.query[`funnel-step`]]);
 
-	// useEffect(() => {}, []);
-
+	console.log('clean111', router);
 	const setStep = (step: stateType, e: MouseEvent<HTMLButtonElement>) => {
 		if (!e.currentTarget.dataset.name) {
 			return;
 		}
-		console.log(e, e.currentTarget, e.target);
+		// console.log(e, e.currentTarget, e.target);
 		const name = e.currentTarget.dataset.name;
 
 		setSelected((prev) => {
-			console.log(e, e.currentTarget, e.target);
+			// console.log(e, e.currentTarget, e.target);
 
 			return { ...prev, [state]: name };
 		});
+		console.log('1112', router);
 		router.push(`/${type}/custom?funnel-step=${step}`);
 	};
 
@@ -71,22 +87,31 @@ export function useFunnel(options: {
 	 *
 	 */
 	const Funnel = ({ children }: FunnelProps) => {
-		console.log('🚀 ~ file: useFunnel.tsx:70 ~ Funnel ~ children:', children, [
-			children,
-			typeof children,
-		]);
+		// console.log('🚀 ~ file: useFunnel.tsx:70 ~ Funnel ~ children:', children, [
+		// 	children,
+		// 	typeof children,
+		// ]);
 		let targetStep;
 		if (!Array.isArray(children)) {
+			// console.log(
+			// 	'🚀 ~ file: useFunnel.tsx:82 ~ Funnel ~ children:',
+			// 	children.props.name,
+			// );
+			// targetStep = children;
+			// if (children.props.name == state) {
+			// console.log(
+			// 	'🚀 ~ file: useFunnel.tsx:180 ~ Funnel ~ children.props.name:',
+			// 	state,
+			// 	children.props.name,
+			// );
 			targetStep = children;
+			// }
+
+			// targetStep = children;
 		} else {
-			if (Array.isArray(children))
-				targetStep = children.find(
-					(childStep) => childStep.props.name === state,
-				);
-			console.log(
-				'🚀 ~ file: useFunnel.tsx:74 ~ Funnel ~ targetStep:',
-				targetStep,
-			);
+			// if (Array.isArray(children))
+			// console.log('🚀 ~ file: useFunnel.tsx:98 ~ Funnel ~ children:', children);
+			targetStep = children.find((childStep) => childStep.props.name === state);
 		}
 
 		return targetStep;
