@@ -4,10 +4,11 @@ import mockRouter from 'next-router-mock';
 import { useFunnel } from '@utils/useFunnel';
 import { renderWithQueryClient } from '@test/test-utils';
 import CustomPage from '@pages/[type]/custom';
+import StackTemp from '@templates/stackTemp';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
-describe('useFunnel이 정상적으로 동작하는 테스트', () => {
+describe('useFunnel이 정상적으로 동작하는지 테스트', () => {
 	it('Query Param의 funnel-step이 position 때, position 스텝이 렌더된다.', async () => {
 		mockRouter.setCurrentUrl(`?funnel-step=position`);
 		renderWithQueryClient(<CustomPage />);
@@ -49,5 +50,29 @@ describe('useFunnel이 정상적으로 동작하는 테스트', () => {
 		renderWithQueryClient(<TestComponent />);
 
 		expect(await screen.findByText('aaaa')).toBeInTheDocument();
+	});
+
+	it('MenuItem을 누르면 상태가 변경된다.', async () => {
+		function TestComponent() {
+			const [테스트퍼널, setStep, setStepState] = useFunnel({
+				initialStep: 'time',
+			});
+
+			return (
+				<테스트퍼널>
+					<테스트퍼널.Step name="time">
+						<StackTemp next={() => setStep('time')} setState={setStepState} />,
+					</테스트퍼널.Step>
+				</테스트퍼널>
+			);
+		}
+
+		renderWithQueryClient(<TestComponent />);
+
+		const button = screen.getByTestId('skillMenuItem');
+
+		expect(button).toBeInTheDocument();
+
+		await userEvent.click(button);
 	});
 });

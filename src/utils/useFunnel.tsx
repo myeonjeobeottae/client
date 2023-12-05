@@ -10,48 +10,41 @@ interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-interface returnType {
-	Funnel: any;
-	setStep: any;
+type returnType = [Funnel: any, setStep: any, setStepState: any];
+
+interface stackStateType {
+	skill: [];
+	cs: [];
 }
 
 interface selectedStateType {
 	position: string;
-	stack: string[];
+	stack: stackStateType[];
 	time: number;
 }
 
 type stateType = keyof selectedStateType;
 
-export function useFunnel(options: {
-	initialStep: stateType;
-}): [returnType['Funnel'], returnType['setStep']] {
+export function useFunnel(options: { initialStep: stateType }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
-		stack: [],
+		stack: [{ skill: [], cs: [] }],
 		time: 0,
 	});
-	console.log('🚀 ~ file: useFunnel.tsx:30 ~ state:', state);
-	// console.log('🚀 ~ file: useFunnel.tsx:35 ~ selected:', selected);
-	// const prevCountRef = useRef<string>(router.query[`funnel-step`]);
-	// useEffect(() => {
-	// 	prevCountRef.current = router.query[`funnel-step`]t;
-	// }, [router.query[`funnel-step`]]);
+	console.log(selected);
 
 	useEffect(() => {
-		// debugger;
 		if (!router.query[`funnel-step`]) {
-			// debugger;
 			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
 		} else {
 			setState(router.query[`funnel-step`] as stateType);
 		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStep = (step: stateType, e: MouseEvent<HTMLButtonElement>) => {
+	const setStepState = (e: MouseEvent<HTMLButtonElement>) => {
 		if (!e.currentTarget.dataset.name) {
 			return;
 		}
@@ -60,6 +53,9 @@ export function useFunnel(options: {
 		setSelected((prev) => {
 			return { ...prev, [state]: name };
 		});
+	};
+
+	const setStep = (step: stateType) => {
 		router.push(`/${type}/custom?funnel-step=${step}`);
 	};
 
@@ -90,5 +86,5 @@ export function useFunnel(options: {
 	};
 	Funnel.Step = Step;
 
-	return [Funnel, setStep];
+	return [Funnel, setStep, setStepState];
 }
