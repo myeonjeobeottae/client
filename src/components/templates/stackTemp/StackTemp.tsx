@@ -3,18 +3,27 @@ import { MouseEvent } from 'react';
 
 interface PositionTempProps {
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
+	setState: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-function StackTemp({ next }: PositionTempProps) {
+function StackTemp({ next, setState }: PositionTempProps) {
 	return (
 		<section className="positionWrapper">
 			<h1 className="title">세부 기술을 선택해 주세요.</h1>
 			<div className="selectBtns">
+				<Button
+					className="selected"
+					type="button"
+					onClick={next}
+					data-testId={'skillMenu'}
+				>
+					기술
+				</Button>
 				<Button className="frontEnd" type="button" onClick={next}>
 					CS
 				</Button>
-				<Button className="backEnd" type="button" onClick={next}>
-					언어
+				<Button type="button" onClick={setState} data-testId={'skillMenuItem'}>
+					기술
 				</Button>
 			</div>
 			<ul className="tips">
