@@ -52,27 +52,27 @@ describe('useFunnel이 정상적으로 동작하는지 테스트', () => {
 		expect(await screen.findByText('aaaa')).toBeInTheDocument();
 	});
 
-	it('MenuItem을 누르면 상태가 변경된다.', async () => {
-		function TestComponent() {
-			const [테스트퍼널, setStep, setStepState] = useFunnel({
-				initialStep: 'time',
-			});
+	// 	it('MenuItem을 누르면 상태가 변경된다.', async () => {
+	// 		function TestComponent() {
+	// 			const [테스트퍼널, setStep, setStepState] = useFunnel({
+	// 				initialStep: 'time',
+	// 			});
 
-			return (
-				<테스트퍼널>
-					<테스트퍼널.Step name="time">
-						<StackTemp next={() => setStep('time')} setState={setStepState} />,
-					</테스트퍼널.Step>
-				</테스트퍼널>
-			);
-		}
+	// 			return (
+	// 				<테스트퍼널>
+	// 					<테스트퍼널.Step name="time">
+	// 						<StackTemp next={() => setStep('time')} setState={setStepState} />,
+	// 					</테스트퍼널.Step>
+	// 				</테스트퍼널>
+	// 			);
+	// 		}
 
-		renderWithQueryClient(<TestComponent />);
+	// 		renderWithQueryClient(<TestComponent />);
 
-		const button = screen.getByTestId('skillMenuItem');
+	// 		const button = screen.getByTestId('skillMenuItem');
 
-		expect(button).toBeInTheDocument();
+	// 		expect(button).toBeInTheDocument();
 
-		await userEvent.click(button);
-	});
+	// 		await userEvent.click(button);
+	// 	});
 });

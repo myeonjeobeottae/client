@@ -19,7 +19,7 @@ interface stackStateType {
 
 interface selectedStateType {
 	position: string;
-	stack: stackStateType[];
+	stack: stackStateType;
 	time: number;
 }
 
@@ -31,9 +31,10 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
-		stack: [{ skill: [], cs: [] }],
+		stack: { skill: [], cs: [] },
 		time: 0,
 	});
+
 	console.log(selected);
 
 	useEffect(() => {
@@ -45,14 +46,37 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 	}, [router.query[`funnel-step`]]);
 
 	const setStepState = (e: MouseEvent<HTMLButtonElement>) => {
-		if (!e.currentTarget.dataset.name) {
-			return;
-		}
-		const name = e.currentTarget.dataset.name;
+		switch (state) {
+			case 'position':
+				if (!e.currentTarget.dataset.name) {
+					return;
+				}
+				const name = e.currentTarget.dataset.name;
 
-		setSelected((prev) => {
-			return { ...prev, [state]: name };
-		});
+				setSelected((prev) => {
+					return { ...prev, position: name };
+				});
+				break;
+			case 'stack':
+				const target = e.target as HTMLButtonElement;
+				const value = target.textContent;
+				const type = (target.dataset.type as keyof stackStateType) ?? 'skill';
+
+				setSelected((prev) => {
+					return {
+						...prev,
+						stack: {
+							...prev.stack,
+							[type]: [...(prev.stack[type] ?? []), value],
+						},
+					};
+				});
+				break;
+			case 'time':
+			// option += '열선 및 통풍 시트, 스마트 키, 네비게이션, ';
+			default:
+			// option += '에어백, 차선이탈 경보장치, 무선도어 잠금장치';
+		}
 	};
 
 	const setStep = (step: stateType) => {
