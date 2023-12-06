@@ -15,7 +15,7 @@ function CustomPage() {
 					<PositionTemp next={() => setStep('stack')} setState={setStepState} />
 				</Funnel.Step>
 				<Funnel.Step name="stack">
-					<StackTemp next={() => setStep('time')} setState={setStepState} />
+					<StackTemp next={() => setStep('time')} setStepState={setStepState} />
 				</Funnel.Step>
 				<Funnel.Step name="time">
 					<div>asdfadsfasd</div>

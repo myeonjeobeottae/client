@@ -29,7 +29,7 @@ beforeEach(() => {
 	const setStep = jest.fn();
 
 	renderWithQueryClient(
-		<StackTemp next={() => setStep('time')} setState={setStepState} />,
+		<StackTemp next={() => setStep('time')} setStepState={setStepState} />,
 	);
 });
 
@@ -38,7 +38,18 @@ describe('useTabs가 정상적으로 동작하는지 테스트', () => {
 		const button = screen.getByTestId('skillMenu');
 		expect(button).toHaveClass('selected');
 	});
-	it('skill Menu 버튼을 누르면 skill Menu의 item 들이 렌더된다.', async () => {});
+	it('다른 Menu 버튼을 누르면 해당 Menu의 item 들이 렌더된다.', async () => {
+		const button = screen.getByTestId('csMenu');
+		expect(button).toBeInTheDocument();
+
+		userEvent.click(button);
+
+		const csMenuItem = screen.getByTestId('csMenuItem');
+		expect(csMenuItem).toBeInTheDocument();
+
+		const skillMenuItem = screen.getByTestId('skillMenuItem');
+		expect(skillMenuItem).not.toBeInTheDocument();
+	});
 	it('selectedItem 들을 모아볼 수 있는 영역 만들기', async () => {});
 	it('MenuItem 사용자 검색 기능', async () => {});
 });
