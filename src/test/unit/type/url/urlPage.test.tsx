@@ -2,13 +2,14 @@ import { WANTED_URL } from '@utils/variables';
 import { render, screen } from '@testing-library/react';
 import UrlPage from '@pages/[type]/url';
 import userEvent from '@testing-library/user-event';
+import { renderWithQueryClient } from '@test/test-utils';
 
 jest.mock('next/router', () => ({
 	useRouter: jest.fn(),
 }));
 
 beforeEach(() => {
-	render(<UrlPage />);
+	renderWithQueryClient(<UrlPage />);
 });
 
 describe(`input창에 url을 입력하고 확인 버튼을 클릭하면 로딩 컴포넌트가 렌더된다.`, () => {

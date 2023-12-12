@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 
@@ -7,52 +7,79 @@ interface StepProps {
 }
 
 interface FunnelProps {
-	children: React.ReactElement[];
+	children: React.ReactElement[] | React.ReactElement;
 }
 
-interface returnType {
-	Funnel: any;
-	setStep: any;
+type returnType = [Funnel: any, setStep: any, setStepState: any];
+
+interface stackStateType {
+	skill: [];
+	cs: [];
 }
 
 interface selectedStateType {
 	position: string;
-	stack: string[];
+	stack: stackStateType;
 	time: number;
 }
 
 type stateType = keyof selectedStateType;
 
-export function useFunnel(options: {
-	initialStep: stateType;
-}): [returnType['Funnel'], returnType['setStep']] {
+export function useFunnel(options: { initialStep: stateType }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
-		stack: [],
+		stack: { skill: [], cs: [] },
 		time: 0,
 	});
-	console.log('🚀 ~ file: useFunnel.tsx:30 ~ state:', state);
-	console.log('🚀 ~ file: useFunnel.tsx:35 ~ selected:', selected);
+
+	console.log(selected);
 
 	useEffect(() => {
-		setState(router.query[`funnel-step`] as stateType);
+		if (!router.query[`funnel-step`]) {
+			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
+		} else {
+			setState(router.query[`funnel-step`] as stateType);
+		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStep = (step: stateType, e: MouseEvent<HTMLButtonElement>) => {
-		if (!e.currentTarget.dataset.name) {
-			return;
+	const setStepState = (e: MouseEvent<HTMLButtonElement>) => {
+		switch (state) {
+			case 'position':
+				if (!e.currentTarget.dataset.name) {
+					return;
+				}
+				const name = e.currentTarget.dataset.name;
+
+				setSelected((prev) => {
+					return { ...prev, position: name };
+				});
+				break;
+			case 'stack':
+				const target = e.target as HTMLButtonElement;
+				const value = target.textContent;
+				const type = (target.dataset.type as keyof stackStateType) ?? 'skill';
+
+				setSelected((prev) => {
+					return {
+						...prev,
+						stack: {
+							...prev.stack,
+							[type]: [...(prev.stack[type] ?? []), value],
+						},
+					};
+				});
+				break;
+			case 'time':
+			// option += '열선 및 통풍 시트, 스마트 키, 네비게이션, ';
+			default:
+			// option += '에어백, 차선이탈 경보장치, 무선도어 잠금장치';
 		}
-		console.log(e, e.currentTarget, e.target);
-		const name = e.currentTarget.dataset.name;
+	};
 
-		setSelected((prev) => {
-			console.log(e, e.currentTarget, e.target);
-
-			return { ...prev, [state]: name };
-		});
+	const setStep = (step: stateType) => {
 		router.push(`/${type}/custom?funnel-step=${step}`);
 	};
 
@@ -60,13 +87,28 @@ export function useFunnel(options: {
 		return <>{props.children}</>;
 	};
 
+	/**
+	 * FIXME: children.find 가 언디파인드면 (즉, initialStep과 일치하는 name이 없으면) 처리하기
+	 *
+	 */
 	const Funnel = ({ children }: FunnelProps) => {
-		const targetStep = children.find(
-			(childStep) => childStep.props.name === state,
-		);
+		let targetStep;
+		if (!Array.isArray(children)) {
+			// targetStep = children;
+			// if (children.props.name == state) {
+			// );
+			targetStep = children;
+			// }
+
+			// targetStep = children;
+		} else {
+			// if (Array.isArray(children))
+			targetStep = children.find((childStep) => childStep.props.name === state);
+		}
+
 		return targetStep;
 	};
 	Funnel.Step = Step;
 
-	return [Funnel, setStep];
+	return [Funnel, setStep, setStepState];
 }
