@@ -1,62 +1,70 @@
 import Button from '@atoms/button';
-import { MenuItems } from '@templates/stackTemp/StackTemp';
 import { useState, MouseEvent } from 'react';
 
-export function useTabs(options: {
-	initialMenu: keyof MenuItems;
-	MENU_ITEMS: MenuItems[];
-	setStepState: (e: MouseEvent<HTMLElement, globalThis.MouseEvent>) => void;
-}) {
-	const [menu, setMenu] = useState<keyof MenuItems>(options.initialMenu);
+type returnType = [Tab: any, selected: string[]];
 
-	const setMenuState = (e: MouseEvent<HTMLButtonElement>) => {
-		if (!e.currentTarget.dataset.name) {
-			return;
+export function useTabs<T extends Record<string, any[]>>(options: {
+	initialMenu: keyof T;
+	tabData: T;
+}): returnType {
+	const [menu, setMenu] = useState<keyof T>(options.initialMenu);
+	const [selected, setSelected] = useState<string[]>([]);
+
+	const setClickState = (e: MouseEvent<HTMLElement>) => {
+		const target = e.target as HTMLButtonElement;
+		const value = target.textContent;
+		if (value) {
+			if (options.tabData[value] !== undefined) {
+				setMenu(value);
+			} else {
+				setSelected((prev) => {
+					return [...prev, value];
+				});
+			}
 		}
-		const name = e.currentTarget.dataset.name as keyof MenuItems;
-		setMenu(name);
 	};
+
+	console.log(`selected`, selected);
 
 	const Menu = () => {
 		return (
-			<>
-				{options.MENU_ITEMS.map((el) => (
-					<>
-						{Object.keys(el).map((key) => (
-							<Button
-								data-testId={'skillMenuItem'}
-								data-name={key}
-								onClick={setMenuState}
-							>
-								{key}
-							</Button>
-						))}
-					</>
-				))}
-			</>
+			<div onClick={setClickState}>
+				{Object.keys(options.tabData).map((key) => {
+					return (
+						<Button
+							key={key}
+							data-testId={'skillMenu'}
+							data-name={key}
+							style={{ color: 'white' }}
+						>
+							{key}
+						</Button>
+					);
+				})}
+			</div>
 		);
 	};
 
 	const MenuItems = () => {
 		return (
-			<div
-				onClick={(e) => {
-					options.setStepState(e);
-				}}
-			>
-				{options.MENU_ITEMS.map(
-					(el) =>
-						el[menu]?.map((item) => (
-							<Button data-testId={'csMenuItem'} data-type={menu}>
-								{item}
-							</Button>
-						)),
-				)}
+			<div onClick={setClickState}>
+				{options.tabData[menu].map((item) => {
+					return (
+						<Button
+							key={item}
+							data-testId={'csMenuItem'}
+							data-type={menu}
+							style={{ color: 'white' }}
+						>
+							{item}
+						</Button>
+					);
+				})}
 			</div>
 		);
 	};
 
-	const Tab = ({
+	const Tabs = ({
 		children,
 	}: {
 		children: React.ReactElement | React.ReactElement[];
@@ -64,13 +72,8 @@ export function useTabs(options: {
 		return children;
 	};
 
-	Tab.Menu = Menu;
-	Tab.MenuItems = MenuItems;
+	Tabs.Menu = Menu;
+	Tabs.MenuItems = MenuItems;
 
-	return [Tab];
+	return [Tabs, selected];
 }
-
-// <Tab>
-// 	<Tab.Menu></Tab.Menu>
-// 	<Tab.MenuItems></Tab.MenuItems>
-// </Tab>;
