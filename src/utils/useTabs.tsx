@@ -1,15 +1,19 @@
 import Button from '@atoms/button';
 import { useState, MouseEvent } from 'react';
 import SelectedStacks from '@organisms/selectedStacks';
+import { useRouter } from 'next/router';
 
-type returnType = [Tab: any, selected: string[]];
+type returnType = [Tab: any, selectedStacks: string[]];
 
 export function useTabs<T extends Record<string, any[]>>(options: {
 	initialMenu: keyof T;
 	tabData: T;
+	selected: any[];
 }): returnType {
 	const [menu, setMenu] = useState<keyof T>(options.initialMenu);
-	const [selected, setSelected] = useState<string[]>([]);
+	const [selectedStacks, setSelectedStacks] = useState<string[]>(
+		options.selected,
+	);
 
 	const setClickState = (e: MouseEvent<HTMLElement>) => {
 		const target = e.target as HTMLButtonElement;
@@ -19,8 +23,8 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 			if (isTabMenu) {
 				setMenu(value);
 			} else {
-				if (!selected.includes(value)) {
-					setSelected((prev) => {
+				if (!selectedStacks.includes(value)) {
+					setSelectedStacks((prev) => {
 						return [...prev, value];
 					});
 				}
@@ -49,13 +53,16 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	const MenuItems = () => {
 		return (
-			<div onClick={setClickState} style={{ outline: 'solid red' }}>
+			<div onClick={setClickState}>
 				{options.tabData[menu].map((item) => {
 					return (
 						<Button
 							key={item}
 							data-testid={'menuItem'}
-							style={{ color: 'white', outline: 'solid blue' }}
+							style={{
+								color: selectedStacks.includes(item) ? 'gray' : 'white',
+								outline: 'solid blue',
+							}}
 						>
 							{item}
 						</Button>
@@ -76,7 +83,7 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 	Tabs.Menu = Menu;
 	Tabs.MenuItems = MenuItems;
 	Tabs.SelectedStacks = () => (
-		<SelectedStacks selected={selected} setSelected={setSelected} />
+		<SelectedStacks selected={selectedStacks} setSelected={setSelectedStacks} />
 	);
-	return [Tabs, selected];
+	return [Tabs, selectedStacks];
 }

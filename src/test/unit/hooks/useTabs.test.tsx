@@ -24,11 +24,13 @@ beforeEach(() => {
 			'데이터베이스',
 		],
 	};
+	const selected = ['test'];
 
 	function TestComponent() {
-		const [테스트Tabs, selected] = useTabs({
+		const [테스트Tabs, selectedStacks] = useTabs({
 			initialMenu: 'skill',
 			tabData,
+			selected,
 		});
 		return (
 			<>
@@ -38,7 +40,7 @@ beforeEach(() => {
 				</테스트Tabs>
 				<div>
 					<ul>
-						{selected.map((stack, i) => {
+						{selectedStacks.map((stack, i) => {
 							return (
 								<li key={i} data-testid={'selectedStack'}>
 									{stack}

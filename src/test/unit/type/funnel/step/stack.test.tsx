@@ -13,10 +13,15 @@ import StackTemp from '@templates/stackTemp';
 jest.mock('next/router', () => require('next-router-mock'));
 const setStep = jest.fn();
 const setStepState = jest.fn();
+const selected: any = jest.fn(() => []);
 
 beforeEach(() => {
 	renderWithQueryClient(
-		<StackTemp next={() => setStep('time')} setStepState={setStepState} />,
+		<StackTemp
+			next={() => setStep('time')}
+			selected={selected}
+			setStepState={setStepState}
+		/>,
 	);
 });
 

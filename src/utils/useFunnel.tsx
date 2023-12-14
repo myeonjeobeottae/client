@@ -10,13 +10,18 @@ interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-type returnType = [Funnel: any, setStep: any, setStepState: any];
-
-interface selectedStateType {
+export interface selectedStateType {
 	position: string;
 	stack: any[];
 	time: number;
 }
+
+type returnType = [
+	Funnel: any,
+	selected: selectedStateType,
+	setStep: any,
+	setStepState: any,
+];
 
 type stateType = keyof selectedStateType;
 
@@ -57,7 +62,7 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 					setSelected((prev) => {
 						return {
 							...prev,
-							stack: [...prev.stack, ...tabData],
+							stack: [...new Set([...prev.stack, ...tabData])],
 						};
 					});
 				}
@@ -100,5 +105,5 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 	};
 	Funnel.Step = Step;
 
-	return [Funnel, setStep, setStepState];
+	return [Funnel, selected, setStep, setStepState];
 }

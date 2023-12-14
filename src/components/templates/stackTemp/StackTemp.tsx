@@ -1,8 +1,10 @@
 import Button from '@atoms/button/Button';
 import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
+import type { selectedStateType } from '@utils/useFunnel';
 
-interface PositionTempProps {
+interface StackTempProps {
+	selected: selectedStateType['stack'];
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 	setStepState: (e: React.MouseEvent<HTMLElement>, tabData: any[]) => void;
 }
@@ -30,10 +32,12 @@ const tabData = {
 	케케케: [1, false, '컴퓨터구조', '자료구조', '알고리즘', '데이터베이스'],
 };
 
-function StackTemp({ next, setStepState }: PositionTempProps) {
-	const [Tabs, selected] = useTabs({
+function StackTemp({ selected, next, setStepState }: StackTempProps) {
+	console.log(selected);
+	const [Tabs, selectedStacks] = useTabs({
 		initialMenu: 'skill',
 		tabData,
+		selected,
 	});
 
 	return (
@@ -51,7 +55,7 @@ function StackTemp({ next, setStepState }: PositionTempProps) {
 				style={{ color: 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(e, selected);
+					setStepState(e, selectedStacks);
 				}}
 			>
 				다음
