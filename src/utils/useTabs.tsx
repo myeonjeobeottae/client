@@ -13,8 +13,8 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	const setClickState = (e: MouseEvent<HTMLElement>) => {
 		const target = e.target as HTMLButtonElement;
-		const value = target.textContent;
-		if (value) {
+		const value = target.innerText;
+		if (value && target instanceof HTMLButtonElement) {
 			const isTabMenu = options.tabData[value] !== undefined;
 			if (isTabMenu) {
 				setMenu(value);
@@ -49,13 +49,13 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	const MenuItems = () => {
 		return (
-			<div onClick={setClickState}>
+			<div onClick={setClickState} style={{ outline: 'solid red' }}>
 				{options.tabData[menu].map((item) => {
 					return (
 						<Button
 							key={item}
 							data-testid={'menuItem'}
-							style={{ color: 'white' }}
+							style={{ color: 'white', outline: 'solid blue' }}
 						>
 							{item}
 						</Button>
