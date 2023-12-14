@@ -14,15 +14,23 @@ jest.mock('next/router', () => require('next-router-mock'));
 const setStep = jest.fn();
 const setStepState = jest.fn();
 
+beforeEach(() => {
+	renderWithQueryClient(
+		<StackTemp next={() => setStep('time')} setStepState={setStepState} />,
+	);
+});
+
 describe('StackTemp컴포넌트가 렌더링 된다.', () => {
 	it('"세부 기술을 선택해 주세요."가 렌더된다.', async () => {
 		mockRouter.setCurrentUrl(`?funnel-step=stack`);
-		renderWithQueryClient(
-			<StackTemp next={() => setStep('time')} setState={setStepState} />,
-		);
+
 		expect(mockRouter.query['funnel-step']).toBe('stack');
 		expect(
 			await screen.findByText('세부 기술을 선택해 주세요.'),
 		).toBeInTheDocument();
+	});
+	it('selectedStacks가 렌더된다.', async () => {
+		const selectedStacks = screen.getByTestId('selectedStacks');
+		expect(selectedStacks).toBeInTheDocument();
 	});
 });

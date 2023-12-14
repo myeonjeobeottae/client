@@ -1,5 +1,5 @@
 import Button from '@atoms/button/Button';
-import { MouseEvent, useCallback } from 'react';
+import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
 
 interface PositionTempProps {
@@ -31,7 +31,10 @@ const tabData = {
 };
 
 function StackTemp({ next, setStepState }: PositionTempProps) {
-	const [Tabs, selected] = useTabs({ initialMenu: 'skill', tabData });
+	const [Tabs, selected] = useTabs({
+		initialMenu: 'skill',
+		tabData,
+	});
 
 	return (
 		<section className="stackWrapper">
@@ -40,15 +43,12 @@ function StackTemp({ next, setStepState }: PositionTempProps) {
 				<Tabs>
 					<Tabs.Menu />
 					<Tabs.MenuItems />
+					<Tabs.SelectedStacks />
 				</Tabs>
 			</div>
-			{/* <div>
-				<ul>
-					<li></li>
-				</ul>
-			</div> */}
 			{/* TODO: 아이템 담겨잇는게 없으면 클릭되면 안됌 */}
 			<Button
+				style={{ color: 'white' }}
 				onClick={(e) => {
 					next(e);
 					setStepState(e, selected);

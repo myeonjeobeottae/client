@@ -1,5 +1,6 @@
 import Button from '@atoms/button';
 import { useState, MouseEvent } from 'react';
+import SelectedStacks from '@organisms/selectedStacks';
 
 type returnType = [Tab: any, selected: string[]];
 
@@ -14,17 +15,16 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 		const target = e.target as HTMLButtonElement;
 		const value = target.textContent;
 		if (value) {
-			if (options.tabData[value] !== undefined) {
+			const isTabMenu = options.tabData[value] !== undefined;
+			if (isTabMenu) {
 				setMenu(value);
 			} else {
 				setSelected((prev) => {
-					return [...prev, value];
+					return [...new Set([...prev, value])];
 				});
 			}
 		}
 	};
-
-	console.log(`selected`, selected);
 
 	const Menu = () => {
 		return (
@@ -33,9 +33,9 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 					return (
 						<Button
 							key={key}
-							data-testId={'skillMenu'}
-							data-name={key}
+							className={key === menu ? 'selected' : undefined}
 							style={{ color: 'white' }}
+							data-testid={'skillMenu'}
 						>
 							{key}
 						</Button>
@@ -52,8 +52,7 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 					return (
 						<Button
 							key={item}
-							data-testId={'csMenuItem'}
-							data-type={menu}
+							data-testid={'menuItem'}
 							style={{ color: 'white' }}
 						>
 							{item}
@@ -74,6 +73,8 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	Tabs.Menu = Menu;
 	Tabs.MenuItems = MenuItems;
-
+	Tabs.SelectedStacks = () => (
+		<SelectedStacks selected={selected} setSelected={setSelected} />
+	);
 	return [Tabs, selected];
 }
