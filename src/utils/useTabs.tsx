@@ -1,7 +1,6 @@
 import Button from '@atoms/button';
 import { useState, MouseEvent } from 'react';
 import SelectedStacks from '@organisms/selectedStacks';
-import { useRouter } from 'next/router';
 
 type returnType = [Tab: any, selectedStacks: string[]];
 
@@ -23,11 +22,9 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 			if (isTabMenu) {
 				setMenu(value);
 			} else {
-				if (!selectedStacks.includes(value)) {
-					setSelectedStacks((prev) => {
-						return [...prev, value];
-					});
-				}
+				setSelectedStacks((prev) => {
+					return [...prev, value];
+				});
 			}
 		}
 	};
@@ -53,7 +50,7 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	const MenuItems = () => {
 		return (
-			<div onClick={setClickState}>
+			<div onClick={setClickState} style={{ outline: 'solid red' }}>
 				{options.tabData[menu].map((item) => {
 					return (
 						<Button
@@ -63,6 +60,7 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 								color: selectedStacks.includes(item) ? 'gray' : 'white',
 								outline: 'solid blue',
 							}}
+							disabled={selectedStacks.includes(item)}
 						>
 							{item}
 						</Button>

@@ -52,11 +52,12 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 			</div>
 			{/* TODO: 아이템 담겨잇는게 없으면 클릭되면 안됌 */}
 			<Button
-				style={{ color: 'white' }}
+				style={{ color: !selectedStacks.length ? 'gray' : 'white' }}
 				onClick={(e) => {
 					next(e);
 					setStepState(e, selectedStacks);
 				}}
+				disabled={!selectedStacks.length}
 			>
 				다음
 			</Button>
