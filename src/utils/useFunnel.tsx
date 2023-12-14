@@ -62,7 +62,7 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 					setSelected((prev) => {
 						return {
 							...prev,
-							stack: [...new Set([...prev.stack, ...tabData])],
+							stack: [...new Set([...tabData])],
 						};
 					});
 				}
