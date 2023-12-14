@@ -4,7 +4,7 @@ import PositionTemp from '@templates/positionTemp/PositionTemp';
 import StackTemp from '@templates/stackTemp/StackTemp';
 
 function CustomPage() {
-	const [Funnel, setStep, setStepState] = useFunnel({
+	const [Funnel, selected, setStep, setStepState] = useFunnel({
 		initialStep: 'position',
 	});
 
@@ -15,7 +15,11 @@ function CustomPage() {
 					<PositionTemp next={() => setStep('stack')} setState={setStepState} />
 				</Funnel.Step>
 				<Funnel.Step name="stack">
-					<StackTemp next={() => setStep('time')} setStepState={setStepState} />
+					<StackTemp
+						selected={selected.stack}
+						next={() => setStep('time')}
+						setStepState={setStepState}
+					/>
 				</Funnel.Step>
 				<Funnel.Step name="time">
 					<div>asdfadsfasd</div>

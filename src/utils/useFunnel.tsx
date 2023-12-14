@@ -10,18 +10,18 @@ interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-type returnType = [Funnel: any, setStep: any, setStepState: any];
-
-interface stackStateType {
-	skill: [];
-	cs: [];
-}
-
-interface selectedStateType {
+export interface selectedStateType {
 	position: string;
-	stack: stackStateType;
+	stack: any[];
 	time: number;
 }
+
+type returnType = [
+	Funnel: any,
+	selected: selectedStateType,
+	setStep: any,
+	setStepState: any,
+];
 
 type stateType = keyof selectedStateType;
 
@@ -31,7 +31,7 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
-		stack: { skill: [], cs: [] },
+		stack: [],
 		time: 0,
 	});
 
@@ -45,7 +45,7 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStepState = (e: MouseEvent<HTMLButtonElement>) => {
+	const setStepState = (e: MouseEvent<HTMLButtonElement>, tabData?: any[]) => {
 		switch (state) {
 			case 'position':
 				if (!e.currentTarget.dataset.name) {
@@ -58,19 +58,14 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 				});
 				break;
 			case 'stack':
-				const target = e.target as HTMLButtonElement;
-				const value = target.textContent;
-				const type = (target.dataset.type as keyof stackStateType) ?? 'skill';
-
-				setSelected((prev) => {
-					return {
-						...prev,
-						stack: {
-							...prev.stack,
-							[type]: [...(prev.stack[type] ?? []), value],
-						},
-					};
-				});
+				if (tabData) {
+					setSelected((prev) => {
+						return {
+							...prev,
+							stack: [...tabData],
+						};
+					});
+				}
 				break;
 			case 'time':
 			// option += '열선 및 통풍 시트, 스마트 키, 네비게이션, ';
@@ -110,5 +105,5 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 	};
 	Funnel.Step = Step;
 
-	return [Funnel, setStep, setStepState];
+	return [Funnel, selected, setStep, setStepState];
 }
