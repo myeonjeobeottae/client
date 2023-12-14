@@ -19,9 +19,11 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 			if (isTabMenu) {
 				setMenu(value);
 			} else {
-				setSelected((prev) => {
-					return [...new Set([...prev, value])];
-				});
+				if (!selected.includes(value)) {
+					setSelected((prev) => {
+						return [...prev, value];
+					});
+				}
 			}
 		}
 	};
