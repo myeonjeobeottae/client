@@ -4,7 +4,6 @@ import mockRouter from 'next-router-mock';
 import { useFunnel } from '@utils/useFunnel';
 import { renderWithQueryClient } from '@test/test-utils';
 import CustomPage from '@pages/[type]/custom';
-import StackTemp from '@templates/stackTemp';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
