@@ -2,6 +2,7 @@ import { useFunnel } from '@utils/useFunnel';
 import PositionTemp from '@templates/positionTemp';
 import StackTemp from '@templates/stackTemp';
 import TimeTemp from '@templates/timeTemp';
+import Loading from '@atoms/loading/Loading';
 
 function CustomPage() {
 	const [Funnel, selected, setStep, setStepState] = useFunnel({
@@ -24,9 +25,12 @@ function CustomPage() {
 				<Funnel.Step name="time">
 					<TimeTemp
 						selected={selected.time}
-						next={() => setStep('last')}
+						next={() => setStep('result')}
 						setStepState={setStepState}
 					/>
+				</Funnel.Step>
+				<Funnel.Step name="result">
+					<Loading />
 				</Funnel.Step>
 			</Funnel>
 		</main>
