@@ -18,7 +18,7 @@ export default function Redirect({ code }: { code: string }) {
 				const data = await axios.get(
 					`https://interviewee.store/kakao/redirect?code=${code}`,
 					{
-						// withCredentials: true,
+						withCredentials: true,
 					},
 				);
 				console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
