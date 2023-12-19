@@ -5,9 +5,11 @@ const slideData = ['1번째 슬라이드', '2번째 슬라이드', '3번째 슬�
 
 function Loading() {
 	const [Slides] = useSlides(slideData);
+	// const [Motion] = useSlides(undefined, { simple: true });
 	return (
 		<div>
 			<IconSpinner />
+			{/* <Motion>Test</Motion> */}
 			<Slides>
 				{(slideIdx: number) => <Slides.items slideIdx={slideIdx} />}
 			</Slides>

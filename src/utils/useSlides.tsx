@@ -8,7 +8,7 @@ type SlideOptions = {
 	 *
 	 * view : 1(default);
 	 */
-	view?: 1 | 2 | 3 | undefined;
+	view?: 1 | 2 | undefined;
 	/**
 	 * direction : 'top'(default)
 	 *
@@ -27,13 +27,20 @@ type SlideOptions = {
 	 * delay : null - 최초 한 번만 동작
 	 */
 	delay?: number | undefined;
+	/**
+	 * simple : false(default)
+	 *
+	 * simple : true - 단순 motionComponent인 [Motion] 리턴
+	 */
+	simple?: boolean | undefined;
 };
 
 const DefaultSlideOptions: SlideOptions = {
 	view: 1,
 	direction: 'top',
-	duration: 0.5,
-	delay: 4.5,
+	duration: 1,
+	delay: 5.5,
+	simple: false,
 };
 
 interface SlidesProps {
@@ -45,49 +52,155 @@ function wrap(min: number, max: number, v: number) {
 	return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 }
 
+//TODO : Partial parameter
 function useSlides(
-	slideData: string | any[],
+	slideData: string | any[] | undefined = [],
 	options: SlideOptions = DefaultSlideOptions,
-) {
-	const variants = {
-		enter: (options: SlideOptions) => {
-			switch (options.direction) {
-				case 'top':
-					return { y: 20, opacity: 0 };
-				case 'right':
-					return { x: '-100%', opacity: 0 };
-				case 'bottom':
-					return { y: -20, opacity: 0 };
-				case 'left':
-					return { x: '100%', opacity: 0 };
-				default:
-					return { y: 20, opacity: 0 };
-			}
-		},
+): any {
+	//options.simple
+	if (options.simple) {
+		console.log('hahah');
+		const Motion = ({
+			children,
+		}: {
+			children: React.ReactNode | React.ReactNode[];
+		}) => {
+			return (
+				<motion.div
+					animate={{
+						y: [20, 0],
+						opacity: [0, 1],
+						transition: { duration: options.duration },
+					}}
+				>
+					{children}
+				</motion.div>
+			);
+		};
+		return [Motion];
+	}
+	const single = {
 		center: (options: SlideOptions) => {
 			switch (options.direction) {
 				case 'top':
-					return { y: 0, opacity: 1 };
+					return {
+						y: [20, 0],
+						opacity: [0, 1],
+					};
 				case 'right':
-					return { x: '0', opacity: 1 };
+					return { x: '0', opacity: 0 };
 				case 'bottom':
-					return { y: 0, opacity: 1 };
+					return { y: 0, opacity: 0 };
 				case 'left':
-					return { x: '0', opacity: 1 };
+					return { x: '0', opacity: 0 };
 				default:
-					return { y: 0, opacity: 1 };
+					return { y: 0, opacity: 0 };
 			}
 		},
 		exit: (options: SlideOptions) => {
 			switch (options.direction) {
 				case 'top':
-					return { y: -20, opacity: 0 };
+					return {
+						y: -20,
+						opacity: 0,
+					};
 				case 'right':
-					return { x: '100%', opacity: 0 };
+					return {
+						x: '100%',
+						opacity: 0,
+					};
 				case 'bottom':
 					return { y: 20, opacity: 0 };
 				case 'left':
-					return { x: '-100%', opacity: 0 };
+					return {
+						x: '-100%',
+						opacity: 0,
+					};
+				default:
+					return { y: -20, opacity: 0 };
+			}
+		},
+	};
+	const multiSlide1 = {
+		center: (options: SlideOptions) => {
+			switch (options.direction) {
+				case 'top':
+					return {
+						y: 0,
+						opacity: [1, 1],
+					};
+				case 'right':
+					return { x: '0', opacity: 0 };
+				case 'bottom':
+					return { y: 0, opacity: 0 };
+				case 'left':
+					return { x: '0', opacity: 0 };
+				default:
+					return { y: 0, opacity: 0 };
+			}
+		},
+		exit: (options: SlideOptions) => {
+			switch (options.direction) {
+				case 'top':
+					return {
+						y: -20,
+						opacity: 0,
+					};
+				case 'right':
+					return {
+						x: '100%',
+						opacity: 0,
+					};
+				case 'bottom':
+					return { y: 20, opacity: 0 };
+				case 'left':
+					return {
+						x: '-100%',
+						opacity: 0,
+					};
+				default:
+					return { y: -20, opacity: 0 };
+			}
+		},
+	};
+	const multiSlide2 = {
+		center: (options: SlideOptions) => {
+			switch (options.direction) {
+				case 'top':
+					return {
+						y: [20, 0],
+						opacity: [0, 0.2],
+						transition: { duration: options.duration && options.duration / 2 },
+					};
+				case 'right':
+					return { x: '0', opacity: 0 };
+				case 'bottom':
+					return { y: 0, opacity: 0 };
+				case 'left':
+					return { x: '0', opacity: 0 };
+				default:
+					return { y: 0, opacity: 0 };
+			}
+		},
+		exit: (options: SlideOptions) => {
+			switch (options.direction) {
+				case 'top':
+					return {
+						y: [0, -20],
+						opacity: 1,
+					};
+				case 'right':
+					return {
+						x: '100%',
+						opacity: 0,
+					};
+				case 'bottom':
+					return { y: 20, opacity: 0 };
+				case 'left':
+					return {
+						x: '-100%',
+						opacity: 0,
+					};
 				default:
 					return { y: -20, opacity: 0 };
 			}
@@ -102,11 +215,28 @@ function useSlides(
 			return <div>{slideData}</div>;
 		}
 		//case 2 : slideData가 arr일 때
-		else if (Array.isArray(slideData)) {
+		else if (Array.isArray(slideData) && options.view === 1) {
 			return (
 				<div>
 					<motion.div
-						variants={variants}
+						variants={single}
+						custom={options}
+						initial={'enter'}
+						animate={'center'}
+						exit={'exit'}
+						transition={{
+							duration: options.duration,
+						}}
+					>
+						{slideData[slideIdx]}
+					</motion.div>
+				</div>
+			);
+		} else if (Array.isArray(slideData) && options.view === 2) {
+			return (
+				<div>
+					<motion.div
+						variants={multiSlide1}
 						custom={options}
 						initial={'enter'}
 						animate={'center'}
@@ -114,6 +244,16 @@ function useSlides(
 						transition={{ duration: options.duration }}
 					>
 						{slideData[slideIdx]}
+					</motion.div>
+					<motion.div
+						variants={multiSlide2}
+						custom={options}
+						initial={'enter'}
+						animate={'center'}
+						exit={'exit'}
+						transition={{ duration: options.duration }}
+					>
+						{slideData[slideIdx + 1] ?? slideData[0]}
 					</motion.div>
 				</div>
 			);
