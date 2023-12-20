@@ -13,7 +13,7 @@ interface FunnelProps {
 export interface selectedStateType {
 	position: string;
 	stack: any[];
-	time: number;
+	time: string | number;
 }
 
 type returnType = [
@@ -25,14 +25,14 @@ type returnType = [
 
 type stateType = keyof selectedStateType;
 
-export function useFunnel(options: { initialStep: stateType }): returnType {
+function useFunnel(options: { initialStep: stateType }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
 		stack: [],
-		time: 0,
+		time: 3,
 	});
 
 	console.log(selected);
@@ -45,7 +45,11 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStepState = (e: MouseEvent<HTMLButtonElement>, tabData?: any[]) => {
+	const setStepState = (
+		e: MouseEvent<HTMLButtonElement>,
+		tabData?: selectedStateType['stack'],
+		timeData?: selectedStateType['time'],
+	) => {
 		switch (state) {
 			case 'position':
 				if (!e.currentTarget.dataset.name) {
@@ -68,7 +72,17 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 				}
 				break;
 			case 'time':
-			// option += '열선 및 통풍 시트, 스마트 키, 네비게이션, ';
+				console.log('timeitme', timeData);
+				if (timeData) {
+					console.log('success');
+					setSelected((prev) => {
+						return {
+							...prev,
+							time: timeData,
+						};
+					});
+				}
+				break;
 			default:
 			// option += '에어백, 차선이탈 경보장치, 무선도어 잠금장치';
 		}
@@ -107,3 +121,5 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 
 	return [Funnel, selected, setStep, setStepState];
 }
+
+export default useFunnel;

@@ -1,12 +1,16 @@
 import Button from '@atoms/button/Button';
 import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
-import type { selectedStateType } from '@utils/useFunnel';
+import type { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface StackTempProps {
 	selected: selectedStateType['stack'];
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
-	setStepState: (e: React.MouseEvent<HTMLElement>, tabData: any[]) => void;
+	setStepState: (
+		e: React.MouseEvent<HTMLElement>,
+		tabData?: selectedStateType['stack'],
+		timeData?: selectedStateType['time'],
+	) => void;
 }
 
 const tabData = {
@@ -50,7 +54,6 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 					<Tabs.SelectedStacks />
 				</Tabs>
 			</div>
-			{/* TODO: 아이템 담겨잇는게 없으면 클릭되면 안됌 */}
 			<Button
 				style={{ color: !selectedStacks.length ? 'gray' : 'white' }}
 				onClick={(e) => {

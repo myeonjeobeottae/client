@@ -1,7 +1,8 @@
-// import { useFunnel } from '@toss/use-funnel';
 import { useFunnel } from '@utils/useFunnel';
-import PositionTemp from '@templates/positionTemp/PositionTemp';
-import StackTemp from '@templates/stackTemp/StackTemp';
+import PositionTemp from '@templates/positionTemp';
+import StackTemp from '@templates/stackTemp';
+import TimeTemp from '@templates/timeTemp';
+import Loading from '@atoms/loading/Loading';
 
 function CustomPage() {
 	const [Funnel, selected, setStep, setStepState] = useFunnel({
@@ -22,7 +23,14 @@ function CustomPage() {
 					/>
 				</Funnel.Step>
 				<Funnel.Step name="time">
-					<div>asdfadsfasd</div>
+					<TimeTemp
+						selected={selected.time}
+						next={() => setStep('result')}
+						setStepState={setStepState}
+					/>
+				</Funnel.Step>
+				<Funnel.Step name="result">
+					<Loading />
 				</Funnel.Step>
 			</Funnel>
 		</main>
