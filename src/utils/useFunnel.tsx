@@ -84,7 +84,6 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 				}
 				break;
 			default:
-			// option += '에어백, 차선이탈 경보장치, 무선도어 잠금장치';
 		}
 	};
 
