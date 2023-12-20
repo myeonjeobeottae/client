@@ -1,6 +1,6 @@
 import Button from '@atoms/button';
 import { useState } from 'react';
-import type { selectedStateType } from '@utils/useFunnel';
+import type { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface PropTypes {
 	selected: selectedStateType['time'];

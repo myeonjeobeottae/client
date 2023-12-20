@@ -25,7 +25,7 @@ type returnType = [
 
 type stateType = keyof selectedStateType;
 
-export function useFunnel(options: { initialStep: stateType }): returnType {
+function useFunnel(options: { initialStep: stateType }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 	const [state, setState] = useState(options.initialStep);
@@ -121,3 +121,5 @@ export function useFunnel(options: { initialStep: stateType }): returnType {
 
 	return [Funnel, selected, setStep, setStepState];
 }
+
+export default useFunnel;

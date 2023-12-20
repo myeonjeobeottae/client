@@ -1,7 +1,7 @@
 import Button from '@atoms/button/Button';
 import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
-import type { selectedStateType } from '@utils/useFunnel';
+import type { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface StackTempProps {
 	selected: selectedStateType['stack'];

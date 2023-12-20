@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import mockRouter from 'next-router-mock';
-import { useFunnel } from '@utils/useFunnel';
+import useFunnel from '@utils/hooks/useFunnel';
 import { renderWithQueryClient } from '@test/test-utils';
 import CustomPage from '@pages/[type]/custom';
 

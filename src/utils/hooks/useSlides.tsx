@@ -30,13 +30,13 @@ type SlideOptions = {
 	/**
 	 * simple : false(default)
 	 *
-	 * simple : true - 단순 motionComponent인 [Motion] 리턴
+	 * simple : true - 단순 motionComponent인 [Slides] 리턴
 	 */
 	simple?: boolean | undefined;
 };
 
 const DefaultSlideOptions: SlideOptions = {
-	view: 1,
+	view: 2,
 	direction: 'top',
 	duration: 1,
 	delay: 5.5,
@@ -59,8 +59,7 @@ function useSlides(
 ): any {
 	//options.simple
 	if (options.simple) {
-		console.log('hahah');
-		const Motion = ({
+		const Slides = ({
 			children,
 		}: {
 			children: React.ReactNode | React.ReactNode[];
@@ -77,7 +76,7 @@ function useSlides(
 				</motion.div>
 			);
 		};
-		return [Motion];
+		return [Slides];
 	}
 	const single = {
 		center: (options: SlideOptions) => {
