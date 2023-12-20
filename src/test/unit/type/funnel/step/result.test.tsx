@@ -4,12 +4,13 @@ import userEvent from '@testing-library/user-event';
 import mockRouter from 'next-router-mock';
 import { Suspense, ReactNode, ReactElement } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { useFunnel } from '@utils/useFunnel';
+
 import { renderWithQueryClient } from '@test/test-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PositionTemp from '@templates/positionTemp';
 import StackTemp from '@templates/stackTemp';
 import ResultTemp from '@templates/resultTemp';
+import useFunnel from '@utils/hooks/useFunnel';
 
 describe('ResultTemp가 정상적으로 동작하는지 테스트', () => {
 	it('각 Step에서 funnel을 통해 가져온 state들이 랜더된다.', async () => {

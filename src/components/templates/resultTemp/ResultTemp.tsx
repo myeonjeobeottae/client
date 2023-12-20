@@ -1,4 +1,4 @@
-import { selectedStateType } from '@utils/useFunnel';
+import { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface ResultProps {
 	selected: selectedStateType;
