@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
+import { getServerSideProps } from '@pages/redirect';
+import { GetServerSideProps } from 'next';
 
 interface StepProps {
 	children: React.ReactElement;
@@ -28,6 +30,7 @@ type stateType = keyof selectedStateType;
 function useFunnel(options: { initialStep: stateType }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
+
 	const [state, setState] = useState(options.initialStep);
 	const [selected, setSelected] = useState<selectedStateType>({
 		position: '',
@@ -38,7 +41,15 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 	console.log(selected);
 
 	useEffect(() => {
-		if (!router.query[`funnel-step`]) {
+		if (router.query['type'] === undefined) {
+			window.alert('루트로');
+			router.push('/');
+			return;
+		}
+	}, []);
+
+	useEffect(() => {
+		if (!router.query[`funnel-step`] && type == 'chat') {
 			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
 		} else {
 			setState(router.query[`funnel-step`] as stateType);
@@ -58,7 +69,7 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 				const name = e.currentTarget.dataset.name;
 
 				setSelected((prev) => {
-					return { ...prev, position: name };
+					return { ...prev, [state]: name };
 				});
 				break;
 			case 'stack':
@@ -66,7 +77,7 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 					setSelected((prev) => {
 						return {
 							...prev,
-							stack: [...tabData],
+							[state]: [...tabData],
 						};
 					});
 				}
@@ -78,7 +89,7 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 					setSelected((prev) => {
 						return {
 							...prev,
-							time: timeData,
+							[state]: timeData,
 						};
 					});
 				}
@@ -101,6 +112,7 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 	 */
 	const Funnel = ({ children }: FunnelProps) => {
 		let targetStep;
+
 		if (!Array.isArray(children)) {
 			// targetStep = children;
 			// if (children.props.name == state) {
