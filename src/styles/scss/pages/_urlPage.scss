@@ -1,0 +1,51 @@
+@use '../base' as *;
+@use '../helpers' as *;
+
+.url-page-wrapper {
+	@include mixin-fullScreen;
+	@include mixin-flexCenter;
+	flex-direction: column;
+	gap: 4rem;
+
+	& > .container {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		gap: 2rem;
+
+		label > svg {
+			width: 30%;
+		}
+
+		.urlForm {
+			display: flex;
+			gap: 1rem;
+			position: relative;
+
+			.urlInput {
+				width: 30rem;
+				border-radius: var(--radius-s);
+				height: 3rem;
+				font-size: var(--fs-m);
+				padding: 0.5rem 1rem;
+			}
+
+			.submitButton {
+				width: 4rem;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+			}
+		}
+	}
+	& > .tips {
+		@include mixin-flexColumn;
+		gap: var(--gap-xs);
+		color: var(--color-gray-9);
+		font-size: var(--fs-xs);
+		& > .tip {
+			list-style: square;
+		}
+	}
+}

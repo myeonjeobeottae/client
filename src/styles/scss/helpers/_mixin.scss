@@ -1,0 +1,28 @@
+@mixin fullScreen {
+	width: 100vw;
+	height: 100vh;
+}
+
+@mixin flexCenter {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin flexColumn {
+	display: flex;
+	flex-direction: column;
+}
+
+@mixin flexBetween {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+@mixin absoluteCenter {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate3d(-50%, -50%, 0);
+}
