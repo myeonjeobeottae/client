@@ -5,7 +5,7 @@ import Loading from '@atoms/loading/Loading';
 import ResultTemp from '@templates/resultTemp';
 import useFunnel from '@utils/hooks/useFunnel';
 
-type useFunnelType = 'position' | 'stack' | 'time' | 'result';
+export type useFunnelType = 'position' | 'stack' | 'time' | 'result';
 
 function CustomPage() {
 	const [Funnel, selected, setStep, setStepState] = useFunnel<useFunnelType>({

@@ -1,37 +1,50 @@
 import { ButtonImageItem } from '@molecules/ButtonItem';
 import { IconSearch } from '@svgs/index';
+import type { SelectedTy } from '@utils/hooks/useFunnel';
+import type { useFunnelType } from '@pages/[type]/custom';
 import { useEffect, useState } from 'react';
 
-type SelectedTy<T extends string> = {
-	[P in T]?: string;
-};
-
 interface PropTypes {
-	selected: any;
-	setStepState: (stepData: string) => void;
+	selected: SelectedTy<useFunnelType>;
 	selectedItems: string[];
+	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+	setState: (checkSelected: string[], selectedItems: string[]) => string[];
 }
 
-function SelectedStacks({ selected, setStepState, selectedItems }: PropTypes) {
-	const [items, setItems] = useState(selected['stack'] ?? []);
-	const toArrayItems = Array.isArray(items) ? [] : items.split(',');
+function SelectedStacks({
+	selected,
+	selectedItems,
+	setSelectedItems,
+	setState,
+}: PropTypes) {
+	let checkSelected = selected['stack']
+		? selected['stack'].split(',')
+		: ''.split('');
 
-	//items = 'stac,stac'
+	console.log(checkSelected, selectedItems);
+
+	const [item, setItem] = useState(checkSelected);
+
 	useEffect(() => {
-		if (JSON.stringify(toArrayItems) !== JSON.stringify(selectedItems)) {
-			setStepState(selectedItems.toString());
-		}
-	}, [selectedItems]);
+		console.log(setState(checkSelected, selectedItems));
+		setSelectedItems(() => {
+			return checkSelected;
+		});
+	}, []);
 
-	// selected.stack? = []
+	useEffect(() => {
+		setItem(setState(checkSelected, selectedItems));
+	}, [selectedItems]);
 
 	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 		const target = e.currentTarget as HTMLButtonElement;
 		const value = target.ariaLabel;
 		console.log(target, value);
 		if (value) {
-			const deleteTargetArray = [...toArrayItems].filter((el) => el !== value);
-			setStepState(deleteTargetArray.toString());
+			setSelectedItems((prev) => {
+				const deleteTarget = [...prev].filter((el) => el !== value);
+				return deleteTarget;
+			});
 		}
 	};
 
@@ -41,7 +54,7 @@ function SelectedStacks({ selected, setStepState, selectedItems }: PropTypes) {
 			style={{ outline: 'solid white', width: '200px', height: '50px' }}
 			data-testid={'selectedStacks'}
 		>
-			{toArrayItems.map((stack: string, i: number) => {
+			{item.map((stack, i) => {
 				return (
 					<ButtonImageItem
 						key={i}

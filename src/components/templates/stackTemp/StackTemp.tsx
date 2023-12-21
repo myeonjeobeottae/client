@@ -2,10 +2,11 @@ import Button from '@atoms/button/Button';
 import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
 import SelectedStacks from '@organisms/selectedStacks';
-import type { selectedStateType } from '@utils/hooks/useFunnel';
+import type { useFunnelType } from '@pages/[type]/custom';
+import type { SelectedTy } from '@utils/hooks/useFunnel';
 
 interface StackTempProps {
-	selected: {};
+	selected: SelectedTy<useFunnelType>;
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 	setStepState: (stepData: string) => void;
 }
@@ -35,11 +36,21 @@ const tabData = {
 
 function StackTemp({ selected, next, setStepState }: StackTempProps) {
 	console.log(selected);
-	const [Tabs, selectedItems] = useTabs({
+	let checkSelected = selected['stack']
+		? selected['stack'].split(',')
+		: ''.split('');
+
+	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
 		tabData,
 	});
-
+	function setState(checkSelected: string[], selectedItems: string[]) {
+		if (checkSelected.length < selectedItems.length) {
+			return [...new Set(checkSelected.concat(...selectedItems))];
+		} else {
+			return selectedItems;
+		}
+	}
 	return (
 		<section className="stackWrapper">
 			<h1 className="title">세부 기술을 선택해 주세요.</h1>
@@ -50,15 +61,16 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 				</Tabs>
 				<SelectedStacks
 					selected={selected}
-					setStepState={setStepState}
 					selectedItems={selectedItems}
+					setSelectedItems={setSelectedItems}
+					setState={setState}
 				/>
 			</div>
 			<Button
 				style={{ color: !selectedItems?.length ? 'gray' : 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(selectedItems.toString());
+					setStepState(setState(checkSelected, selectedItems).toString());
 				}}
 				disabled={!selectedItems?.length}
 			>
