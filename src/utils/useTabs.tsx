@@ -1,8 +1,11 @@
 import Button from '@atoms/button';
 import { useState, MouseEvent } from 'react';
-import SelectedStacks from '@organisms/selectedStacks';
 
-type returnType = [Tab: any, selectedStacks: string[]];
+type returnType = [
+	Tab: any,
+	selectedStacks: string[],
+	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>,
+];
 
 export function useTabs<T extends Record<string, any[]>>(options: {
 	initialMenu: keyof T;
@@ -78,10 +81,5 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 	Tabs.Menu = Menu;
 	Tabs.MenuItems = MenuItems;
 
-	return [Tabs, selectedItems];
+	return [Tabs, selectedItems, setSelectedItems];
 }
-
-//1
-// selected.stack = [];
-//click -> setSelectedItems (setter)
-//<SelectedStacks selected={selected}  setSelected={setSelectedItems} />
