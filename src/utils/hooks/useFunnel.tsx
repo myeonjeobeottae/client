@@ -24,8 +24,8 @@ type stateType = keyof selectedStateType;
  * - [x] setStepState 함수 수정
  */
 
-type SelectedTy<T extends string> = {
-	[P in T]?: string;
+export type SelectedTy<T extends string> = {
+	[P in T]: string;
 };
 
 function useFunnel<T extends string>(options: { initialStep: T }): returnType {
@@ -33,7 +33,9 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 	const type = router.query && router.query.type;
 
 	const [state, setState] = useState<T>(options.initialStep);
-	const [selected, setSelected] = useState<SelectedTy<T>>({});
+	const [selected, setSelected] = useState<SelectedTy<T>>({
+		[options.initialStep]: '',
+	} as SelectedTy<T>);
 
 	console.log(selected);
 
