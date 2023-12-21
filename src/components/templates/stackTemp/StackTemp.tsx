@@ -1,16 +1,13 @@
 import Button from '@atoms/button/Button';
 import { MouseEvent } from 'react';
 import { useTabs } from '@utils/useTabs';
+import SelectedStacks from '@organisms/selectedStacks';
 import type { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface StackTempProps {
-	selected: selectedStateType['stack'];
+	selected: {};
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
-	setStepState: (
-		e: React.MouseEvent<HTMLElement>,
-		tabData?: selectedStateType['stack'],
-		timeData?: selectedStateType['time'],
-	) => void;
+	setStepState: (stepData: string) => void;
 }
 
 const tabData = {
@@ -38,10 +35,9 @@ const tabData = {
 
 function StackTemp({ selected, next, setStepState }: StackTempProps) {
 	console.log(selected);
-	const [Tabs, selectedStacks] = useTabs({
+	const [Tabs, selectedItems] = useTabs({
 		initialMenu: 'skill',
 		tabData,
-		selected,
 	});
 
 	return (
@@ -51,16 +47,20 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 				<Tabs>
 					<Tabs.Menu />
 					<Tabs.MenuItems />
-					<Tabs.SelectedStacks />
 				</Tabs>
+				<SelectedStacks
+					selected={selected}
+					setStepState={setStepState}
+					selectedItems={selectedItems}
+				/>
 			</div>
 			<Button
-				style={{ color: !selectedStacks.length ? 'gray' : 'white' }}
+				style={{ color: !selectedItems?.length ? 'gray' : 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(e, selectedStacks);
+					setStepState(selectedItems.toString());
 				}}
-				disabled={!selectedStacks.length}
+				disabled={!selectedItems?.length}
 			>
 				다음
 			</Button>

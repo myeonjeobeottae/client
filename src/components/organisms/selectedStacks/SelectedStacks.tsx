@@ -1,21 +1,37 @@
 import { ButtonImageItem } from '@molecules/ButtonItem';
 import { IconSearch } from '@svgs/index';
+import { useEffect, useState } from 'react';
+
+type SelectedTy<T extends string> = {
+	[P in T]?: string;
+};
 
 interface PropTypes {
-	selected: any[];
-	setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+	selected: any;
+	setStepState: (stepData: string) => void;
+	selectedItems: string[];
 }
 
-function SelectedStacks({ selected, setSelected }: PropTypes) {
+function SelectedStacks({ selected, setStepState, selectedItems }: PropTypes) {
+	const [items, setItems] = useState(selected['stack'] ?? []);
+	const toArrayItems = Array.isArray(items) ? [] : items.split(',');
+
+	//items = 'stac,stac'
+	useEffect(() => {
+		if (JSON.stringify(toArrayItems) !== JSON.stringify(selectedItems)) {
+			setStepState(selectedItems.toString());
+		}
+	}, [selectedItems]);
+
+	// selected.stack? = []
+
 	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 		const target = e.currentTarget as HTMLButtonElement;
 		const value = target.ariaLabel;
 		console.log(target, value);
 		if (value) {
-			setSelected((prev) => {
-				const deleteTarget = [...prev].filter((el) => el !== value);
-				return deleteTarget;
-			});
+			const deleteTargetArray = [...toArrayItems].filter((el) => el !== value);
+			setStepState(deleteTargetArray.toString());
 		}
 	};
 
@@ -25,7 +41,7 @@ function SelectedStacks({ selected, setSelected }: PropTypes) {
 			style={{ outline: 'solid white', width: '200px', height: '50px' }}
 			data-testid={'selectedStacks'}
 		>
-			{selected.map((stack, i) => {
+			{toArrayItems.map((stack: string, i: number) => {
 				return (
 					<ButtonImageItem
 						key={i}
