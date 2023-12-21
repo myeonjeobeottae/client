@@ -1,8 +1,5 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { MouseEvent } from 'react';
-import { getServerSideProps } from '@pages/redirect';
-import { GetServerSideProps } from 'next';
 
 interface StepProps {
 	children: React.ReactElement;
@@ -13,30 +10,30 @@ interface FunnelProps {
 }
 
 export interface selectedStateType {
-	position: string;
-	stack: any[];
-	time: string | number;
+	position: any;
+	stack: any;
+	time: any;
 }
 
-type returnType = [
-	Funnel: any,
-	selected: selectedStateType,
-	setStep: any,
-	setStepState: any,
-];
+type returnType = [Funnel: any, selected: any, setStep: any, setStepState: any];
 
 type stateType = keyof selectedStateType;
 
-function useFunnel(options: { initialStep: stateType }): returnType {
+/**
+ * - []  useFunnel 제네릭 타입으로 수정
+ * - [x] setStepState 함수 수정
+ */
+
+type SelectedTy<T extends string> = {
+	[P in T]?: string;
+};
+
+function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 
-	const [state, setState] = useState(options.initialStep);
-	const [selected, setSelected] = useState<selectedStateType>({
-		position: '',
-		stack: [],
-		time: 3,
-	});
+	const [state, setState] = useState<T>(options.initialStep);
+	const [selected, setSelected] = useState<SelectedTy<T>>({});
 
 	console.log(selected);
 
@@ -52,50 +49,19 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 		if (!router.query[`funnel-step`] && type == 'chat') {
 			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
 		} else {
-			setState(router.query[`funnel-step`] as stateType);
+			setState(router.query[`funnel-step`] as T);
 		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStepState = (
-		e: MouseEvent<HTMLButtonElement>,
-		tabData?: selectedStateType['stack'],
-		timeData?: selectedStateType['time'],
-	) => {
-		switch (state) {
-			case 'position':
-				if (!e.currentTarget.dataset.name) {
-					return;
-				}
-				const name = e.currentTarget.dataset.name;
-
-				setSelected((prev) => {
-					return { ...prev, [state]: name };
-				});
-				break;
-			case 'stack':
-				if (tabData) {
-					setSelected((prev) => {
-						return {
-							...prev,
-							[state]: [...tabData],
-						};
-					});
-				}
-				break;
-			case 'time':
-				console.log('timeitme', timeData);
-				if (timeData) {
-					console.log('success');
-					setSelected((prev) => {
-						return {
-							...prev,
-							[state]: timeData,
-						};
-					});
-				}
-				break;
-			default:
-		}
+	const setStepState = (stepData: string) => {
+		console.log(
+			'🚀 ~ file: useFunnel.tsx:83 ~ setStepState ~ stepData:',
+			stepData,
+			selected,
+		);
+		setSelected((prev) => {
+			return { ...prev, [state as string]: stepData };
+		});
 	};
 
 	const setStep = (step: stateType) => {
@@ -114,15 +80,8 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 		let targetStep;
 
 		if (!Array.isArray(children)) {
-			// targetStep = children;
-			// if (children.props.name == state) {
-			// );
 			targetStep = children;
-			// }
-
-			// targetStep = children;
 		} else {
-			// if (Array.isArray(children))
 			targetStep = children.find((childStep) => childStep.props.name === state);
 		}
 

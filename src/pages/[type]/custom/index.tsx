@@ -5,8 +5,10 @@ import Loading from '@atoms/loading/Loading';
 import ResultTemp from '@templates/resultTemp';
 import useFunnel from '@utils/hooks/useFunnel';
 
+type useFunnelType = 'position' | 'stack' | 'time' | 'result';
+
 function CustomPage() {
-	const [Funnel, selected, setStep, setStepState] = useFunnel({
+	const [Funnel, selected, setStep, setStepState] = useFunnel<useFunnelType>({
 		initialStep: 'position',
 	});
 
@@ -14,11 +16,14 @@ function CustomPage() {
 		<main className="customPageWrapper">
 			<Funnel>
 				<Funnel.Step name="position">
-					<PositionTemp next={() => setStep('stack')} setState={setStepState} />
+					<PositionTemp
+						next={() => setStep('stack')}
+						setStepState={setStepState}
+					/>
 				</Funnel.Step>
 				<Funnel.Step name="stack">
 					<StackTemp
-						selected={selected.stack}
+						selected={selected}
 						next={() => setStep('time')}
 						setStepState={setStepState}
 					/>
