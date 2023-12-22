@@ -1,5 +1,5 @@
 import Button from '@atoms/button/Button';
-import { MouseEvent } from 'react';
+import { MouseEvent, useCallback } from 'react';
 import { useTabs } from '@utils/useTabs';
 import SelectedStacks from '@organisms/selectedStacks';
 import type { useFunnelType } from '@pages/[type]/custom';
@@ -42,17 +42,32 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 		tabData,
 	});
 
-	function stackAddAndDelete(selectedItems: string[]) {
-		let checkSelected = selected['stack']
-			? selected['stack'].split(',')
-			: ''.split('');
+	const stackAddAndDelete = useCallback(
+		(selectedItems: string[]) => {
+			let checkSelected = selected['stack']
+				? selected['stack'].split(',')
+				: ''.split('');
 
-		if (checkSelected.length < selectedItems.length) {
-			return [...new Set(checkSelected.concat(...selectedItems))];
-		} else {
-			return selectedItems;
-		}
-	}
+			if (checkSelected.length < selectedItems.length) {
+				return [...new Set(checkSelected.concat(...selectedItems))];
+			} else {
+				return selectedItems;
+			}
+		},
+		[selected, selectedItems],
+	);
+
+	// function stackAddAndDelete(selectedItems: string[]) {
+	// 	let checkSelected = selected['stack']
+	// 		? selected['stack'].split(',')
+	// 		: ''.split('');
+
+	// 	if (checkSelected.length < selectedItems.length) {
+	// 		return [...new Set(checkSelected.concat(...selectedItems))];
+	// 	} else {
+	// 		return selectedItems;
+	// 	}
+	// }
 	return (
 		<section className="stackWrapper">
 			<h1 className="title">세부 기술을 선택해 주세요.</h1>
