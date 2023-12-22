@@ -1,9 +1,10 @@
 import Button from '@atoms/button';
 import { useState } from 'react';
-import type { selectedStateType } from '@utils/hooks/useFunnel';
+import type { SelectedTy } from '@utils/hooks/useFunnel';
+import type { useFunnelType } from '@pages/[type]/custom';
 
 interface PropTypes {
-	selected: selectedStateType['time'];
+	selected: SelectedTy<useFunnelType>;
 	next: (e: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 	setStepState: (stepData: string) => void;
 }
@@ -15,7 +16,9 @@ const timeData = {
 };
 
 function TimeTemp({ selected, next, setStepState }: PropTypes) {
-	const [time, setTime] = useState(selected);
+	let checkSelected = selected['time'] ?? '3';
+
+	const [time, setTime] = useState(checkSelected);
 	return (
 		<section className="stackWrapper">
 			<h1 className="title">문제당 제한시간을 선택해 주세요.</h1>

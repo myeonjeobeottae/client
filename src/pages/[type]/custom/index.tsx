@@ -30,7 +30,7 @@ function CustomPage() {
 				</Funnel.Step>
 				<Funnel.Step name="time">
 					<TimeTemp
-						selected={selected.time}
+						selected={selected}
 						next={() => setStep('result')}
 						setStepState={setStepState}
 					/>
