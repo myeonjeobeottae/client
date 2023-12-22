@@ -8,32 +8,25 @@ interface PropTypes {
 	selected: SelectedTy<useFunnelType>;
 	selectedItems: string[];
 	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
-	setState: (checkSelected: string[], selectedItems: string[]) => string[];
+	stackAddAndDelete: (selectedItems: string[]) => string[];
 }
 
 function SelectedStacks({
 	selected,
 	selectedItems,
 	setSelectedItems,
-	setState,
+	stackAddAndDelete,
 }: PropTypes) {
-	let checkSelected = selected['stack']
-		? selected['stack'].split(',')
-		: ''.split('');
-
-	console.log(checkSelected, selectedItems);
-
-	const [item, setItem] = useState(checkSelected);
+	const [stacks, setStacks] = useState(stackAddAndDelete(selectedItems));
 
 	useEffect(() => {
-		console.log(setState(checkSelected, selectedItems));
 		setSelectedItems(() => {
-			return checkSelected;
+			return selected['stack'] ? selected['stack'].split(',') : ''.split('');
 		});
 	}, []);
 
 	useEffect(() => {
-		setItem(setState(checkSelected, selectedItems));
+		setStacks(stackAddAndDelete(selectedItems));
 	}, [selectedItems]);
 
 	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -54,7 +47,7 @@ function SelectedStacks({
 			style={{ outline: 'solid white', width: '200px', height: '50px' }}
 			data-testid={'selectedStacks'}
 		>
-			{item.map((stack, i) => {
+			{stacks.map((stack, i) => {
 				return (
 					<ButtonImageItem
 						key={i}

@@ -36,15 +36,17 @@ const tabData = {
 
 function StackTemp({ selected, next, setStepState }: StackTempProps) {
 	console.log(selected);
-	let checkSelected = selected['stack']
-		? selected['stack'].split(',')
-		: ''.split('');
 
 	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
 		tabData,
 	});
-	function setState(checkSelected: string[], selectedItems: string[]) {
+
+	function stackAddAndDelete(selectedItems: string[]) {
+		let checkSelected = selected['stack']
+			? selected['stack'].split(',')
+			: ''.split('');
+
 		if (checkSelected.length < selectedItems.length) {
 			return [...new Set(checkSelected.concat(...selectedItems))];
 		} else {
@@ -63,14 +65,14 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 					selected={selected}
 					selectedItems={selectedItems}
 					setSelectedItems={setSelectedItems}
-					setState={setState}
+					stackAddAndDelete={stackAddAndDelete}
 				/>
 			</div>
 			<Button
 				style={{ color: !selectedItems?.length ? 'gray' : 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(setState(checkSelected, selectedItems).toString());
+					setStepState(stackAddAndDelete(selectedItems).toString());
 				}}
 				disabled={!selectedItems?.length}
 			>
