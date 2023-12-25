@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { routerError } from '@utils/error';
 
 interface StepProps {
 	children: React.ReactElement;
@@ -40,14 +42,22 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 	console.log(selected);
 
 	useEffect(() => {
-		if (router.query['type'] === undefined) {
-			window.alert('루트로');
-			router.push('/');
-			return;
-		}
+		console.log(router.query['type']);
+		// toast.warn('페이지를 닫으시겠습니까?');
+		const preventClose = (e: BeforeUnloadEvent) => {
+			e.preventDefault();
+		};
+		(() => {
+			window.addEventListener('beforeunload', preventClose);
+		})();
+		return () => {
+			window.removeEventListener('beforeunload', preventClose);
+		};
+		// }
 	}, []);
 
 	useEffect(() => {
+		console.log(router.query);
 		if (!router.query[`funnel-step`] && type == 'chat') {
 			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
 		} else {
@@ -79,6 +89,11 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 	 *
 	 */
 	const Funnel = ({ children }: FunnelProps) => {
+		useEffect(() => {
+			if (router.query['type'] === undefined) {
+				return routerError('잘못된 접근입니다.', 600);
+			}
+		}, []);
 		let targetStep;
 
 		if (!Array.isArray(children)) {

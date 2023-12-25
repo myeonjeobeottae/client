@@ -66,7 +66,19 @@ export class ApiErrorBoundary extends Component<
 			return <div style={{ color: 'white' }}>네트워크에러</div>;
 		}
 		// return <div onClickRetry={()=>this.setState({shouldHandleError: false})}>네트워크에러</div>
-		return <div style={{ color: 'limegreen' }}>알려지지않은 에러</div>;
+		return (
+			<div
+				style={{
+					color: 'limegreen',
+					position: 'absolute',
+					top: '50%',
+					left: '50%',
+				}}
+				onClick={() => this.setState({ shouldHandleError: false })}
+			>
+				알려지지않은 에러
+			</div>
+		);
 		// return <UnknownError onClickRetry={() => this.setState({ shouldHandleError: false})} />
 	}
 }
