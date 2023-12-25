@@ -35,8 +35,8 @@ const tabData = {
 };
 
 function StackTemp({ selected, next, setStepState }: StackTempProps) {
+	//Catch Error
 	console.log(selected);
-
 	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
 		tabData,
@@ -57,17 +57,6 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 		[selected, selectedItems],
 	);
 
-	// function stackAddAndDelete(selectedItems: string[]) {
-	// 	let checkSelected = selected['stack']
-	// 		? selected['stack'].split(',')
-	// 		: ''.split('');
-
-	// 	if (checkSelected.length < selectedItems.length) {
-	// 		return [...new Set(checkSelected.concat(...selectedItems))];
-	// 	} else {
-	// 		return selectedItems;
-	// 	}
-	// }
 	return (
 		<section className="stackWrapper">
 			<h1 className="title">세부 기술을 선택해 주세요.</h1>
