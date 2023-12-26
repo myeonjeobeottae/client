@@ -1,5 +1,5 @@
 import Layout from '@templates/layout';
-import Loading from '@atoms/loading/Loading';
+import Loading from '@molecules/loading';
 import {
 	HydrationBoundary,
 	QueryClient,

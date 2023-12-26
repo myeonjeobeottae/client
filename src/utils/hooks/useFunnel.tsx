@@ -41,20 +41,21 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 
 	console.log(selected);
 
-	useEffect(() => {
-		console.log(router.query['type']);
-		// toast.warn('페이지를 닫으시겠습니까?');
-		const preventClose = (e: BeforeUnloadEvent) => {
-			e.preventDefault();
-		};
-		(() => {
-			window.addEventListener('beforeunload', preventClose);
-		})();
-		return () => {
-			window.removeEventListener('beforeunload', preventClose);
-		};
-		// }
-	}, []);
+	// useEffect(() => {
+	// 	console.log(router.query['type']);
+	// 	// toast.warn('페이지를 닫으시겠습니까?');
+	// 	const preventClose = (e: BeforeUnloadEvent) => {
+	// 		e.preventDefault();
+	// 	};
+	// 	// router.events.on , off ( routerChangeStart)
+	// 	(() => {
+	// 		window.addEventListener('beforeunload', preventClose);
+	// 	})();
+	// 	return () => {
+	// 		window.removeEventListener('beforeunload', preventClose);
+	// 	};
+	// 	// }
+	// }, []);
 
 	useEffect(() => {
 		console.log(router.query);
@@ -89,11 +90,9 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 	 *
 	 */
 	const Funnel = ({ children }: FunnelProps) => {
-		useEffect(() => {
-			if (router.query['type'] === undefined) {
-				return routerError('잘못된 접근입니다.', 600);
-			}
-		}, []);
+		if (router.query['type'] === undefined) {
+			return routerError('잘못된 접근입니다.', 600);
+		}
 		let targetStep;
 
 		if (!Array.isArray(children)) {

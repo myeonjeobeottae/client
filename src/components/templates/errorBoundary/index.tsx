@@ -74,9 +74,14 @@ export class ApiErrorBoundary extends Component<
 					top: '50%',
 					left: '50%',
 				}}
-				onClick={() => this.setState({ shouldHandleError: false })}
 			>
 				알려지지않은 에러
+				<button onClick={() => (window.location.href = '/')}>
+					메인으로가기
+				</button>
+				<button onClick={() => this.setState({ shouldHandleError: false })}>
+					다시 시도
+				</button>
 			</div>
 		);
 		// return <UnknownError onClickRetry={() => this.setState({ shouldHandleError: false})} />

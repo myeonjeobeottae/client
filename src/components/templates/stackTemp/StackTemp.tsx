@@ -35,7 +35,6 @@ const tabData = {
 };
 
 function StackTemp({ selected, next, setStepState }: StackTempProps) {
-	//Catch Error
 	console.log(selected);
 	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',

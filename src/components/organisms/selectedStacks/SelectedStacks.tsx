@@ -1,4 +1,4 @@
-import { ButtonImageItem } from '@molecules/ButtonItem';
+import { ButtonImageItem } from '@molecules/buttonItem/ButtonItem';
 import { IconSearch } from '@svgs/index';
 import type { SelectedTy } from '@utils/hooks/useFunnel';
 import type { useFunnelType } from '@pages/[type]/custom';
@@ -21,7 +21,7 @@ function SelectedStacks({
 
 	useEffect(() => {
 		setSelectedItems(() => {
-			return selected['stack'] ? selected['stack'].split(',') : ''.split('');
+			return selected['stack'] ? selected['stack'].split(',') : [];
 		});
 	}, []);
 
