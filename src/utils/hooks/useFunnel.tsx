@@ -11,33 +11,31 @@ interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-export interface selectedStateType {
-	position: any;
-	stack: any;
-	time: any;
-}
+type returnType<T extends string> = [
+	Funnel: any,
+	selected: SelectedType<T>,
+	setStep: any,
+	setStepState: any,
+];
 
-type returnType = [Funnel: any, selected: any, setStep: any, setStepState: any];
+type stateType<T extends string> = {
+	[P in T]: P;
+};
 
-type stateType = keyof selectedStateType;
-
-/**
- * - []  useFunnel 제네릭 타입으로 수정
- * - [x] setStepState 함수 수정
- */
-
-export type SelectedTy<T extends string> = {
+export type SelectedType<T extends string> = {
 	[P in T]: string;
 };
 
-function useFunnel<T extends string>(options: { initialStep: T }): returnType {
+function useFunnel<T extends string>(options: {
+	initialStep: T;
+}): returnType<T> {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 
 	const [state, setState] = useState<T>(options.initialStep);
-	const [selected, setSelected] = useState<SelectedTy<T>>({
+	const [selected, setSelected] = useState<SelectedType<T>>({
 		[options.initialStep]: '',
-	} as SelectedTy<T>);
+	} as SelectedType<T>);
 
 	console.log(selected);
 
@@ -77,7 +75,7 @@ function useFunnel<T extends string>(options: { initialStep: T }): returnType {
 		});
 	};
 
-	const setStep = (step: stateType) => {
+	const setStep = (step: stateType<T>) => {
 		router.push(`/${type}/custom?funnel-step=${step}`);
 	};
 
