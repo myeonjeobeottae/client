@@ -1,7 +1,7 @@
-import { selectedStateType } from '@utils/hooks/useFunnel';
-
 interface ResultProps {
-	selected: selectedStateType;
+	selected: {
+		[key: string]: string;
+	};
 }
 
 function ResultTemp({ selected }: ResultProps) {
