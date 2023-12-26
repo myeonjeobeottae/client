@@ -1,5 +1,6 @@
 import HomeLogoGray from '@images/landingPage/logo-gray.png';
 import Image from 'next/image';
+import { LinkButton } from '@atoms/button/LinkButton';
 import { useRouter } from 'next/router';
 
 interface LogoProps {
@@ -15,15 +16,15 @@ function Logo({ size }: LogoProps) {
 	switch (size) {
 		case 'mid':
 			return (
-				<div className="logoMid" onClick={() => router.push(`/`)}>
+				<LinkButton className="logoMid" href={'/'}>
 					<Image src={homeLogo()} alt={`Home Logo Image`} />
-				</div>
+				</LinkButton>
 			);
 		case 'big':
 			return (
-				<div className="logoBig" onClick={() => router.push(`/`)}>
+				<LinkButton className="logoBig" href={'/'}>
 					<Image src={homeLogo()} alt={`Home Logo Image`} />
-				</div>
+				</LinkButton>
 			);
 	}
 }
