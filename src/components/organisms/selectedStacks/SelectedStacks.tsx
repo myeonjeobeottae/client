@@ -1,18 +1,38 @@
-import { ButtonImageItem } from '@molecules/ButtonItem';
+import { ButtonImageItem } from '@molecules/buttonItem/ButtonItem';
 import { IconSearch } from '@svgs/index';
+import { useEffect, useState } from 'react';
 
 interface PropTypes {
-	selected: any[];
-	setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+	selected: string;
+	selectedItems: string[];
+	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+	stackAddAndDelete: (selectedItems: string[]) => string[];
 }
 
-function SelectedStacks({ selected, setSelected }: PropTypes) {
+function SelectedStacks({
+	selected,
+	selectedItems,
+	setSelectedItems,
+	stackAddAndDelete,
+}: PropTypes) {
+	const [stacks, setStacks] = useState(stackAddAndDelete(selectedItems));
+
+	useEffect(() => {
+		setSelectedItems(() => {
+			return selected === '' ? [] : selected.split(',');
+		});
+	}, []);
+
+	useEffect(() => {
+		setStacks(stackAddAndDelete(selectedItems));
+	}, [selectedItems]);
+
 	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 		const target = e.currentTarget as HTMLButtonElement;
 		const value = target.ariaLabel;
 		console.log(target, value);
 		if (value) {
-			setSelected((prev) => {
+			setSelectedItems((prev) => {
 				const deleteTarget = [...prev].filter((el) => el !== value);
 				return deleteTarget;
 			});
@@ -25,7 +45,7 @@ function SelectedStacks({ selected, setSelected }: PropTypes) {
 			style={{ outline: 'solid white', width: '200px', height: '50px' }}
 			data-testid={'selectedStacks'}
 		>
-			{selected.map((stack, i) => {
+			{stacks.map((stack, i) => {
 				return (
 					<ButtonImageItem
 						key={i}

@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { MouseEvent } from 'react';
-import { getServerSideProps } from '@pages/redirect';
-import { GetServerSideProps } from 'next';
+import { toast } from 'react-toastify';
+import { routerError } from '@utils/error';
 
 interface StepProps {
 	children: React.ReactElement;
@@ -12,93 +11,72 @@ interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-export interface selectedStateType {
-	position: string;
-	stack: any[];
-	time: string | number;
-}
-
-type returnType = [
+type returnType<T extends string> = [
 	Funnel: any,
-	selected: selectedStateType,
+	selected: SelectedType<T>,
 	setStep: any,
 	setStepState: any,
 ];
 
-type stateType = keyof selectedStateType;
+type stateType<T extends string> = {
+	[P in T]: P;
+};
 
-function useFunnel(options: { initialStep: stateType }): returnType {
+type SelectedType<T extends string> = {
+	[P in T]: string;
+};
+
+function useFunnel<T extends string>(options: {
+	initialStep: T;
+}): returnType<T> {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 
-	const [state, setState] = useState(options.initialStep);
-	const [selected, setSelected] = useState<selectedStateType>({
-		position: '',
-		stack: [],
-		time: 3,
-	});
+	const [state, setState] = useState<T>(options.initialStep);
+	const [selected, setSelected] = useState<SelectedType<T>>({
+		[options.initialStep]: '',
+	} as SelectedType<T>);
 
 	console.log(selected);
 
-	useEffect(() => {
-		if (router.query['type'] === undefined) {
-			window.alert('루트로');
-			router.push('/');
-			return;
-		}
-	}, []);
+	//TODO: router.events.on / off로 로직변경하기
+	// useEffect(() => {
+	// 	console.log(router.query['type']);
+	// 	// toast.warn('페이지를 닫으시겠습니까?');
+	// 	const preventClose = (e: BeforeUnloadEvent) => {
+	// 		e.preventDefault();
+	// 	};
+	// 	// router.events.on , off ( routerChangeStart)
+	// 	(() => {
+	// 		window.addEventListener('beforeunload', preventClose);
+	// 	})();
+	// 	return () => {
+	// 		window.removeEventListener('beforeunload', preventClose);
+	// 	};
+	// 	// }
+	// }, []);
 
 	useEffect(() => {
+		console.log(router.query);
 		if (!router.query[`funnel-step`] && type == 'chat') {
 			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
 		} else {
-			setState(router.query[`funnel-step`] as stateType);
+			setState(router.query[`funnel-step`] as T);
 		}
 	}, [router.query[`funnel-step`]]);
 
-	const setStepState = (
-		e: MouseEvent<HTMLButtonElement>,
-		tabData?: selectedStateType['stack'],
-		timeData?: selectedStateType['time'],
-	) => {
-		switch (state) {
-			case 'position':
-				if (!e.currentTarget.dataset.name) {
-					return;
-				}
-				const name = e.currentTarget.dataset.name;
-
-				setSelected((prev) => {
-					return { ...prev, [state]: name };
-				});
-				break;
-			case 'stack':
-				if (tabData) {
-					setSelected((prev) => {
-						return {
-							...prev,
-							[state]: [...tabData],
-						};
-					});
-				}
-				break;
-			case 'time':
-				console.log('timeitme', timeData);
-				if (timeData) {
-					console.log('success');
-					setSelected((prev) => {
-						return {
-							...prev,
-							[state]: timeData,
-						};
-					});
-				}
-				break;
-			default:
-		}
+	const setStepState = (stepData: string) => {
+		console.log(
+			'🚀 ~ file: useFunnel.tsx:83 ~ setStepState ~ stepData:',
+			stepData,
+			selected,
+		);
+		setSelected((prev) => {
+			return { ...prev, [state as string]: stepData };
+		});
 	};
 
-	const setStep = (step: stateType) => {
+	const setStep = (step: stateType<T>) => {
 		router.push(`/${type}/custom?funnel-step=${step}`);
 	};
 
@@ -111,18 +89,14 @@ function useFunnel(options: { initialStep: stateType }): returnType {
 	 *
 	 */
 	const Funnel = ({ children }: FunnelProps) => {
+		if (router.query['type'] === undefined) {
+			return routerError('잘못된 접근입니다.', 600);
+		}
 		let targetStep;
 
 		if (!Array.isArray(children)) {
-			// targetStep = children;
-			// if (children.props.name == state) {
-			// );
 			targetStep = children;
-			// }
-
-			// targetStep = children;
 		} else {
-			// if (Array.isArray(children))
 			targetStep = children.find((childStep) => childStep.props.name === state);
 		}
 
