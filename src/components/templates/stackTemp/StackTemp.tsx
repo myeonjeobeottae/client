@@ -1,9 +1,7 @@
 import Button from '@atoms/button/Button';
-import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, useCallback } from 'react';
 import { useTabs } from '@utils/useTabs';
 import SelectedStacks from '@organisms/selectedStacks';
-import { useRouter } from 'next/router';
-import useRouteControl from '@utils/hooks/useRouteControl';
 
 interface StackTempProps {
 	selected: string;
@@ -35,9 +33,6 @@ const tabData = {
 };
 
 function StackTemp({ selected = '', next, setStepState }: StackTempProps) {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const { unBlockingWithCallback } = useRouteControl(() => setIsOpen(true));
-
 	console.log(selected);
 	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
@@ -59,15 +54,6 @@ function StackTemp({ selected = '', next, setStepState }: StackTempProps) {
 
 	return (
 		<section className="stackWrapper">
-			{isOpen && (
-				<div style={{ position: 'fixed', top: '50%', left: '50%' }}>
-					<h1>라우터 변화 감지 모달</h1>
-					<div style={{ color: 'white' }}>
-						<button onClick={() => setIsOpen(false)}>취소</button>
-						<button onClick={() => unBlockingWithCallback()}>나가기</button>
-					</div>
-				</div>
-			)}
 			<h1 className="title">세부 기술을 선택해 주세요.</h1>
 			<div className="selectBtns">
 				<Tabs>
