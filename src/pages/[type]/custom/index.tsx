@@ -25,14 +25,14 @@ function CustomPage() {
 					</Funnel.Step>
 					<Funnel.Step name="stack">
 						<StackTemp
-							selected={selected}
+							selected={selected.stack}
 							next={() => setStep('time')}
 							setStepState={setStepState}
 						/>
 					</Funnel.Step>
 					<Funnel.Step name="time">
 						<TimeTemp
-							selected={selected}
+							selected={selected.time}
 							next={() => setStep('result')}
 							setStepState={setStepState}
 						/>

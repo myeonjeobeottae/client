@@ -1,11 +1,9 @@
 import { ButtonImageItem } from '@molecules/buttonItem/ButtonItem';
 import { IconSearch } from '@svgs/index';
-import type { SelectedTy } from '@utils/hooks/useFunnel';
-import type { useFunnelType } from '@pages/[type]/custom';
 import { useEffect, useState } from 'react';
 
 interface PropTypes {
-	selected: SelectedTy<useFunnelType>;
+	selected: string;
 	selectedItems: string[];
 	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
 	stackAddAndDelete: (selectedItems: string[]) => string[];
@@ -21,7 +19,7 @@ function SelectedStacks({
 
 	useEffect(() => {
 		setSelectedItems(() => {
-			return selected['stack'] ? selected['stack'].split(',') : [];
+			return selected === '' ? [] : selected.split(',');
 		});
 	}, []);
 

@@ -2,11 +2,9 @@ import Button from '@atoms/button/Button';
 import { MouseEvent, useCallback } from 'react';
 import { useTabs } from '@utils/useTabs';
 import SelectedStacks from '@organisms/selectedStacks';
-import type { useFunnelType } from '@pages/[type]/custom';
-import type { SelectedTy } from '@utils/hooks/useFunnel';
 
 interface StackTempProps {
-	selected: SelectedTy<useFunnelType>;
+	selected: string;
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 	setStepState: (stepData: string) => void;
 }
@@ -34,7 +32,7 @@ const tabData = {
 	케케케: [1, false, '컴퓨터구조', '자료구조', '알고리즘', '데이터베이스'],
 };
 
-function StackTemp({ selected, next, setStepState }: StackTempProps) {
+function StackTemp({ selected = '', next, setStepState }: StackTempProps) {
 	console.log(selected);
 	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
@@ -43,9 +41,7 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 
 	const stackAddAndDelete = useCallback(
 		(selectedItems: string[]) => {
-			let checkSelected = selected['stack']
-				? selected['stack'].split(',')
-				: ''.split('');
+			let checkSelected = selected === '' ? [] : selected.split(',');
 
 			if (checkSelected.length < selectedItems.length) {
 				return [...new Set(checkSelected.concat(...selectedItems))];

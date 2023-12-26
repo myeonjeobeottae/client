@@ -22,7 +22,7 @@ type stateType<T extends string> = {
 	[P in T]: P;
 };
 
-export type SelectedType<T extends string> = {
+type SelectedType<T extends string> = {
 	[P in T]: string;
 };
 
@@ -39,6 +39,7 @@ function useFunnel<T extends string>(options: {
 
 	console.log(selected);
 
+	//TODO: router.events.on / off로 로직변경하기
 	// useEffect(() => {
 	// 	console.log(router.query['type']);
 	// 	// toast.warn('페이지를 닫으시겠습니까?');
