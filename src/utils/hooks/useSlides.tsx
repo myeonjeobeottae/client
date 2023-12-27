@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState, memo } from 'react';
 import { useInterval } from './useInterval';
+import { normalizeOptions } from '@utils/normalizeOptions';
 
 type SlideOptions = {
 	/**
@@ -35,7 +36,7 @@ type SlideOptions = {
 	simple?: boolean | undefined;
 };
 
-const DefaultSlideOptions: SlideOptions = {
+const defaultSlideOptions: SlideOptions = {
 	view: 2,
 	direction: 'top',
 	duration: 1,
@@ -55,27 +56,26 @@ function wrap(min: number, max: number, v: number) {
 //TODO : Partial parameter
 function useSlides(
 	slideData: string | any[] | undefined = [],
-	options: SlideOptions = DefaultSlideOptions,
+	options: SlideOptions = defaultSlideOptions,
 ): any {
+	normalizeOptions(options, defaultSlideOptions);
 	//options.simple
 	if (options.simple) {
-		const Slides = ({
-			children,
-		}: {
-			children: React.ReactNode | React.ReactNode[];
-		}) => {
-			return (
-				<motion.div
-					animate={{
-						y: [20, 0],
-						opacity: [0, 1],
-						transition: { duration: options.duration },
-					}}
-				>
-					{children}
-				</motion.div>
-			);
-		};
+		const Slides = memo(
+			({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
+				return (
+					<motion.div
+						animate={{
+							y: [20, 0],
+							opacity: [0, 1],
+							transition: { duration: options.duration },
+						}}
+					>
+						{children}
+					</motion.div>
+				);
+			},
+		);
 		return [Slides];
 	}
 	const single = {
@@ -128,12 +128,8 @@ function useSlides(
 						y: 0,
 						opacity: [1, 1],
 					};
-				case 'right':
-					return { x: '0', opacity: 0 };
 				case 'bottom':
-					return { y: 0, opacity: 0 };
-				case 'left':
-					return { x: '0', opacity: 0 };
+					return { y: [20, 20], opacity: 1 };
 				default:
 					return { y: 0, opacity: 0 };
 			}
@@ -145,18 +141,8 @@ function useSlides(
 						y: -20,
 						opacity: 0,
 					};
-				case 'right':
-					return {
-						x: '100%',
-						opacity: 0,
-					};
 				case 'bottom':
-					return { y: 20, opacity: 0 };
-				case 'left':
-					return {
-						x: '-100%',
-						opacity: 0,
-					};
+					return { y: 40, opacity: 0 };
 				default:
 					return { y: -20, opacity: 0 };
 			}
@@ -171,12 +157,12 @@ function useSlides(
 						opacity: [0, 0.2],
 						transition: { duration: options.duration && options.duration / 2 },
 					};
-				case 'right':
-					return { x: '0', opacity: 0 };
 				case 'bottom':
-					return { y: 0, opacity: 0 };
-				case 'left':
-					return { x: '0', opacity: 0 };
+					return {
+						y: [-40, -20],
+						opacity: [0, 0.2],
+						transition: { duration: options.duration && options.duration / 2 },
+					};
 				default:
 					return { y: 0, opacity: 0 };
 			}
@@ -188,28 +174,18 @@ function useSlides(
 						y: [0, -20],
 						opacity: 1,
 					};
-				case 'right':
-					return {
-						x: '100%',
-						opacity: 0,
-					};
 				case 'bottom':
-					return { y: 20, opacity: 0 };
-				case 'left':
-					return {
-						x: '-100%',
-						opacity: 0,
-					};
+					return { y: [-20, 0], opacity: 1 };
 				default:
 					return { y: -20, opacity: 0 };
 			}
 		},
 	};
-
 	//세부 컴포넌트
 	//Slides.items
 	const Slide = ({ slideIdx }: { slideIdx: number }) => {
 		//case 1 : slideData가 arr가 아닐때
+		console.log(options);
 		if (typeof slideData === 'string') {
 			return <div>{slideData}</div>;
 		}
@@ -232,6 +208,29 @@ function useSlides(
 				</div>
 			);
 		} else if (Array.isArray(slideData) && options.view === 2) {
+			if (
+				(options.view === 2 && options.direction === 'left') ||
+				options.direction === 'right'
+			) {
+				return (
+					<div style={{ color: 'limegreen' }}>
+						When{' '}
+						<span style={{ color: 'white', fontWeight: 'bold' }}>view</span> is
+						set to <span style={{ color: 'white', fontWeight: 'bold' }}>2</span>
+						,
+						<br /> only{' '}
+						<span style={{ color: 'white', fontWeight: 'bold' }}>'top'</span> or
+						<span style={{ color: 'white', fontWeight: 'bold' }}>
+							'bottom'
+						</span>{' '}
+						is supported for{' '}
+						<span style={{ color: 'white', fontWeight: 'bold' }}>
+							direction
+						</span>
+						.
+					</div>
+				);
+			}
 			return (
 				<div>
 					<motion.div
