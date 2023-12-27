@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import { normalizeOptions } from '@utils/normalizeOptions';
 
 type ControlOptions = {
 	/**
@@ -16,7 +17,7 @@ type ControlOptions = {
 	condition?: boolean | undefined;
 };
 
-const DefaultControlOptions: ControlOptions = { reload: true, condition: true };
+const defaultControlOptions: ControlOptions = { reload: true, condition: true };
 
 /**
  * @param {Function} blockingCallback Routing을 막는 Callback함수
@@ -24,17 +25,13 @@ const DefaultControlOptions: ControlOptions = { reload: true, condition: true };
  */
 function useRouteControl(
 	blockingCallback: () => void,
-	options: ControlOptions = DefaultControlOptions,
+	options: ControlOptions = defaultControlOptions,
 ) {
 	const [nextUrl, setNextUrl] = useState<string>('');
 	const router = useRouter();
 
 	//optional undefined 방지
-	useEffect(() => {
-		options.reload = options.reload === undefined ? true : options.reload;
-		options.condition =
-			options.condition === undefined ? true : options.condition;
-	}, [options.reload, options.condition]);
+	normalizeOptions(options, defaultControlOptions);
 
 	//reload 감지
 	useEffect(() => {
@@ -78,7 +75,6 @@ function useRouteControl(
 
 	//router events 등록
 	useEffect(() => {
-		console.log(options.reload, options.condition);
 		if (options.condition) {
 			router.events.on('routeChangeStart', handleRouteChange);
 		}
