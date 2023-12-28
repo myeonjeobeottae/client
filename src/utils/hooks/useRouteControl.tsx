@@ -6,13 +6,13 @@ type ControlOptions = {
 	/**
 	 * 새로고침 방지 유무
 	 *
-	 * reload : true(default);
+	 * @defaultValue `true`
 	 */
 	reload?: boolean | undefined;
 	/**
 	 * 커스텀 RouteBlocking 조건
 	 *
-	 * condition : true(default);
+	 * @defaultValue `true`
 	 */
 	condition?: boolean | undefined;
 };
@@ -51,16 +51,32 @@ function useRouteControl(
 		(nextUrl: string) => router.asPath.split('?')[0] === nextUrl.split('?')[0],
 		[router.asPath],
 	);
+
+	const syncUrlWithRouter = useCallback(() => {
+		// if the user clicked on the browser back button then the url displayed in the browser gets incorrectly updated
+		console.log(router.asPath, window.location.pathname);
+		if (router.asPath !== window.location.pathname) {
+			window.history.pushState(null, '', router.asPath);
+		}
+	}, [router.asPath]);
+
+	console.log(router);
 	//route blocking
 	const handleRouteChange = useCallback(
 		(nextUrl: string) => {
+			console.log(
+				isSamePath(nextUrl),
+				router.asPath.split('?')[0],
+				nextUrl.split('?')[0],
+			);
 			if (isSamePath(nextUrl)) return;
+			syncUrlWithRouter();
 			setNextUrl(nextUrl);
 			blockingCallback();
 			// router.events.emit('routeChangeError');
 			throw 'Next Route is Blocking';
 		},
-		[router.events, isSamePath, blockingCallback],
+		[router.events, isSamePath, syncUrlWithRouter, blockingCallback],
 	);
 
 	//route unBlocking

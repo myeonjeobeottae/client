@@ -7,31 +7,31 @@ type SlideOptions = {
 	/**
 	 * 한 번에 보여줄 Slide 개수
 	 *
-	 * view : 1(default);
+	 * @defaultValue `1`
 	 */
 	view?: 1 | 2 | undefined;
 	/**
-	 * direction : 'top'(default)
-	 *
 	 * 애니메이션 동작 방향
+	 *
+	 * @defaultValue `top`
 	 */
 	direction?: 'top' | 'right' | 'bottom' | 'left' | undefined;
 	/**
-	 * duration : 0.5(default);
-	 *
 	 * === animation-duration - 애니메이션 동작 시간
+	 *
+	 * @defaultValue `0.5`
 	 */
 	duration?: number | undefined;
 	/**
-	 * dealy : 4.5(default 초)
-	 *
 	 * delay : null - 최초 한 번만 동작
+	 *
+	 * @defaultValue `4.5`(초)
 	 */
 	delay?: number | undefined;
 	/**
-	 * simple : false(default)
-	 *
 	 * simple : true - 단순 motionComponent인 [Slides] 리턴
+	 *
+	 * @defaultValue `false`
 	 */
 	simple?: boolean | undefined;
 };
