@@ -16,13 +16,13 @@ function Logo({ size }: LogoProps) {
 	switch (size) {
 		case 'mid':
 			return (
-				<LinkButton className="logoMid" href={'/'}>
+				<LinkButton className="logoMid" href={'/'} replace>
 					<Image src={homeLogo()} alt={`Home Logo Image`} />
 				</LinkButton>
 			);
 		case 'big':
 			return (
-				<LinkButton className="logoBig" href={'/'}>
+				<LinkButton className="logoBig" href={'/'} replace>
 					<Image src={homeLogo()} alt={`Home Logo Image`} />
 				</LinkButton>
 			);
