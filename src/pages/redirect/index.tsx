@@ -1,58 +1,57 @@
-import axios, { AxiosResponse } from 'axios';
+import customAxios from '@pages/api';
+import { AuthContext } from 'context/Auth';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
-interface UserData {
-	accessToken: string;
-	refreshToken: string;
-	userNickname: string;
-	userImage: string;
+interface User {
+	image: string;
+	nickname: string;
+}
+
+interface CustomAxiosResponse<T> {
+	data: T;
+	status: number;
 }
 
 export default function Redirect({ code }: { code: string }) {
 	const router = useRouter();
+	const authService = useContext(AuthContext);
+
 	useEffect(() => {
 		const onLogin = async () => {
 			try {
-				const data = await axios.get(
-					`https://interviewee.store/kakao/redirect?code=${code}`,
-					{
-						withCredentials: true,
-					},
+				// authService?.login(code);
+				const res = await customAxios.get<CustomAxiosResponse<User>>(
+					`/kakao/redirect?code=${code}`,
 				);
-				console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
-				// const { accessToken, refreshToken, userImage, userNickname } = data;
-				// console.log(
-				// 	'🚀 ~ file: index.tsx:25 ~ onLogin ~ accessToken, refreshToken, userImage, userNickname:',
-				// 	accessToken,
-				// 	refreshToken,
-				// 	userImage,
-				// 	userNickname,
-				// );
-
+				console.log('🚀 ~ file: index.tsx:26 ~ onLogin ~ res:', res);
 				router.push('/');
-			} catch (error) {}
+			} catch (error) {
+				console.log(error);
+			}
 		};
 		onLogin();
 	}, []);
 
-	return <div>로그인 리다이렉트</div>;
+	return <></>;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	if (context.query && context.query.code) {
+	try {
+		if (!context.query) {
+			throw new Error(`query 없음`);
+		}
 		const { code } = context.query;
-
+		// const res = await customAxios.get(`/kakao/redirect?code=${code}`);
 		return {
 			props: {
 				code,
 			},
 		};
+	} catch (error) {
+		return {
+			props: {},
+		};
 	}
-	return {
-		props: {
-			code: '',
-		},
-	};
 };
