@@ -4,8 +4,8 @@ import TimeTemp from '@templates/timeTemp';
 import ResultTemp from '@templates/resultTemp';
 import useFunnel from '@utils/hooks/useFunnel';
 import { ApiErrorBoundary } from '@templates/errorBoundary';
-import { useState } from 'react';
 import useRouteControl from '@utils/hooks/useRouteControl';
+import useModal from '@utils/hooks/useModal';
 
 export type useFunnelType = 'position' | 'stack' | 'time' | 'result';
 
@@ -14,21 +14,16 @@ function CustomPage() {
 		initialStep: 'position',
 	});
 	//TODO: useModal 구현
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const { unBlockingWithCallback } = useRouteControl(() => setIsOpen(true));
+	const [Modal, HandleOpen, HandleDelete] = useModal();
+	const { unBlockingWithCallback } = useRouteControl(HandleOpen);
 
 	return (
 		<ApiErrorBoundary>
 			<main className="customPageWrapper">
-				{isOpen && (
-					<div style={{ position: 'fixed', top: '50%', left: '50%' }}>
-						<h1>라우터 변화 감지 모달</h1>
-						<div style={{ color: 'white' }}>
-							<button onClick={() => setIsOpen(false)}>취소</button>
-							<button onClick={() => unBlockingWithCallback()}>나가기</button>
-						</div>
-					</div>
-				)}
+				<Modal>
+					<Modal.Title>라우터 감지 모달</Modal.Title>
+					<Modal.Content unBlockingWithCallback={unBlockingWithCallback} />
+				</Modal>
 				<Funnel>
 					<Funnel.Step name="position">
 						<PositionTemp
