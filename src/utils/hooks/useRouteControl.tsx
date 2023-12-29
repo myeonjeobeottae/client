@@ -53,30 +53,34 @@ function useRouteControl(
 	);
 
 	const syncUrlWithRouter = useCallback(() => {
-		// if the user clicked on the browser back button then the url displayed in the browser gets incorrectly updated
 		console.log(router.asPath, window.location.pathname);
 		if (router.asPath !== window.location.pathname) {
+			console.log('추가');
 			window.history.pushState(null, '', router.asPath);
+			router.replace(router.asPath);
 		}
 	}, [router.asPath]);
 
-	console.log(router);
 	//route blocking
 	const handleRouteChange = useCallback(
 		(nextUrl: string) => {
 			console.log(
 				isSamePath(nextUrl),
-				router.asPath.split('?')[0],
+				`pathname: ${window.location.pathname}`,
+				router.asPath,
 				nextUrl.split('?')[0],
+				nextUrl,
 			);
-			if (isSamePath(nextUrl)) return;
+			if (isSamePath(nextUrl)) {
+				return;
+			}
 			syncUrlWithRouter();
 			setNextUrl(nextUrl);
 			blockingCallback();
-			// router.events.emit('routeChangeError');
+			router.events.emit('routeChangeError');
 			throw 'Next Route is Blocking';
 		},
-		[router.events, isSamePath, syncUrlWithRouter, blockingCallback],
+		[router.asPath, nextUrl, isSamePath, syncUrlWithRouter, blockingCallback],
 	);
 
 	//route unBlocking
@@ -86,7 +90,7 @@ function useRouteControl(
 			router.replace(nextUrl);
 			callback?.();
 		},
-		[router.events, handleRouteChange],
+		[router.events, nextUrl, handleRouteChange],
 	);
 
 	//router events 등록
@@ -97,7 +101,7 @@ function useRouteControl(
 		return () => {
 			router.events.off('routeChangeStart', handleRouteChange);
 		};
-	}, [router.events, handleRouteChange, options.condition]);
+	}, [router, handleRouteChange, options.condition]);
 
 	return { unBlockingWithCallback };
 }
