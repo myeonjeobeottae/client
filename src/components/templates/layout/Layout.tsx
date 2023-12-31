@@ -19,7 +19,6 @@ function Layout({ children }: LayoutProps) {
 				alt="Background Image"
 			/>
 			<Header />
-			//FIXME: ConditionBackButton 한뎁스 내리기
 			<ConditionBackButton />
 			{children}
 		</div>
