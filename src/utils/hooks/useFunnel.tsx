@@ -39,27 +39,10 @@ function useFunnel<T extends string>(options: {
 
 	console.log(selected);
 
-	//TODO: router.events.on / off로 로직변경하기
-	// useEffect(() => {
-	// 	console.log(router.query['type']);
-	// 	// toast.warn('페이지를 닫으시겠습니까?');
-	// 	const preventClose = (e: BeforeUnloadEvent) => {
-	// 		e.preventDefault();
-	// 	};
-	// 	// router.events.on , off ( routerChangeStart)
-	// 	(() => {
-	// 		window.addEventListener('beforeunload', preventClose);
-	// 	})();
-	// 	return () => {
-	// 		window.removeEventListener('beforeunload', preventClose);
-	// 	};
-	// 	// }
-	// }, []);
-
 	useEffect(() => {
 		console.log(router.query);
-		if (!router.query[`funnel-step`] && type == 'chat') {
-			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
+		if (!router.query[`funnel-step`]) {
+			router.replace(`${router.asPath}?funnel-step=${options.initialStep}`);
 		} else {
 			setState(router.query[`funnel-step`] as T);
 		}
