@@ -52,14 +52,20 @@ function useRouteControl(
 		[router.asPath],
 	);
 
-	const syncUrlWithRouter = useCallback(() => {
-		console.log(router.asPath, window.location.pathname);
-		if (router.asPath !== window.location.pathname) {
-			console.log('추가');
-			window.history.pushState(null, '', router.asPath);
-			router.replace(router.asPath);
-		}
-	}, [router.asPath]);
+	//다른 페이지 일때 && 뒤로가기 || 다른 페이지로 라우팅
+	const syncUrlWithRouter = useCallback(
+		(nextUrl: string) => {
+			console.log(router.asPath, window.location.pathname);
+			if (router.asPath !== window.location.pathname) {
+				//FIXME: 루트 이동 말고도 다른 path가 추가 될 여지 있음
+				if (nextUrl !== '/') {
+					window.history.pushState(null, '', router.asPath);
+					router.replace(router.asPath);
+				}
+			}
+		},
+		[router.asPath, nextUrl],
+	);
 
 	//route blocking
 	const handleRouteChange = useCallback(
@@ -74,18 +80,19 @@ function useRouteControl(
 			if (isSamePath(nextUrl)) {
 				return;
 			}
-			syncUrlWithRouter();
+			syncUrlWithRouter(nextUrl);
 			setNextUrl(nextUrl);
 			blockingCallback();
 			router.events.emit('routeChangeError');
 			throw 'Next Route is Blocking';
 		},
-		[router.asPath, nextUrl, isSamePath, syncUrlWithRouter, blockingCallback],
+		[router.asPath, nextUrl, syncUrlWithRouter, isSamePath, blockingCallback],
 	);
 
 	//route unBlocking
 	const unBlockingWithCallback = useCallback(
 		(callback?: () => void) => {
+			console.log(nextUrl);
 			router.events.off('routeChangeStart', handleRouteChange);
 			router.replace(nextUrl);
 			callback?.();
@@ -101,7 +108,7 @@ function useRouteControl(
 		return () => {
 			router.events.off('routeChangeStart', handleRouteChange);
 		};
-	}, [router, handleRouteChange, options.condition]);
+	}, [router.events, handleRouteChange, options.condition]);
 
 	return { unBlockingWithCallback };
 }
