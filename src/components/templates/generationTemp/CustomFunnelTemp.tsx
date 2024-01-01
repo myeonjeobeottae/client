@@ -9,7 +9,7 @@ import useModal from '@utils/hooks/useModal';
 
 export type useFunnelType = 'position' | 'stack' | 'time' | 'result';
 
-function CustomPage() {
+function CustomFunnelTemp() {
 	const [Funnel, selected, setStep, setStepState] = useFunnel<useFunnelType>({
 		initialStep: 'position',
 	});
@@ -53,4 +53,4 @@ function CustomPage() {
 		</ApiErrorBoundary>
 	);
 }
-export default CustomPage;
+export default CustomFunnelTemp;
