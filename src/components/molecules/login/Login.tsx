@@ -4,10 +4,10 @@ import { AuthContext } from 'context/Auth';
 import { useContext } from 'react';
 
 function Login() {
-	const authService = useContext(AuthContext);
+	// const authService = useContext(AuthContext);
 
-	const user = authService?.getCurrentUser();
-	console.log('user', user);
+	// const user = authService?.getCurrentUser();
+	// console.log('user', user);
 
 	return (
 		<a className="loginBtn" href={KAKAO_LOGIN_URI}>

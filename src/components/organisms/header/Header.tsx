@@ -1,5 +1,6 @@
 import Logo from '@atoms/logo/Logo';
 import Login from '@molecules/login';
+import React from 'react';
 
 function Header() {
 	return (
@@ -10,4 +11,4 @@ function Header() {
 	);
 }
 
-export default Header;
+export default React.memo(Header);
