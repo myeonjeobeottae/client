@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import React, { Children, isValidElement, useState } from 'react';
 
 type ReturnType = [Modal: any, HandleOpen: () => void];
 
@@ -20,33 +21,31 @@ function useModal(): ReturnType {
 		left: '0',
 		right: '0',
 		bottom: '0',
-		zIndex: '999',
+		// zIndex: '999',
 		backgroundColor: 'rgba(0, 0, 0, 0.4)',
 	} as const;
+
 	const Overlay = () => {
 		return <div style={overlayStyle}></div>;
 	};
 
 	const Title = ({ children }: { children: React.ReactNode }) => {
 		return (
-			<h1 style={{ color: 'white', position: 'relative', zIndex: '999' }}>
+			<h2 style={{ color: 'black', position: 'relative', zIndex: '999' }}>
 				{children}
-			</h1>
+			</h2>
 		);
 	};
 
-	interface CancelButton {
-		children: React.ReactNode;
-	}
-
-	const CancelButton = ({ children }: CancelButton) => {
+	const CancelButton = ({ children }: { children: React.ReactNode }) => {
 		return (
-			<div style={{ position: 'relative', zIndex: '999' }}>
+			<div
+				style={{ position: 'relative', zIndex: '999', display: 'inline-block' }}
+			>
 				<button
-					style={{ color: 'white' }}
+					style={{ color: 'black' }}
 					onClick={() => {
 						setIsOpen(false);
-						// window.history.pushState(null, '', router.asPath);
 					}}
 				>
 					{children}
@@ -57,7 +56,7 @@ function useModal(): ReturnType {
 
 	interface ExecuteButtonType {
 		children: React.ReactNode;
-		unBlockingWithCallback: () => void;
+		unBlockingWithCallback: (callback?: undefined | Function) => void;
 	}
 
 	const ExecuteButton = ({
@@ -65,9 +64,11 @@ function useModal(): ReturnType {
 		unBlockingWithCallback,
 	}: ExecuteButtonType) => {
 		return (
-			<div style={{ position: 'relative', zIndex: '999' }}>
+			<div
+				style={{ position: 'relative', zIndex: '999', display: 'inline-block' }}
+			>
 				<button
-					style={{ color: 'white' }}
+					style={{ color: 'black' }}
 					onClick={() => unBlockingWithCallback()}
 				>
 					{children}
@@ -76,15 +77,63 @@ function useModal(): ReturnType {
 		);
 	};
 
+	type PropsType<T extends string> = { children: React.ReactNode } & {
+		[K in T]: () => void;
+	} & ExecuteButtonType;
+
+	const findChildren = (
+		children: React.ReactNode,
+		targetChildren: <T extends string>(
+			props: PropsType<T>,
+		) => React.JSX.Element,
+	) => {
+		const childrenArray = Children.toArray(children);
+		return childrenArray
+			.filter((child) => isValidElement(child) && child.type == targetChildren)
+			.slice(0, 2);
+	};
+
 	const Modal = ({ children }: { children: React.ReactNode }) => {
-		return (
-			<>
-				{isOpen && (
-					<div style={{ position: 'fixed', top: '50%', left: '50%' }}>
-						{children}
-					</div>
-				)}
-			</>
+		if (!isOpen) {
+			return null;
+		}
+
+		const modalOverlay = findChildren(children, Overlay);
+		const modalTitle = findChildren(children, Title);
+		const modalCancelButton = findChildren(children, CancelButton);
+		const modalExecuteButton = findChildren(children, ExecuteButton);
+		console.log(modalCancelButton);
+
+		//FIXME: to SCSS
+		return createPortal(
+			<div
+				style={{
+					position: 'fixed',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+					width: '100%',
+					height: '100%',
+					zIndex: '999',
+				}}
+			>
+				{modalOverlay ? <>{modalOverlay}</> : null}
+				<div
+					style={{
+						outline: 'solid 5px limegreen',
+						width: '300px',
+						height: '100px',
+						background: 'white',
+						zIndex: '999',
+					}}
+				>
+					{modalTitle ? <>{modalTitle}</> : null}
+					{modalCancelButton ? <>{modalCancelButton}</> : null}
+					{modalExecuteButton ? <>{modalExecuteButton}</> : null}
+				</div>
+			</div>,
+			document.getElementById('modal')!,
 		);
 	};
 	Modal.Overlay = Overlay;
