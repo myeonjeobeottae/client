@@ -1,7 +1,28 @@
 import { createPortal } from 'react-dom';
 import React, { Children, isValidElement, useState } from 'react';
 
-type ReturnType = [Modal: any, HandleOpen: () => void];
+interface TitlePropsType {
+	children: React.ReactNode;
+}
+
+interface CancelButtonPropsType {
+	children: React.ReactNode;
+}
+
+interface ExecuteButtonPropsType {
+	children: React.ReactNode;
+	unBlockingWithCallback: (callback?: undefined | (() => void)) => void;
+}
+
+type ModalType = {
+	(props: { children: React.ReactNode }): React.ReactPortal | null;
+	Overlay: () => React.JSX.Element;
+	Title: (props: TitlePropsType) => React.JSX.Element;
+	CancelButton: (props: CancelButtonPropsType) => React.JSX.Element;
+	ExecuteButton: (props: ExecuteButtonPropsType) => React.JSX.Element;
+};
+
+type ReturnType = [Modal: ModalType, HandleOpen: () => void];
 
 function useModal(): ReturnType {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -54,15 +75,10 @@ function useModal(): ReturnType {
 		);
 	};
 
-	interface ExecuteButtonType {
-		children: React.ReactNode;
-		unBlockingWithCallback: (callback?: undefined | Function) => void;
-	}
-
 	const ExecuteButton = ({
 		children,
 		unBlockingWithCallback,
-	}: ExecuteButtonType) => {
+	}: ExecuteButtonPropsType) => {
 		return (
 			<div
 				style={{ position: 'relative', zIndex: '999', display: 'inline-block' }}
@@ -79,7 +95,7 @@ function useModal(): ReturnType {
 
 	type PropsType<T extends string> = { children: React.ReactNode } & {
 		[K in T]: () => void;
-	} & ExecuteButtonType;
+	} & ExecuteButtonPropsType;
 
 	const findChildren = (
 		children: React.ReactNode,
