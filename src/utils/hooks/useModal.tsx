@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 
-type ReturnType = [Modal: any, HandleOpen: () => void, HandleClose: () => void];
+type ReturnType = [Modal: any, HandleOpen: () => void];
 
 function useModal(): ReturnType {
-	const router = useRouter();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const HandleOpen = () => {
@@ -15,31 +13,70 @@ function useModal(): ReturnType {
 		setIsOpen(false);
 	};
 
-	function Title({ children }: { children: React.ReactNode }) {
-		return <h1>{children}</h1>;
+	//FIXME: to SCSS
+	const overlayStyle = {
+		position: 'fixed',
+		top: '0',
+		left: '0',
+		right: '0',
+		bottom: '0',
+		zIndex: '999',
+		backgroundColor: 'rgba(0, 0, 0, 0.4)',
+	} as const;
+	const Overlay = () => {
+		return <div style={overlayStyle}></div>;
+	};
+
+	const Title = ({ children }: { children: React.ReactNode }) => {
+		return (
+			<h1 style={{ color: 'white', position: 'relative', zIndex: '999' }}>
+				{children}
+			</h1>
+		);
+	};
+
+	interface CancelButton {
+		children: React.ReactNode;
 	}
 
-	function Content({
-		unBlockingWithCallback,
-	}: {
-		unBlockingWithCallback: any;
-	}) {
+	const CancelButton = ({ children }: CancelButton) => {
 		return (
-			<div style={{ color: 'white' }}>
+			<div style={{ position: 'relative', zIndex: '999' }}>
 				<button
+					style={{ color: 'white' }}
 					onClick={() => {
 						setIsOpen(false);
 						// window.history.pushState(null, '', router.asPath);
 					}}
 				>
-					취소
+					{children}
 				</button>
-				<button onClick={() => unBlockingWithCallback()}>나가기</button>
 			</div>
 		);
+	};
+
+	interface ExecuteButtonType {
+		children: React.ReactNode;
+		unBlockingWithCallback: () => void;
 	}
 
-	function Modal({ children }: { children: React.ReactNode }) {
+	const ExecuteButton = ({
+		children,
+		unBlockingWithCallback,
+	}: ExecuteButtonType) => {
+		return (
+			<div style={{ position: 'relative', zIndex: '999' }}>
+				<button
+					style={{ color: 'white' }}
+					onClick={() => unBlockingWithCallback()}
+				>
+					{children}
+				</button>
+			</div>
+		);
+	};
+
+	const Modal = ({ children }: { children: React.ReactNode }) => {
 		return (
 			<>
 				{isOpen && (
@@ -49,12 +86,13 @@ function useModal(): ReturnType {
 				)}
 			</>
 		);
-	}
-
+	};
+	Modal.Overlay = Overlay;
 	Modal.Title = Title;
-	Modal.Content = Content;
+	Modal.CancelButton = CancelButton;
+	Modal.ExecuteButton = ExecuteButton;
 
-	return [Modal, HandleOpen, HandleClose];
+	return [Modal, HandleOpen];
 }
 
 export default useModal;

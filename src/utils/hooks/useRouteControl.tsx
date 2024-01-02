@@ -59,7 +59,9 @@ function useRouteControl(
 			if (router.asPath !== window.location.pathname) {
 				//FIXME: 루트 이동 말고도 다른 path가 추가 될 여지 있음
 				if (nextUrl !== '/') {
+					//현재 path 유지
 					window.history.pushState(null, '', router.asPath);
+					//뒤로가기 버튼 클릭 전 path로 초기화
 					router.replace(router.asPath);
 				}
 			}

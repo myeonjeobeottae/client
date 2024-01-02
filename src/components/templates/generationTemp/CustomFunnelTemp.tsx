@@ -14,15 +14,19 @@ function CustomFunnelTemp() {
 		initialStep: 'position',
 	});
 	//TODO: useModal 구현
-	const [Modal, HandleOpen, HandleDelete] = useModal();
+	const [Modal, HandleOpen] = useModal();
 	const { unBlockingWithCallback } = useRouteControl(HandleOpen);
 
 	return (
 		<ApiErrorBoundary>
 			<main className="customPageWrapper">
 				<Modal>
+					<Modal.Overlay />
 					<Modal.Title>라우터 감지 모달</Modal.Title>
-					<Modal.Content unBlockingWithCallback={unBlockingWithCallback} />
+					<Modal.CancelButton>취소</Modal.CancelButton>
+					<Modal.ExecuteButton unBlockingWithCallback={unBlockingWithCallback}>
+						나가기
+					</Modal.ExecuteButton>
 				</Modal>
 				<Funnel>
 					<Funnel.Step name="position">
