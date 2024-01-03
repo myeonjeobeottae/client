@@ -5,14 +5,20 @@ import { routerError } from '@utils/error';
 
 interface StepProps {
 	children: React.ReactElement;
+	name: string;
 }
 
 interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-type returnType<T extends string> = [
-	Funnel: any,
+type FunnelType = {
+	({ children }: FunnelProps): React.ReactElement | undefined;
+	Step: (props: StepProps) => React.JSX.Element;
+};
+
+type ReturnType<T extends string> = [
+	Funnel: FunnelType,
 	selected: SelectedType<T>,
 	setStep: any,
 	setStepState: any,
@@ -28,7 +34,7 @@ type SelectedType<T extends string> = {
 
 function useFunnel<T extends string>(options: {
 	initialStep: T;
-}): returnType<T> {
+}): ReturnType<T> {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 
@@ -71,16 +77,20 @@ function useFunnel<T extends string>(options: {
 	 * FIXME: children.find 가 언디파인드면 (즉, initialStep과 일치하는 name이 없으면) 처리하기
 	 *
 	 */
-	const Funnel = ({ children }: FunnelProps) => {
+	const Funnel = ({
+		children,
+	}: FunnelProps): React.ReactElement | undefined => {
 		if (router.query['type'] === undefined) {
-			return routerError('잘못된 접근입니다.', 600);
+			routerError('잘못된 접근입니다.', 600);
 		}
 		let targetStep;
 
 		if (!Array.isArray(children)) {
 			targetStep = children;
 		} else {
-			targetStep = children.find((childStep) => childStep.props.name === state);
+			targetStep = children.find(
+				(childStep) => childStep && childStep.props.name === state,
+			);
 		}
 
 		return targetStep;
