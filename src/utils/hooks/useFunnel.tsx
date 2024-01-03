@@ -80,9 +80,14 @@ function useFunnel<T extends string>(options: {
 	const Funnel = ({
 		children,
 	}: FunnelProps): React.ReactElement | undefined => {
-		if (router.query['type'] === undefined) {
+		if (
+			router.query['funnel-step'] !== 'position' &&
+			router.query['funnel-step'] !== undefined &&
+			selected[options.initialStep] === ''
+		) {
 			routerError('잘못된 접근입니다.', 600);
 		}
+
 		let targetStep;
 
 		if (!Array.isArray(children)) {

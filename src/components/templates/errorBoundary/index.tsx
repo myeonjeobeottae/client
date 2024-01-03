@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from '@atoms/button';
 
 //TODO: error code 추상화, error별 컴포넌트 구현
 type ErrorBoundaryProps = {
@@ -64,6 +65,29 @@ export class ApiErrorBoundary extends Component<
 		if (error && error['cause']['code'] === 401) {
 			console.log(error['cause']['code']);
 			return <div style={{ color: 'white' }}>네트워크에러</div>;
+		}
+		if (error && error['cause']['code'] === 600) {
+			console.log(error['cause']['code']);
+
+			return (
+				<div
+					style={{
+						color: 'limegreen',
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate3d(-50%,-50%,0)',
+					}}
+				>
+					비정상적인 접근입니다.
+					<Button
+						style={{ color: 'white' }}
+						onClick={() => (window.location.href = '/')}
+					>
+						메인으로 가기
+					</Button>
+				</div>
+			);
 		}
 		// return <div onClickRetry={()=>this.setState({shouldHandleError: false})}>네트워크에러</div>
 		return (

@@ -9,7 +9,7 @@ type RouterErrorCode = StatusCode['router'];
 
 interface RouterErrorType extends Error {
 	name: ErrorName;
-	cause: { code: any };
+	cause: { code: number };
 }
 
 /**
