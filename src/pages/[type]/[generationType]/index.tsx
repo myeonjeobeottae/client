@@ -6,7 +6,10 @@ function GenerationPage() {
 	const router = useRouter();
 	const generationType = router.query['generationType'];
 	return (
-		<>{generationType === 'custom' ? <CustomFunnelTemp /> : <UrlTemp />}</>
+		<>
+			{generationType === 'custom' ? <CustomFunnelTemp /> : null}
+			{generationType === 'url' ? <UrlTemp /> : null}
+		</>
 	);
 }
 
