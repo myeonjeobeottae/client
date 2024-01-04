@@ -81,7 +81,7 @@ function useFunnel<T extends string>(options: {
 		children,
 	}: FunnelProps): React.ReactElement | undefined => {
 		if (
-			router.query['funnel-step'] !== 'position' &&
+			router.query['funnel-step'] !== options.initialStep &&
 			router.query['funnel-step'] !== undefined &&
 			selected[options.initialStep] === ''
 		) {
