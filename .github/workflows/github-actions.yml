@@ -30,8 +30,8 @@ jobs:
         if: contains(github.ref, 'test')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker-compose build -t myeonjeobeottae/test .
-          docker push myeonjeobeottae/test
+          docker-compose build -t ${{ secrets.DOCKER_USERNAME}}/test:0.0.1 .
+          docker push ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
 
       # deploy to production
       - name: Deploy to production
@@ -45,6 +45,6 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo su
-            docker pull myeonjeobeottae/test
-            docker run -d -p 3000:3000 myeonjeobeottae/test
+            docker pull ${{ secrets.DOCKER_USERNAME}}/test
+            docker run -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME}}/test
             docker image prune -f
