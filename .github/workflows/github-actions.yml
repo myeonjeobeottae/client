@@ -47,7 +47,7 @@ jobs:
             cd client/
             sudo su
           # sudo chown /nginx-proxy-manager/letsencrypt/accounts -R
-            sudo chmod g+rwx "$HOME/client/ubuntu/nginx-proxy-manager/letsencrypt/accounts" -R
+            sudo chmod g+rwx /client/nginx-proxy-manager/letsencrypt/accounts -R
             docker image prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
