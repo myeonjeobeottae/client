@@ -46,8 +46,8 @@ jobs:
           script: |
             cd client/
             sudo su
-            sudo chown /home//${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
-            sudo chmod g+rwx /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
+            sudo chown /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts -R
+            sudo chmod g+rwx /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts -R
             docker image prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
