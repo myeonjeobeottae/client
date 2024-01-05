@@ -11,13 +11,12 @@ services:
       - 80:80 #http
       - 443:443 #https
     volumes:
-      - ./nginx-proxy-manager/data:/data
-      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+      - sudo ./nginx-proxy-manager/data:/data
+      - sudo ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
     environment:
       DISABLE_IPV6: 'true'
     depends_on:
       - myeonjeobeottae
-    options: --user root
 
   myeonjeobeottae:
     container_name: myeonjeobeottae
