@@ -24,7 +24,7 @@ jobs:
       #   touch ./app.yml
       #   echo "${{ secrets.YML}}" > ./app.yml
       # shell: sh
-
+      #gogo
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'test')
