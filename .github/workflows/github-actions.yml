@@ -44,9 +44,9 @@ jobs:
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
 
-          run: sudo chown -R ubuntu:ubuntu ubuntu
           script: |
             sudo su
+            chown -R client/nginx-proxy-manager/letsencrypt/accounts
             cd client/
             docker image prune -f
             docker-compose down
