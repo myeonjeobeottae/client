@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '@atoms/button';
+import axios, { AxiosError } from 'axios';
 
 //TODO: error code 추상화, error별 컴포넌트 구현
 type ErrorBoundaryProps = {
@@ -45,6 +46,7 @@ export class ApiErrorBoundary extends Component<
 
 	render() {
 		const error = this.state.error;
+		const errorCode = error && error['cause']['code'];
 		//여기서 해결못할 에러일 때
 		if (this.state.shouldRethrow) {
 			throw this.state.error;
@@ -62,12 +64,12 @@ export class ApiErrorBoundary extends Component<
 			return <div>네트워크에러</div>;
 			// return <div onClickRetry={()=>this.setState({shouldHandleError: false})}>네트워크에러</div>
 		}
-		if (error && error['cause']['code'] === 401) {
-			console.log(error['cause']['code']);
+		if (errorCode === 401) {
+			console.log(errorCode);
 			return <div style={{ color: 'white' }}>네트워크에러</div>;
 		}
-		if (error && error['cause']['code'] === 600) {
-			console.log(error['cause']['code']);
+		if (errorCode === 600) {
+			console.log(errorCode);
 
 			return (
 				<div
@@ -145,6 +147,15 @@ export class GlobalErrorBoundary extends Component<
 	}
 	render() {
 		const error = this.state.error;
+		const errorCode = error && error['response']['status'];
+
+		if (errorCode === 401) {
+			return (
+				<div style={{ color: 'red', fontSize: '5rem' }}>
+					400에러 !@@!@#!@!#@!#@!
+				</div>
+			);
+		}
 		if (!this.state.shouldHandleError) {
 			return this.props.children;
 		}
