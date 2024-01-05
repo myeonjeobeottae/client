@@ -44,9 +44,8 @@ jobs:
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
           script: |
-            cd client/
-            sudo chmod g+rwx /home/ubuntu/client/nginx-proxy-manager/letsencrypt/accounts -R
             sudo su
+            cd client/
             docker image prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
