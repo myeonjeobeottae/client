@@ -48,5 +48,5 @@ jobs:
             sudo su
             docker image prune -f
             docker-compose down
-            docker pull ${{ secrets.DOCKER_USERNAME}}/test
+            docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
             docker run -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME}}/test
