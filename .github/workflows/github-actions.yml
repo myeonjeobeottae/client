@@ -46,7 +46,7 @@ jobs:
 
           script: |
             sudo su
-            chown -R client/nginx-proxy-manager/letsencrypt/accounts
+            chown -R /client/nginx-proxy-manager/letsencrypt/accounts
             cd client/
             docker image prune -f
             docker-compose down
