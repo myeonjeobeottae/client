@@ -26,3 +26,4 @@ services:
       dockerfile: Dockerfile.yml
     ports:
       - '3000:3000'
+    image: myeonjeobeottae/test:0.0.1
