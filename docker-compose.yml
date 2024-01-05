@@ -17,6 +17,7 @@ services:
       DISABLE_IPV6: 'true'
     depends_on:
       - myeonjeobeottae
+    options: --user root
 
   myeonjeobeottae:
     container_name: myeonjeobeottae
