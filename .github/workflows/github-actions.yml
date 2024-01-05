@@ -43,8 +43,9 @@ jobs:
           username: ${{ secrets.EC2_USERNAME}}
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
+
+          run: sudo chown -R ubuntu:ubuntu ubuntu
           script: |
-            sudo chown -R ubuntu:ubuntu ubuntu
             sudo su
             cd client/
             docker image prune -f
