@@ -49,5 +49,6 @@ jobs:
             docker image prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
+            sudo chown -R ${{ secrets.DOCKER_USERNAME}}:${{ secrets.DOCKER_USERNAME}} /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
             sudo chmod +w /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
             docker-compose up -d --build
