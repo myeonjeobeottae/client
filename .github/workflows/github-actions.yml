@@ -26,13 +26,13 @@ jobs:
       # shell: sh
       #gogo
 
-      - name: make docker-compose.yml
-        if: contains(github.ref, 'test')
-        run: |
-          touch ./DockerFile.yml
-          echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
-          ls
-        shell: sh
+      # - name: make docker-compose.yml
+      #   if: contains(github.ref, 'test')
+      #   run: |
+      #     touch ./DockerFile.yml
+      #     echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
+      #     ls
+      #   shell: sh
 
       # docker build & push to production
       - name: Docker build & push to prodction
