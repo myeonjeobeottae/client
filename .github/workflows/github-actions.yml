@@ -50,7 +50,7 @@ jobs:
         if: contains(github.ref, 'test')
         with:
           host: ${{ secrets.EC2_HOST}}
-          username: ${{ secrets.EC2_USERNAME}}
+          username: ubuntu
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
           script: |
@@ -59,3 +59,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
             docker-compose up -d --build
             docker system prune -f
+            docker logs
