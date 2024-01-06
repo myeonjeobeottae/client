@@ -26,21 +26,21 @@ jobs:
       # shell: sh
       #gogo
 
-      - name: make docker-compose.yml
-        if: contains(github.ref, 'test')
-        run: |
-          touch ./docker-compose.yml
-          echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
-          touch ./DockerFile.yml
-          echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
-        shell: sh
+      # - name: make docker-compose.yml
+      #   if: contains(github.ref, 'test')
+      #   run: |
+      #     touch ./docker-compose.yml
+      #     echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
+      #     touch ./DockerFile.yml
+      #     echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
+      #   shell: sh
 
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'test')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker-compose build
+          docker build -t ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
           docker push ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
 
       # deploy to production
@@ -55,8 +55,7 @@ jobs:
           envs: GITHUB_SHA
           script: |
             cd client/
+            sudo su
             docker-compose down
-            docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
             docker-compose up -d --build
             docker system prune -f
-            docker logs

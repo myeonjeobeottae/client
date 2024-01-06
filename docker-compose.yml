@@ -20,10 +20,11 @@ services:
 
   myeonjeobeottae:
     container_name: myeonjeobeottae
+    image: tanglog/test:0.0.1
     # 현재 경로에 이미지 빌드
-    build:
-      context: .
-      dockerfile: Dockerfile.yml
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.yml
     ports:
       - '3000:3000'
-    image: tanglog/test:0.0.1
+    # image: tanglog/test:0.0.1
