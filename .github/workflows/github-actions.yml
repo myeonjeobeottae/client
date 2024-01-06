@@ -43,7 +43,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME}}
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
-
           script: |
             cd client/
             docker system prune -f
