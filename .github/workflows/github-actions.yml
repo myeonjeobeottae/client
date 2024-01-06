@@ -45,8 +45,7 @@ jobs:
           envs: GITHUB_SHA
 
           script: |
-            sudo su
-            chown -R /client/nginx-proxy-manager/letsencrypt/accounts
+            sudo chmod -R u+w /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
             cd client/
             docker image prune -f
             docker-compose down
