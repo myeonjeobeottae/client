@@ -45,9 +45,9 @@ jobs:
           envs: GITHUB_SHA
 
           script: |
-            sudo su
             cd client/
             docker image prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
+            sudo chmod +w /home/${{ secrets.EC2_USERNAME}}/client/nginx-proxy-manager/letsencrypt/accounts
             docker-compose up -d --build
