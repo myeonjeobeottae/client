@@ -46,7 +46,7 @@ jobs:
 
           script: |
             cd client/
-            docker image prune -f
+            docker system prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
             docker-compose up -d --build
