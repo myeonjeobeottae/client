@@ -14,25 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # # 환경별 yml 파일 생성
-      # -name: make app.yml
-      # if: |
-      #   contains(github.ref, 'main')
-      # run: |
-      #   mkdir ./src/main/resources
-      #   cd ./src/main/resources
-      #   touch ./app.yml
-      #   echo "${{ secrets.YML}}" > ./app.yml
-      # shell: sh
-      #gogo
-
-      # - name: make docker-compose.yml
-      #   if: contains(github.ref, 'test')
-      #   run: |
-      #     touch ./DockerFile.yml
-      #     echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
-      #     ls
-      #   shell: sh
 
       # docker build & push to production
       - name: Docker build & push to prodction
@@ -49,7 +30,7 @@ jobs:
         if: contains(github.ref, 'test')
         with:
           host: ${{ secrets.EC2_HOST}}
-          username: ubuntu
+          username: ${{ secrets.EC2_USERNAME}}
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
           script: |
