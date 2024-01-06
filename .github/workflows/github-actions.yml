@@ -25,6 +25,16 @@ jobs:
       #   echo "${{ secrets.YML}}" > ./app.yml
       # shell: sh
       #gogo
+
+      - name: make docker-compose.yml
+        if: contains(github.ref, 'test')
+        run: |
+          touch ./docker-compose.yml
+          echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
+          touch ./DockerFile.yml
+          echo "${{ secrets.DOCKER_FILE }}" > ./DockerFile.yml
+        shell: sh
+
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'test')
@@ -45,7 +55,7 @@ jobs:
           envs: GITHUB_SHA
           script: |
             cd client/
-            docker system prune -f
             docker-compose down
             docker pull ${{ secrets.DOCKER_USERNAME}}/test:0.0.1
             docker-compose up -d --build
+            docker system prune -f
