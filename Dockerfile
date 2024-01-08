@@ -19,6 +19,14 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
+
+ARG NEXT_PUBLIC_REST_API_KEY
+RUN touch .env.production
+RUN echo "NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}" >> .env.production
+RUN cat .env.production
+
+
+
 RUN yarn build
 
 # Production image, copy all the files and run next
