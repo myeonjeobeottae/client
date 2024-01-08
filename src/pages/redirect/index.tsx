@@ -1,18 +1,7 @@
-import customAxios from '@pages/api';
 import { AuthContext } from 'context/Auth';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-
-interface User {
-	image: string;
-	nickname: string;
-}
-
-interface CustomAxiosResponse<T> {
-	data: T;
-	status: number;
-}
 
 export default function Redirect({ code }: { code: string }) {
 	const router = useRouter();
@@ -21,12 +10,8 @@ export default function Redirect({ code }: { code: string }) {
 	useEffect(() => {
 		const onLogin = async () => {
 			try {
-				// authService?.login(code);
-				const res = await customAxios.get<CustomAxiosResponse<User>>(
-					`/kakao/redirect?code=${code}`,
-				);
-				console.log('🚀 ~ file: index.tsx:26 ~ onLogin ~ res:', res);
-				router.push('/');
+				await authService?.login(code);
+				router.replace('/');
 			} catch (error) {
 				console.log(error);
 			}
@@ -43,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			throw new Error(`query 없음`);
 		}
 		const { code } = context.query;
-		// const res = await customAxios.get(`/kakao/redirect?code=${code}`);
+
 		return {
 			props: {
 				code,

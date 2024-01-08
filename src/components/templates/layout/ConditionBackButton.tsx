@@ -18,4 +18,4 @@ function ConditionBackButton() {
 	);
 }
 
-export default ConditionBackButton;
+export default React.memo(ConditionBackButton);

@@ -12,10 +12,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app';
 import '../styles/scss/style.scss';
-import { AuthProvider, BasicAuthService } from 'context/Auth';
+import { AuthProvider } from 'context/Auth';
 
 export default function App({ Component, pageProps }: AppProps) {
-	const authService = new BasicAuthService();
 	const [queryClient] = useState(
 		() =>
 			new QueryClient({
@@ -30,7 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AuthProvider authService={authService}>
+			<AuthProvider>
 				<HydrationBoundary state={pageProps.dehydratedState}>
 					<GlobalErrorBoundary>
 						<Suspense fallback={<Loading />}>
