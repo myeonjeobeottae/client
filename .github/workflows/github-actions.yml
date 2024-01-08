@@ -20,16 +20,18 @@ jobs:
       - name: Create Production envFile
         if: contains(github.ref, 'main')
         run: |
-          touch ./.env.production
-          echo "${{ secrets.ENV_PRODUCTION }}" > ./.env.production
+          ls
+          touch ./.env
+          echo "${{ secrets.ENV_PRODUCTION }}" > ./.env
 
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'main')
         run: |
-          cat .env.production
+          cat .env
+          ls
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker build --build-arg ENV_FILE=./.env.production --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
+          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
           docker push ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae
 
       # deploy to production
