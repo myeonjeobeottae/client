@@ -19,6 +19,11 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
+ARG NEXT_PUBLIC_KAKAO_LOGIN_URI
+RUN touch .env.production
+RUN echo "NEXT_PUBLIC_KAKAO_LOGIN_URI=${NEXT_PUBLIC_KAKAO_LOGIN_URI}" > .env.production
+ENV NODE_ENV production
+
 RUN yarn build
 
 # Production image, copy all the files and run next
@@ -34,10 +39,7 @@ WORKDIR /usr/src/app
 # ENV NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
 # ENV NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
 
-ARG NEXT_PUBLIC_KAKAO_LOGIN_URI
-RUN touch .env.production
-RUN echo "NEXT_PUBLIC_KAKAO_LOGIN_URI=${NEXT_PUBLIC_KAKAO_LOGIN_URI}" > .env.production
-ENV NODE_ENV production
+
 
 
 
