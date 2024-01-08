@@ -33,7 +33,7 @@ ARG APP_ENV
 ENV NODE_ENV="production"
 RUN ls
 RUN touch ./.env.production
-RUN echo ./.env.production > ${APP_ENV}
+RUN echo ./.env.production > NEXT_PUBLIC_REST_API_KEY=8bf32c7eb886bbd4e40c43b9bbce3ca3
 RUN cat ./.env.production
 # COPY /.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
