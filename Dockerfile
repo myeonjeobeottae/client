@@ -34,7 +34,7 @@ ENV NODE_ENV="production"
 RUN ls
 RUN touch /.env.production
 RUN echo /usr/src/app/.env.production > ${APP_ENV}
-COPY /usr/src/app/.env.production ./.env.production
+COPY /.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
