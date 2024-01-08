@@ -16,20 +16,19 @@ jobs:
       # github 가상환경에서 작업할 수 있도록 repository 코드 복제
       - uses: actions/checkout@v3
 
-      # make docker production envFile
-      - name: Create Production envFile
+      # set ENV from Action secret
+      - name: Set ENV from Action secret
         if: contains(github.ref, 'test')
         run: |
-          ls
-          touch ./.env
-          echo "${{ secrets.ENV_PRODUCTION }}" > ./.env
+          echo "NEXT_PUBLIC_REST_API_KEY=${{ secrets.REST_API_KEY }}" > $GITHUB_ENV
+          echo "NEXT_PUBLIC_REDIRECT_URI=${{ secrets.REDIRECT_URI }}" > $GITHUB_ENV
 
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'test')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker build --build-arg NEXT_PUBLIC_REST_API_KEY=${{ secrets.REST_API_KEY}} --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
+          docker build --build-arg NEXT_PUBLIC_REST_API_KEY=$NEXT_PUBLIC_REST_API_KEY --build-arg NEXT_PUBLIC_REDIRECT_URI=$NEXT_PUBLIC_REDIRECT_URI --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
           docker push ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae
 
       # deploy to production
