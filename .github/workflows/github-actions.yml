@@ -35,7 +35,6 @@ jobs:
           key: ${{ secrets.EC2_KEY}}
           envs: GITHUB_SHA
           script: |
-            cd client/
             sudo su
             docker-compose down
             docker-compose up -d --build
