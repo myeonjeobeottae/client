@@ -7,7 +7,10 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense, useState } from 'react';
-import { GlobalErrorBoundary } from '@templates/errorBoundary';
+import {
+	ApiErrorBoundary,
+	GlobalErrorBoundary,
+} from '@templates/errorBoundary';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app';
@@ -29,22 +32,24 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AuthProvider>
-				<HydrationBoundary state={pageProps.dehydratedState}>
-					<GlobalErrorBoundary>
-						<Suspense fallback={<Loading />}>
-							<Layout>
-								<Component {...pageProps} />
-								<ReactQueryDevtools
-									initialIsOpen={false}
-									buttonPosition="bottom-right"
-								/>
-							</Layout>
-							<ToastContainer autoClose={2000} pauseOnHover />
-						</Suspense>
-					</GlobalErrorBoundary>
-				</HydrationBoundary>
-			</AuthProvider>
+			<HydrationBoundary state={pageProps.dehydratedState}>
+				<GlobalErrorBoundary>
+					<ApiErrorBoundary>
+						<AuthProvider>
+							<Suspense fallback={<Loading />}>
+								<Layout>
+									<Component {...pageProps} />
+									<ReactQueryDevtools
+										initialIsOpen={false}
+										buttonPosition="bottom-right"
+									/>
+								</Layout>
+								<ToastContainer autoClose={2000} pauseOnHover />
+							</Suspense>
+						</AuthProvider>
+					</ApiErrorBoundary>
+				</GlobalErrorBoundary>
+			</HydrationBoundary>
 		</QueryClientProvider>
 	);
 }

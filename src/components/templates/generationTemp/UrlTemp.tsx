@@ -4,7 +4,7 @@ import { BackButton } from '@atoms/button/BackButton';
 import { IconSearch, IconWantedLogo } from '@svgs/index';
 import { useRouter } from 'next/router';
 
-export default function UrlPage() {
+function UrlTemp() {
 	const { pathname } = useRouter();
 	console.log(pathname);
 	const [value, urlInput] = useTextInput({
@@ -37,3 +37,4 @@ export default function UrlPage() {
 		</main>
 	);
 }
+export default UrlTemp;

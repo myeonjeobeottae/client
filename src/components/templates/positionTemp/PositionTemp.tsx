@@ -15,6 +15,7 @@ function PositionTemp({ next, setStepState }: PositionTempProps) {
 				{positionData.map((position) => {
 					return (
 						<Button
+							key={position}
 							//TODO: classname 통일
 							className="frontEnd"
 							type="button"

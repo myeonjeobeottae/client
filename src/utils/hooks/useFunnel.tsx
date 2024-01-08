@@ -5,14 +5,20 @@ import { routerError } from '@utils/error';
 
 interface StepProps {
 	children: React.ReactElement;
+	name: string;
 }
 
 interface FunnelProps {
 	children: React.ReactElement[] | React.ReactElement;
 }
 
-type returnType<T extends string> = [
-	Funnel: any,
+type FunnelType = {
+	({ children }: FunnelProps): React.ReactElement | undefined;
+	Step: (props: StepProps) => React.JSX.Element;
+};
+
+type ReturnType<T extends string> = [
+	Funnel: FunnelType,
 	selected: SelectedType<T>,
 	setStep: any,
 	setStepState: any,
@@ -28,7 +34,7 @@ type SelectedType<T extends string> = {
 
 function useFunnel<T extends string>(options: {
 	initialStep: T;
-}): returnType<T> {
+}): ReturnType<T> {
 	const router = useRouter();
 	const type = router.query && router.query.type;
 
@@ -39,27 +45,10 @@ function useFunnel<T extends string>(options: {
 
 	console.log(selected);
 
-	//TODO: router.events.on / off로 로직변경하기
-	// useEffect(() => {
-	// 	console.log(router.query['type']);
-	// 	// toast.warn('페이지를 닫으시겠습니까?');
-	// 	const preventClose = (e: BeforeUnloadEvent) => {
-	// 		e.preventDefault();
-	// 	};
-	// 	// router.events.on , off ( routerChangeStart)
-	// 	(() => {
-	// 		window.addEventListener('beforeunload', preventClose);
-	// 	})();
-	// 	return () => {
-	// 		window.removeEventListener('beforeunload', preventClose);
-	// 	};
-	// 	// }
-	// }, []);
-
 	useEffect(() => {
 		console.log(router.query);
-		if (!router.query[`funnel-step`] && type == 'chat') {
-			router.replace(`/${type}/custom?funnel-step=${options.initialStep}`);
+		if (!router.query[`funnel-step`]) {
+			router.replace(`${router.asPath}?funnel-step=${options.initialStep}`);
 		} else {
 			setState(router.query[`funnel-step`] as T);
 		}
@@ -88,16 +77,25 @@ function useFunnel<T extends string>(options: {
 	 * FIXME: children.find 가 언디파인드면 (즉, initialStep과 일치하는 name이 없으면) 처리하기
 	 *
 	 */
-	const Funnel = ({ children }: FunnelProps) => {
-		if (router.query['type'] === undefined) {
-			return routerError('잘못된 접근입니다.', 600);
+	const Funnel = ({
+		children,
+	}: FunnelProps): React.ReactElement | undefined => {
+		if (
+			router.query['funnel-step'] !== options.initialStep &&
+			router.query['funnel-step'] !== undefined &&
+			selected[options.initialStep] === ''
+		) {
+			routerError('잘못된 접근입니다.', 600);
 		}
+
 		let targetStep;
 
 		if (!Array.isArray(children)) {
 			targetStep = children;
 		} else {
-			targetStep = children.find((childStep) => childStep.props.name === state);
+			targetStep = children.find(
+				(childStep) => childStep && childStep.props.name === state,
+			);
 		}
 
 		return targetStep;
