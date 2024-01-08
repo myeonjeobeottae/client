@@ -25,9 +25,9 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /usr/src/app
 
-ARG APP_ENV
+ARG ENV_FILE
 ENV NODE_ENV="production"
-COPY ${APP_ENV} /usr/src/app/.env
+COPY ${ENV_FILE} /usr/src/app/.env
 # RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
