@@ -31,7 +31,7 @@ WORKDIR /usr/src/app
 # RUN NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
 # ARG APP_ENV
 ENV NODE_ENV="production"
-COPY /.env.production ./.env.production
+COPY /usr/src/app/.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
