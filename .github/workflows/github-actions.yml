@@ -31,7 +31,7 @@ jobs:
           cat .env
           ls
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker build --build-arg NEXT_PUBLIC_REST_API_KEY=${{ secrets.REST_API_KEY}} --build-arg NEXT_PUBLIC_REDIRECT_URI=${{ secrets.REDIRECT_URI}} --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
+          docker build --build-arg APP_ENV=${{ secrets.ENV_PRODUCTION}} --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
           docker push ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae
 
       # deploy to production
