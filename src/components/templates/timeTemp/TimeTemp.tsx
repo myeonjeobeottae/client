@@ -1,24 +1,19 @@
 import Button from '@atoms/button';
 import { useState } from 'react';
-import type { selectedStateType } from '@utils/hooks/useFunnel';
 
 interface PropTypes {
-	selected: selectedStateType['time'];
+	selected: string;
 	next: (e: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
-	setStepState: (
-		e: React.MouseEvent<HTMLElement>,
-		tabData?: selectedStateType['stack'],
-		timeData?: selectedStateType['time'],
-	) => void;
+	setStepState: (stepData: string) => void;
 }
 
 const timeData = {
 	제한없음: 'noLimit',
-	'3분': 3,
-	'5분': 5,
+	'3분': '3',
+	'5분': '5',
 };
 
-function TimeTemp({ selected, next, setStepState }: PropTypes) {
+function TimeTemp({ selected = '3', next, setStepState }: PropTypes) {
 	const [time, setTime] = useState(selected);
 	return (
 		<section className="stackWrapper">
@@ -45,7 +40,7 @@ function TimeTemp({ selected, next, setStepState }: PropTypes) {
 				style={{ color: 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(e, [], time);
+					setStepState(time);
 				}}
 			>
 				다음

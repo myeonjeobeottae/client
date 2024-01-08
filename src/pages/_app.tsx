@@ -1,5 +1,5 @@
 import Layout from '@templates/layout';
-import Loading from '@atoms/loading/Loading';
+import Loading from '@molecules/loading';
 import {
 	HydrationBoundary,
 	QueryClient,
@@ -7,8 +7,15 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense, useState } from 'react';
+import {
+	ApiErrorBoundary,
+	GlobalErrorBoundary,
+} from '@templates/errorBoundary';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app';
 import '../styles/scss/style.scss';
+import { AuthProvider } from 'context/Auth';
 
 export default function App({ Component, pageProps }: AppProps) {
 	const [queryClient] = useState(
@@ -26,15 +33,22 @@ export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<HydrationBoundary state={pageProps.dehydratedState}>
-				<Layout>
-					<Suspense fallback={<Loading />}>
-						<Component {...pageProps} />
-						<ReactQueryDevtools
-							initialIsOpen={false}
-							buttonPosition="bottom-right"
-						/>
-					</Suspense>
-				</Layout>
+				<GlobalErrorBoundary>
+					<ApiErrorBoundary>
+						<AuthProvider>
+							<Suspense fallback={<Loading />}>
+								<Layout>
+									<Component {...pageProps} />
+									<ReactQueryDevtools
+										initialIsOpen={false}
+										buttonPosition="bottom-right"
+									/>
+								</Layout>
+								<ToastContainer autoClose={2000} pauseOnHover />
+							</Suspense>
+						</AuthProvider>
+					</ApiErrorBoundary>
+				</GlobalErrorBoundary>
 			</HydrationBoundary>
 		</QueryClientProvider>
 	);
