@@ -25,7 +25,10 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /usr/src/app
 
-ENV NODE_ENV production
+ARG APP_ENV
+ENV NODE_ENV="production"
+COPY ${APP_ENV} /usr/src/app/.env
+# RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
