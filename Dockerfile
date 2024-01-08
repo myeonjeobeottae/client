@@ -22,7 +22,7 @@ COPY . .
 
 ARG NEXT_PUBLIC_REST_API_KEY
 RUN touch .env.production
-RUN echo "NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}" >> .env.production
+RUN echo "NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}" > .env.production
 RUN cat .env.production
 
 

@@ -23,7 +23,7 @@ function CustomFunnelTemp() {
 				<Modal>
 					<Modal.Overlay />
 					{/* <Modal.Title>라우터 감지 모달</Modal.Title> */}
-					<Modal.Title>{`${process.env.NEXT_PUBLIC_KAKAO_LOGIN_URI}`}</Modal.Title>
+					<Modal.Title>{`${process.env.NEXT_PUBLIC_REST_API_KEY}`}</Modal.Title>
 					<Modal.CancelButton>취소</Modal.CancelButton>
 					<Modal.ExecuteButton unBlockingWithCallback={unBlockingWithCallback}>
 						나가기
