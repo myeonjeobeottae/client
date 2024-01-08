@@ -20,9 +20,9 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
 
-ARG NEXT_PUBLIC_REST_API_KEY
+ARG NEXT_PUBLIC_KAKAO_LOGIN_URI
 RUN touch .env.production
-RUN echo "NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}" > .env.production
+RUN echo "NEXT_PUBLIC_KAKAO_LOGIN_URI=${NEXT_PUBLIC_KAKAO_LOGIN_URI}" > .env.production
 RUN cat .env.production
 
 
