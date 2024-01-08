@@ -32,9 +32,10 @@ WORKDIR /usr/src/app
 ARG APP_ENV
 ENV NODE_ENV="production"
 RUN ls
-RUN touch /.env.production
-RUN echo /usr/src/app/.env.production > ${APP_ENV}
-COPY /.env.production ./.env.production
+RUN touch ./.env.production
+RUN echo ./.env.production > ${APP_ENV}
+RUN cat ./.env.production
+# COPY /.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
