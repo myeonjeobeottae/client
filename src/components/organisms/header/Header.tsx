@@ -1,16 +1,19 @@
 import Logo from '@atoms/logo/Logo';
-import { IconProfile } from '@svgs/index';
-import { KAKAO_LOGIN_URI } from '@utils/variables';
+import Login from '@molecules/login';
+import React from 'react';
+import { AuthContext } from 'context/Auth';
+import { useContext } from 'react';
+import Profile from '@molecules/profile/Profile';
 
 function Header() {
+	const authService = useContext(AuthContext);
+	const user = authService?.getCurrentUser();
+
 	return (
-		<div className="headerWrapper">
+		<header className="headerWrapper">
 			<Logo size={`mid`} />
-			<a className="loginBtn" href={KAKAO_LOGIN_URI}>
-				<IconProfile />
-				<span>로그인</span>
-			</a>
-		</div>
+			{user ? <Profile user={user} /> : <Login />}
+		</header>
 	);
 }
 

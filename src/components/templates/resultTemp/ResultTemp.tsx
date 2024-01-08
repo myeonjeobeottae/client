@@ -1,40 +1,40 @@
-import { selectedStateType } from '@utils/hooks/useFunnel';
+import customAxios from '@pages/api';
+import Button from '@atoms/button';
 
 interface ResultProps {
-	selected: selectedStateType;
+	selected: {
+		[key: string]: string;
+	};
 }
 
 function ResultTemp({ selected }: ResultProps) {
-	console.log('🚀 ~ file: ResultTemp.tsx:8 ~ ResultTemp ~ selected:', selected);
+	const createQuestions = async () => {
+		try {
+			const data = await customAxios.post(
+				`/interviews/custom/create`,
+				selected,
+			);
+			console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
+		} catch (error) {
+			throw error;
+		}
+	};
 
 	return (
 		<div>
 			<section className="positionWrapper">
 				<ul className="tips">
-					{Object.entries(selected).map(([category, select]) => {
-						if (Array.isArray(select)) {
-							return (
-								<li className="tip">
-									<h3 className="title">{category}</h3>
-									{select.map((value) => (
-										<p>{value}</p>
-									))}
-								</li>
-							);
-						}
-						return (
-							<li className="tip">
-								<h3 className="title">{category}</h3>
-								<p>{select}</p>
-							</li>
-						);
-					})}
+					{Object.entries(selected).map(([category, select]) => (
+						<li className="tip" key={category}>
+							<h3 className="title">{category}</h3>
+							<p>{select}</p>
+						</li>
+					))}
 				</ul>
+				<Button onClick={createQuestions}>문제 생성</Button>
 			</section>
 		</div>
 	);
 }
 
 export default ResultTemp;
-
-// FIXME: 퍼널페이지에서 새로고침하면 url에 undefined가 표시됨.

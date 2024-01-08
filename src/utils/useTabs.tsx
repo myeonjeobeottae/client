@@ -1,18 +1,18 @@
 import Button from '@atoms/button';
 import { useState, MouseEvent } from 'react';
-import SelectedStacks from '@organisms/selectedStacks';
 
-type returnType = [Tab: any, selectedStacks: string[]];
+type returnType = [
+	Tab: any,
+	selectedStacks: string[],
+	setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>,
+];
 
 export function useTabs<T extends Record<string, any[]>>(options: {
 	initialMenu: keyof T;
 	tabData: T;
-	selected: any[];
 }): returnType {
 	const [menu, setMenu] = useState<keyof T>(options.initialMenu);
-	const [selectedStacks, setSelectedStacks] = useState<string[]>(
-		options.selected,
-	);
+	const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
 	const setClickState = (e: MouseEvent<HTMLElement>) => {
 		const target = e.target as HTMLButtonElement;
@@ -22,7 +22,7 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 			if (isTabMenu) {
 				setMenu(value);
 			} else {
-				setSelectedStacks((prev) => {
+				setSelectedItems((prev) => {
 					return [...prev, value];
 				});
 			}
@@ -57,10 +57,10 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 							key={item}
 							data-testid={'menuItem'}
 							style={{
-								color: selectedStacks.includes(item) ? 'gray' : 'white',
+								color: selectedItems.includes(item) ? 'gray' : 'white',
 								outline: 'solid blue',
 							}}
-							disabled={selectedStacks.includes(item)}
+							disabled={selectedItems.includes(item)}
 						>
 							{item}
 						</Button>
@@ -80,8 +80,6 @@ export function useTabs<T extends Record<string, any[]>>(options: {
 
 	Tabs.Menu = Menu;
 	Tabs.MenuItems = MenuItems;
-	Tabs.SelectedStacks = () => (
-		<SelectedStacks selected={selectedStacks} setSelected={setSelectedStacks} />
-	);
-	return [Tabs, selectedStacks];
+
+	return [Tabs, selectedItems, setSelectedItems];
 }

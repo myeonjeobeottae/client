@@ -20,9 +20,6 @@ services:
 
   myeonjeobeottae:
     container_name: myeonjeobeottae
-    # 현재 경로에 이미지 빌드
-    build:
-      context: .
-      dockerfile: Dockerfile.yml
+    image: tanglog/myeonjeobeottae:latest
     ports:
       - '3000:3000'

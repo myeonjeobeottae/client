@@ -2,33 +2,32 @@ import Button from '@atoms/button/Button';
 
 interface PositionTempProps {
 	next: () => void;
-	setState: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	setStepState: (stepData: string) => void;
 }
 
-function PositionTemp({ next, setState }: PositionTempProps) {
+const positionData = ['프론트엔드', '백엔드'];
+
+function PositionTemp({ next, setStepState }: PositionTempProps) {
 	return (
 		<section className="positionWrapper">
 			<h1 className="title">직무를 선택해 주세요.</h1>
 			<div className="selectBtns">
-				<Button
-					className="frontEnd"
-					data-name="프론트엔드"
-					type="button"
-					onClick={(e) => {
-						next();
-						setState(e);
-					}}
-				>
-					프론트엔드
-				</Button>
-				<Button
-					className="backEnd"
-					data-name="백엔드"
-					type="button"
-					onClick={next}
-				>
-					백엔드
-				</Button>
+				{positionData.map((position) => {
+					return (
+						<Button
+							key={position}
+							//TODO: classname 통일
+							className="frontEnd"
+							type="button"
+							onClick={(e) => {
+								next();
+								setStepState(e.currentTarget.innerText);
+							}}
+						>
+							{position}
+						</Button>
+					);
+				})}
 			</div>
 			<ul className="tips">
 				<li className="tip">

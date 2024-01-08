@@ -1,47 +1,32 @@
-import axios, { AxiosResponse } from 'axios';
+import { AuthContext } from 'context/Auth';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
-interface UserData {
-	accessToken: string;
-	refreshToken: string;
-	userNickname: string;
-	userImage: string;
-}
+import { useContext, useEffect } from 'react';
 
 export default function Redirect({ code }: { code: string }) {
 	const router = useRouter();
+	const authService = useContext(AuthContext);
+
 	useEffect(() => {
 		const onLogin = async () => {
 			try {
-				const data = await axios.get(
-					`https://interviewee.store/kakao/redirect?code=${code}`,
-					{
-						withCredentials: true,
-					},
-				);
-				console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
-				// const { accessToken, refreshToken, userImage, userNickname } = data;
-				// console.log(
-				// 	'🚀 ~ file: index.tsx:25 ~ onLogin ~ accessToken, refreshToken, userImage, userNickname:',
-				// 	accessToken,
-				// 	refreshToken,
-				// 	userImage,
-				// 	userNickname,
-				// );
-
-				router.push('/');
-			} catch (error) {}
+				await authService?.login(code);
+				router.replace('/');
+			} catch (error) {
+				console.log(error);
+			}
 		};
 		onLogin();
 	}, []);
 
-	return <div>로그인 리다이렉트</div>;
+	return <></>;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	if (context.query && context.query.code) {
+	try {
+		if (!context.query) {
+			throw new Error(`query 없음`);
+		}
 		const { code } = context.query;
 
 		return {
@@ -49,10 +34,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 				code,
 			},
 		};
+	} catch (error) {
+		return {
+			props: {},
+		};
 	}
-	return {
-		props: {
-			code: '',
-		},
-	};
 };

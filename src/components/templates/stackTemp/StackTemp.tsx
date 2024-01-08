@@ -1,16 +1,12 @@
 import Button from '@atoms/button/Button';
-import { MouseEvent } from 'react';
+import { MouseEvent, useCallback } from 'react';
 import { useTabs } from '@utils/useTabs';
-import type { selectedStateType } from '@utils/hooks/useFunnel';
+import SelectedStacks from '@organisms/selectedStacks';
 
 interface StackTempProps {
-	selected: selectedStateType['stack'];
+	selected: string;
 	next: (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
-	setStepState: (
-		e: React.MouseEvent<HTMLElement>,
-		tabData?: selectedStateType['stack'],
-		timeData?: selectedStateType['time'],
-	) => void;
+	setStepState: (stepData: string) => void;
 }
 
 const tabData = {
@@ -36,13 +32,25 @@ const tabData = {
 	케케케: [1, false, '컴퓨터구조', '자료구조', '알고리즘', '데이터베이스'],
 };
 
-function StackTemp({ selected, next, setStepState }: StackTempProps) {
+function StackTemp({ selected = '', next, setStepState }: StackTempProps) {
 	console.log(selected);
-	const [Tabs, selectedStacks] = useTabs({
+	const [Tabs, selectedItems, setSelectedItems] = useTabs({
 		initialMenu: 'skill',
 		tabData,
-		selected,
 	});
+
+	const stackAddAndDelete = useCallback(
+		(selectedItems: string[]) => {
+			let checkSelected = selected === '' ? [] : selected.split(',');
+
+			if (checkSelected.length < selectedItems.length) {
+				return [...new Set(checkSelected.concat(...selectedItems))];
+			} else {
+				return selectedItems;
+			}
+		},
+		[selected, selectedItems],
+	);
 
 	return (
 		<section className="stackWrapper">
@@ -51,16 +59,21 @@ function StackTemp({ selected, next, setStepState }: StackTempProps) {
 				<Tabs>
 					<Tabs.Menu />
 					<Tabs.MenuItems />
-					<Tabs.SelectedStacks />
 				</Tabs>
+				<SelectedStacks
+					selected={selected}
+					selectedItems={selectedItems}
+					setSelectedItems={setSelectedItems}
+					stackAddAndDelete={stackAddAndDelete}
+				/>
 			</div>
 			<Button
-				style={{ color: !selectedStacks.length ? 'gray' : 'white' }}
+				style={{ color: !selectedItems?.length ? 'gray' : 'white' }}
 				onClick={(e) => {
 					next(e);
-					setStepState(e, selectedStacks);
+					setStepState(stackAddAndDelete(selectedItems).toString());
 				}}
-				disabled={!selectedStacks.length}
+				disabled={!selectedItems?.length}
 			>
 				다음
 			</Button>
