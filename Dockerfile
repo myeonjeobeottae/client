@@ -35,7 +35,7 @@ COPY --from=builder /usr/src/app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-ENV $(cat .env.production)
+ENV $(cat .env.production | xargs)
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
