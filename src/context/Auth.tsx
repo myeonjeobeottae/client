@@ -31,6 +31,8 @@ export class BasicAuthService implements IAuthService {
 	}
 
 	async logout(): Promise<void> {
+		//TODO: 앱을 나간다면 엑세스토큰 지워주기
+		localStorage.removeItem('__token');
 		this.currentUser = null;
 	}
 
@@ -52,11 +54,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		const authService = new BasicAuthService();
 		const hasToken = localStorage.getItem('__token');
+
 		if (!hasToken) {
 			setLoading(false);
 			setAuthServiceState(authService);
 			return;
 		}
+		// FIXME: access token이 만료되었지만 로컬스토리지에 남아있을때 실행 x
 		authService.getCurrentUserFromServer().then(() => {
 			setLoading(false);
 			setAuthServiceState(authService);
@@ -64,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	}, []);
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <div></div>;
 	}
 
 	if (!authServiceState) {
