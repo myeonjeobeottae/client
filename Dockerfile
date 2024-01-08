@@ -21,7 +21,10 @@ COPY . .
 
 ARG NEXT_PUBLIC_REST_API_KEY
 ENV NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
-RUN echo /usr/src/app/.env > ${NEXT_PUBLIC_REST_API_KEY}
+RUN touch /usr/src/app/.env.production
+RUN echo /usr/src/app/.env.production > ${NEXT_PUBLIC_REST_API_KEY}
+
+
 RUN yarn build
 
 # Production image, copy all the files and run next
