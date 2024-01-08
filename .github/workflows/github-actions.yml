@@ -4,7 +4,7 @@ name: CI/CD using github actions & docker
 # main 브랜치에 push가 되었을 때 실행
 on:
   push:
-    branches: ['main']
+    branches: ['test']
 
 permissions:
   contents: read
@@ -18,7 +18,7 @@ jobs:
 
       # make docker production envFile
       - name: Create Production envFile
-        if: contains(github.ref, 'main')
+        if: contains(github.ref, 'test')
         run: |
           ls
           touch ./.env
@@ -26,17 +26,17 @@ jobs:
 
       # docker build & push to production
       - name: Docker build & push to prodction
-        if: contains(github.ref, 'main')
+        if: contains(github.ref, 'test')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker build --build-arg APP_ENV=sd --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
+          docker build --build-arg NEXT_PUBLIC_REST_API_KEY=${{ secrets.REST_API_KEY}} --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
           docker push ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae
 
       # deploy to production
       - name: Deploy to production
         uses: appleboy/ssh-action@master
         id: deploy-prod
-        if: contains(github.ref, 'main')
+        if: contains(github.ref, 'test')
         with:
           host: ${{ secrets.EC2_HOST}}
           username: ${{ secrets.EC2_USERNAME}}

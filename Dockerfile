@@ -29,12 +29,12 @@ WORKDIR /usr/src/app
 # RUN NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
 # ARG NEXT_PUBLIC_REDIRECT_URI
 # RUN NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
-ARG APP_ENV
+ARG NEXT_PUBLIC_REST_API_KEY
 ENV NODE_ENV="production"
-RUN ls
-RUN touch ./.env.production
-RUN echo ./.env.production > NEXT_PUBLIC_REST_API_KEY=8bf32c7eb886bbd4e40c43b9bbce3ca3
-RUN cat ./.env.production
+ENV NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
+# RUN touch ./.env.production
+# RUN echo ./.env.production > NEXT_PUBLIC_REST_API_KEY=8bf32c7eb886bbd4e40c43b9bbce3ca3
+# RUN cat ./.env.production
 # COPY /.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
 
