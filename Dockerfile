@@ -31,7 +31,8 @@ WORKDIR /usr/src/app
 # RUN NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
 ARG APP_ENV
 ENV NODE_ENV="production"
-RUN touch /usr/src/app/.env.production
+RUN ls
+RUN touch /.env.production
 RUN echo /usr/src/app/.env.production > ${APP_ENV}
 COPY /usr/src/app/.env.production ./.env.production
 # RUN mv ./.env.$APP_ENV ./app/.env.production
