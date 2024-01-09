@@ -30,25 +30,6 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /usr/src/app
 
-# ARG NEXT_PUBLIC_REST_API_KEY
-# RUN NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
-# ARG NEXT_PUBLIC_REDIRECT_URI
-# RUN NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
-# ARG NEXT_PUBLIC_REST_API_KEY
-# ARG NEXT_PUBLIC_REDIRECT_URI
-# ENV NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
-# ENV NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
-
-
-
-
-
-# RUN touch ./.env.production
-# RUN echo ./.env.production > NEXT_PUBLIC_REST_API_KEY=8bf32c7eb886bbd4e40c43b9bbce3ca3
-# RUN cat ./.env.production
-# COPY /.env.production ./.env.production
-# RUN mv ./.env.$APP_ENV ./app/.env.production
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
