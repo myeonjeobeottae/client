@@ -17,8 +17,8 @@ export const createApi = (): AxiosInstance => {
 			console.log(error.response);
 			//refreshAccessToken
 			if (error.response?.status === 403) {
-				const userData = (await customAxios.get('/kakao/renew/token')) as User;
-				localStorage.setItem('__token', userData?.accessToken);
+				// const userData = (await customAxios.get('/kakao/renew/token')) as User;
+				// localStorage.setItem('__token', userData?.accessToken);
 				return;
 			}
 			return Promise.reject(error);
