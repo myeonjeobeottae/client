@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from '@atoms/button';
 import axios, { AxiosError } from 'axios';
+import { OtherError } from '@organisms/errors';
 
 //TODO: error code 추상화, error별 컴포넌트 구현
 type ErrorBoundaryProps = {
@@ -44,6 +45,14 @@ export class ApiErrorBoundary extends Component<
 		console.log(`error: ${error}, info: ${JSON.stringify(errorInfo)}`);
 	}
 
+	//새로고침 시 접근에러 : 여기서 etc에러로 잡고, 나머지는 api에러로 여기서 잡는다
+	/**TODO:
+	 * 400: bad request -> 다시시도 + 메인으로가기
+	 * 401: 로그인이 필요한 페이지입니다 or 로그인 모달
+	 * 403: accessToken없을 때: background 재발급
+	 * 403: refreshToekn없을 때: 인증이 만료되었습니다. 다시 로그인해주세요
+	 * 그외 커스텀 에러: 다시시도 + 메인으로가기
+	 */
 	render() {
 		const error = this.state.error;
 		const errorCode = error && error['cause']['code'];
@@ -68,7 +77,7 @@ export class ApiErrorBoundary extends Component<
 			console.log(errorCode);
 			return <div style={{ color: 'white' }}>네트워크에러</div>;
 		}
-		if (errorCode === 600) {
+		if (errorCode === 601) {
 			console.log(errorCode);
 
 			return (
@@ -92,24 +101,7 @@ export class ApiErrorBoundary extends Component<
 			);
 		}
 		// return <div onClickRetry={()=>this.setState({shouldHandleError: false})}>네트워크에러</div>
-		return (
-			<div
-				style={{
-					color: 'limegreen',
-					position: 'absolute',
-					top: '50%',
-					left: '50%',
-				}}
-			>
-				알려지지않은 에러
-				<button onClick={() => (window.location.href = '/')}>
-					메인으로가기
-				</button>
-				<button onClick={() => this.setState({ shouldHandleError: false })}>
-					다시 시도
-				</button>
-			</div>
-		);
+		return <OtherError />;
 		// return <UnknownError onClickRetry={() => this.setState({ shouldHandleError: false})} />
 	}
 }

@@ -4,6 +4,7 @@ import IconBack from './back.svg';
 import IconSearch from './search.svg';
 import IconProfile from './profile_skeleton.svg';
 import IconSpinner from './spinner.svg';
+import IconWaring from './warning.svg';
 
 export {
 	IconHamburger,
@@ -12,4 +13,5 @@ export {
 	IconSearch,
 	IconProfile,
 	IconSpinner,
+	IconWaring,
 };
