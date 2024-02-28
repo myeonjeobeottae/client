@@ -1,0 +1,17 @@
+@use '../base' as *;
+@use '../helpers' as *;
+
+.interviewPageWrapper {
+	@include mixin-fullScreen;
+	@include mixin-flexCenter;
+	position: relative;
+	overflow: hidden;
+
+	& > h1 {
+		font-size: 3.5vmin;
+		font-weight: 600;
+		position: absolute;
+		top: 20%;
+		color: white;
+	}
+}

@@ -17,7 +17,9 @@ function CustomFunnelTemp() {
 	});
 	//TODO: useModal 구현
 	const [Modal, HandleOpen] = useModal();
-	const { unBlockingWithCallback } = useRouteControl(HandleOpen);
+	const { unBlockingWithCallback } = useRouteControl(HandleOpen, {
+		exceptUrl: ['/interview?q=1'],
+	});
 
 	return (
 		<ApiErrorBoundary>
