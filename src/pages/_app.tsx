@@ -25,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					queries: {
 						retry: 0,
 						refetchOnWindowFocus: false,
+						throwOnError: true,
 					},
 				},
 			}),
@@ -36,16 +37,14 @@ export default function App({ Component, pageProps }: AppProps) {
 				<GlobalErrorBoundary>
 					<ApiErrorBoundary>
 						<AuthProvider>
-							<Suspense fallback={<Loading />}>
-								<Layout>
-									<Component {...pageProps} />
-									<ReactQueryDevtools
-										initialIsOpen={false}
-										buttonPosition="bottom-right"
-									/>
-								</Layout>
-								<ToastContainer autoClose={2000} pauseOnHover />
-							</Suspense>
+							<Layout>
+								<Component {...pageProps} />
+								<ReactQueryDevtools
+									initialIsOpen={false}
+									buttonPosition="bottom-right"
+								/>
+							</Layout>
+							<ToastContainer autoClose={2000} pauseOnHover />
 						</AuthProvider>
 					</ApiErrorBoundary>
 				</GlobalErrorBoundary>

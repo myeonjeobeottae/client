@@ -85,7 +85,7 @@ function useFunnel<T extends string>(options: {
 			router.query['funnel-step'] !== undefined &&
 			selected[options.initialStep] === ''
 		) {
-			routerError('잘못된 접근입니다.', 600);
+			// routerError('잘못된 접근입니다.', 600);
 		}
 
 		let targetStep;

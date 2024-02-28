@@ -1,5 +1,8 @@
 import customAxios from '@pages/api';
 import Button from '@atoms/button';
+import Loading from '@molecules/loading';
+import { Suspense, useState } from 'react';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 interface ResultProps {
 	selected: {
@@ -8,12 +11,21 @@ interface ResultProps {
 }
 
 function ResultTemp({ selected }: ResultProps) {
+	const fetchData = async () => {
+		const data = await customAxios.post(`/interviews/custom/create`, selected);
+		return data;
+	};
+	const [data, setData] = useState<any>();
+	const { refetch } = useSuspenseQuery({
+		queryKey: ['aaa'],
+		queryFn: fetchData,
+	});
+
 	const createQuestions = async () => {
 		try {
-			const data = await customAxios.post(
-				`/interviews/custom/create`,
-				selected,
-			);
+			refetch();
+			// return data && <div>sssss</div>;
+			setData(data);
 			console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
 		} catch (error) {
 			throw error;
@@ -33,6 +45,9 @@ function ResultTemp({ selected }: ResultProps) {
 				</ul>
 				<Button onClick={createQuestions}>문제 생성</Button>
 			</section>
+			<Suspense fallback="lodainglodainglodainglodainglodaing">
+				{data && <div>문제문제문제문제문제문제</div>}
+			</Suspense>
 		</div>
 	);
 }
