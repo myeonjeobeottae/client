@@ -6,6 +6,8 @@ import useFunnel from '@utils/hooks/useFunnel';
 import { ApiErrorBoundary } from '@templates/errorBoundary';
 import useRouteControl from '@utils/hooks/useRouteControl';
 import useModal from '@utils/hooks/useModal';
+import { Suspense } from 'react';
+import Loading from '@molecules/loading/Loading';
 
 export type useFunnelType = 'position' | 'stack' | 'time' | 'result';
 
@@ -50,7 +52,9 @@ function CustomFunnelTemp() {
 						/>
 					</Funnel.Step>
 					<Funnel.Step name="result">
-						<ResultTemp selected={selected} />
+						<Suspense fallback={<Loading />}>
+							<ResultTemp selected={selected} />
+						</Suspense>
 					</Funnel.Step>
 				</Funnel>
 			</main>

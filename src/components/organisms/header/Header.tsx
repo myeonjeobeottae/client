@@ -8,11 +8,12 @@ import Profile from '@molecules/profile/Profile';
 function Header() {
 	const authService = useContext(AuthContext);
 	const user = authService?.getCurrentUser();
+	const isLoginPage = window.location.pathname === '/login';
 
 	return (
 		<header className="headerWrapper">
 			<Logo size={`mid`} />
-			{user ? <Profile user={user} /> : <Login />}
+			{!isLoginPage ? user ? <Profile user={user} /> : <Login /> : null}
 		</header>
 	);
 }
