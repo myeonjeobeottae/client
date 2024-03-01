@@ -1,8 +1,9 @@
-import customAxios from '@pages/api';
 import Button from '@atoms/button';
 import Loading from '@molecules/loading';
-import { Suspense, useState } from 'react';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import storage from '@utils/localstorage';
+import { useRouter } from 'next/router';
+import { useCreateQuestions } from 'queries/interview/hooks';
+import { Suspense } from 'react';
 
 interface ResultProps {
 	selected: {
@@ -11,26 +12,20 @@ interface ResultProps {
 }
 
 function ResultTemp({ selected }: ResultProps) {
-	const fetchData = async () => {
-		const data = await customAxios.post(`/interviews/custom/create`, selected);
-		return data;
-	};
-	const [data, setData] = useState<any>();
-	const { refetch } = useSuspenseQuery({
-		queryKey: ['aaa'],
-		queryFn: fetchData,
-	});
+	const router = useRouter();
+	const { isPending, mutateAsync } = useCreateQuestions();
 
 	const createQuestions = async () => {
 		try {
-			refetch();
-			// return data && <div>sssss</div>;
-			setData(data);
-			console.log('🚀 ~ file: index.tsx:24 ~ onLogin ~ data:', data);
+			const data = await mutateAsync(selected);
+			storage.setItem('questions', data);
+			router.push('/interview?q=1');
 		} catch (error) {
 			throw error;
 		}
 	};
+
+	if (isPending) return <Loading />;
 
 	return (
 		<div>
@@ -45,9 +40,7 @@ function ResultTemp({ selected }: ResultProps) {
 				</ul>
 				<Button onClick={createQuestions}>문제 생성</Button>
 			</section>
-			<Suspense fallback="lodainglodainglodainglodainglodaing">
-				{data && <div>문제문제문제문제문제문제</div>}
-			</Suspense>
+			<Suspense fallback="lodainglodainglodainglodainglodaing"></Suspense>
 		</div>
 	);
 }

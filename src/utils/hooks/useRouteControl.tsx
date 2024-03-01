@@ -15,9 +15,28 @@ type ControlOptions = {
 	 * @defaultValue `true`
 	 */
 	condition?: boolean | undefined;
+	/**
+	 * 이벤트 동작을 제외시킬 nextUrl
+	 *
+	 * 해당 url은 뒤로가기 시에도 모달 감지 x
+	 *
+	 * @defaultValue ['default']
+	 */
+	exceptUrl?: string[] | undefined;
+	/**
+	 * queryString의 변화도 감지할 것인지 유무
+	 *
+	 * @defaultValue false
+	 */
+	detectQuery?: boolean | undefined;
 };
 
-const defaultControlOptions: ControlOptions = { reload: true, condition: true };
+const defaultControlOptions: ControlOptions = {
+	reload: true,
+	condition: true,
+	exceptUrl: ['default'],
+	detectQuery: false,
+};
 
 /**
  * @param {Function} blockingCallback Routing을 막는 Callback함수
@@ -30,55 +49,48 @@ function useRouteControl(
 	const [nextUrl, setNextUrl] = useState<string>('');
 	const router = useRouter();
 
-	//optional undefined 방지
 	normalizeOptions(options, defaultControlOptions);
 
-	//reload 감지
 	useEffect(() => {
 		const preventReload = (e: BeforeUnloadEvent) => {
 			e.preventDefault();
 		};
-		if (options.reload && options.condition) {
+		//TODO: 현재 사용자가 exceptUrl에 full path를 입력해야 함
+		if (
+			options.reload &&
+			options.condition &&
+			!options.exceptUrl?.includes(nextUrl)
+		) {
+			console.log('🚀 ~ useEffect ~ nextUrl:', nextUrl);
+			console.log('🚀 ~ useEffect ~ options.exceptUrl:', options.exceptUrl);
 			window.addEventListener('beforeunload', preventReload);
 		}
 		return () => {
 			window.removeEventListener('beforeunload', preventReload);
 		};
-	}, [options.reload, options.condition]);
+	}, [options.reload, options.condition, options.exceptUrl, nextUrl]);
 
-	//같은 페이지 유무
 	const isSamePath = useCallback(
-		(nextUrl: string) => router.asPath.split('?')[0] === nextUrl.split('?')[0],
-		[router.asPath],
+		(nextUrl: string) => {
+			return options.detectQuery
+				? router.asPath === nextUrl
+				: router.asPath.split('?')[0] === nextUrl.split('?')[0];
+		},
+		[router.asPath, options.detectQuery],
 	);
 
-	//다른 페이지 일때 && 뒤로가기 || 다른 페이지로 라우팅
 	const syncUrlWithRouter = useCallback(
 		(nextUrl: string) => {
-			console.log(router.asPath, window.location.pathname);
-			if (router.asPath !== window.location.pathname) {
-				//FIXME: 루트 이동 말고도 다른 path가 추가 될 여지 있음
-				if (nextUrl !== '/') {
-					//현재 path 유지
-					window.history.pushState(null, '', router.asPath);
-					//뒤로가기 버튼 클릭 전 path로 초기화
-					router.replace(router.asPath);
-				}
+			if (nextUrl !== '/') {
+				window.history.pushState(null, '', router.asPath);
+				router.replace(router.asPath);
 			}
 		},
 		[router.asPath, nextUrl],
 	);
 
-	//route blocking
 	const handleRouteChange = useCallback(
 		(nextUrl: string) => {
-			console.log(
-				isSamePath(nextUrl),
-				`pathname: ${window.location.pathname}`,
-				router.asPath,
-				nextUrl.split('?')[0],
-				nextUrl,
-			);
 			if (isSamePath(nextUrl)) {
 				return;
 			}
@@ -88,13 +100,18 @@ function useRouteControl(
 			router.events.emit('routeChangeError');
 			throw 'Next Route is Blocking';
 		},
-		[router.asPath, nextUrl, syncUrlWithRouter, isSamePath, blockingCallback],
+		[
+			router.asPath,
+			nextUrl,
+			options.detectQuery,
+			syncUrlWithRouter,
+			isSamePath,
+			blockingCallback,
+		],
 	);
 
-	//route unBlocking
 	const unBlockingWithCallback = useCallback(
 		(callback?: () => void) => {
-			console.log(nextUrl);
 			router.events.off('routeChangeStart', handleRouteChange);
 			router.replace(nextUrl);
 			callback?.();
@@ -102,15 +119,27 @@ function useRouteControl(
 		[router.events, nextUrl, handleRouteChange],
 	);
 
-	//router events 등록
 	useEffect(() => {
-		if (options.condition) {
-			router.events.on('routeChangeStart', handleRouteChange);
+		if (options.condition && options.exceptUrl) {
+			if (
+				options.exceptUrl[0] === 'default' ||
+				(options.exceptUrl[0] !== 'default' &&
+					options.exceptUrl.includes(nextUrl))
+			) {
+				router.events.on('routeChangeStart', handleRouteChange);
+			}
 		}
+
 		return () => {
 			router.events.off('routeChangeStart', handleRouteChange);
 		};
-	}, [router.events, handleRouteChange, options.condition]);
+	}, [
+		router.events,
+		handleRouteChange,
+		nextUrl,
+		options.condition,
+		options.exceptUrl,
+	]);
 
 	return { unBlockingWithCallback };
 }

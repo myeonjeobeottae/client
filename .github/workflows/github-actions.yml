@@ -16,20 +16,12 @@ jobs:
       # github 가상환경에서 작업할 수 있도록 repository 코드 복제
       - uses: actions/checkout@v3
 
-      # make docker production envFile
-      - name: Create Production envFile
-        if: contains(github.ref, 'main')
-        run: |
-          ls
-          touch ./.env
-          echo "${{ secrets.ENV_PRODUCTION }}" > ./.env
-
       # docker build & push to production
       - name: Docker build & push to prodction
         if: contains(github.ref, 'main')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
-          docker build --build-arg APP_ENV=sd --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
+          docker build --build-arg NEXT_PUBLIC_KAKAO_LOGIN_URI=${{ secrets.KAKAO_LOGIN_URI }} --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae .
           docker push ${{ secrets.DOCKER_USERNAME}}/myeonjeobeottae
 
       # deploy to production
@@ -44,6 +36,7 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo su
-            docker-compose down
-            docker-compose up -d --build
             docker system prune -f
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d --build

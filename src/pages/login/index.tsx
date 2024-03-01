@@ -1,6 +1,4 @@
-import Button from '@atoms/button';
 import Login from '@molecules/login';
-import { KAKAO_LOGIN_URI } from '@utils/variables';
 
 function index() {
 	return (
