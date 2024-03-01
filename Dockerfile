@@ -19,24 +19,16 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
+ARG NEXT_PUBLIC_KAKAO_LOGIN_URI
+RUN touch .env.production
+RUN echo "NEXT_PUBLIC_KAKAO_LOGIN_URI=${NEXT_PUBLIC_KAKAO_LOGIN_URI}" > .env.production
+ENV NODE_ENV production
+
 RUN yarn build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /usr/src/app
-
-# ARG NEXT_PUBLIC_REST_API_KEY
-# RUN NEXT_PUBLIC_REST_API_KEY=${NEXT_PUBLIC_REST_API_KEY}
-# ARG NEXT_PUBLIC_REDIRECT_URI
-# RUN NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI}
-ARG APP_ENV
-ENV NODE_ENV="production"
-RUN ls
-RUN touch ./.env.production
-RUN echo ./.env.production > NEXT_PUBLIC_REST_API_KEY=8bf32c7eb886bbd4e40c43b9bbce3ca3
-RUN cat ./.env.production
-# COPY /.env.production ./.env.production
-# RUN mv ./.env.$APP_ENV ./app/.env.production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
